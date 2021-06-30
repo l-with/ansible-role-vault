@@ -1,0 +1,21 @@
+---
+
+# dependencies:
+#   - role: docker
+#     src: git@gitlab.with.de:ansible/ansible-role-docker.git
+#     scm: git
+#     version: 0.0.4
+
+
+galaxy_info:
+  role_name: vault
+  description: install vault
+  author: l_with
+  license: MIT
+  min_ansible_version: '2.9'
+  platforms:
+  - name: Ubuntu
+    versions: 
+      - focal
+
+...

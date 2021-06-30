@@ -1,0 +1,37 @@
+---
+
+- name: Set fact _vault_config
+  ansible.builtin.set_fact:
+    _vault_config:
+      backend:
+        file:
+          path: '/vault/file'
+        default_lease_ttl: '168h'
+        max_lease_ttl: '720h'
+
+# - name: Print _vault_config
+#   ansible.builtin.debug:
+#     msg: "Print _vault_config: {{ _vault_config | to_json }}"
+
+- name: Ensure vault home
+  ansible.builtin.file:
+    path:    "{{ vault_home }}"
+    recurse: yes
+    state:   directory
+
+- name: Ensure vault config path
+  ansible.builtin.file:
+    path:  "{{ vault_home }}/config"
+    state: directory
+
+- name: Ensure vault file/raft path
+  ansible.builtin.file:
+    path:  "{{ vault_home }}/file/raft"
+    state: directory
+
+- name: Ensure vault config
+  ansible.builtin.template:
+    src: main.hcl.j2
+    dest: "{{ vault_home }}/config/main.hcl"
+
+...
