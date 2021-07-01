@@ -36,9 +36,12 @@
   delay: 2
   changed_when: false
 
-- name: Ensure vault enable auth jwt
+- name: Ensure vault enable auth 
   ansible.builtin.shell:
-    cmd: docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault vault auth enable -address=http://127.0.0.1:8200 jwt | tee {{ vault_auth_jwt_file }}
-    creates: "{{ vault_auth_jwt_file }}"
+    cmd: docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault vault auth enable -address=http://127.0.0.1:8200 {{ _vault_auth_method }} | tee {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }} 
+    creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
+  loop: "{{ vault_auth_methods }}"
+  loop_control:
+    loop_var: _vault_auth_method
 
 ...
