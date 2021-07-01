@@ -18,38 +18,46 @@
       | tee {{ vault_home }}/ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   when: not _vault_initialized
+  run_once: yes
 
 - name: Skurp vault init info
   ansible.builtin.slurp:
     src: "{{ vault_home }}/ansible_done_vault_init"
   register: _vault_init_file_slurp
+  run_once: yes
 
 - name: Set fact _vault_init_info from slurp
   ansible.builtin.set_fact:
     _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+  run_once: yes
 
 - name: Print fact _vault_init_info
   ansible.builtin.debug:
     msg: "_vault_init_info: {{ _vault_init_info }}"
   when: vault_show_unseal_keys
+  run_once: yes
 
 - name: Set fact _vault_unseal_key
   ansible.builtin.set_fact:
     _vault_unseal_key:  "{{ _vault_init_info.unseal_keys_b64[0] }}"
+  run_once: yes
 
 - name: Set fact _vault_root_token
   ansible.builtin.set_fact:
     _vault_root_token: "{{ _vault_init_info.root_token }}"
+  run_once: yes
 
 - name: Print fact _vault_unseal_key
   ansible.builtin.debug:
     msg: "_vault_unseal_key: {{ _vault_unseal_key }}"
   when: vault_show_unseal_keys
+  run_once: yes
 
 - name: Print fact _vault_root_token
   ansible.builtin.debug:
     msg: "_vault_root_token: {{ _vault_root_token }}"
   when: vault_show_root_token
+  run_once: yes
 
 - name: Ensure unseal vault
   ansible.builtin.shell:
@@ -58,5 +66,6 @@
       vault operator unseal {{ _vault_unseal_key }} 
       | tee {{ vault_home }}/ansible_done_vault_unseal
     creates: "{{ vault_home }}/ansible_done_vault_unseal"
+  run_once: yes
 
 ...
