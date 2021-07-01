@@ -7,4 +7,4 @@ sudo rm -rvf /srv/vault/file/raft/*
 sudo rm -rvf /srv/vault/config/.vault_*
 sudo rm -rvf /srv/vault/policies/*
 sudo rm -rvf /srv/vault/config/policies/*
-sudo rm /srv/vault/ansible_done*
+sudo rm -v /srv/vault/ansible_done*
