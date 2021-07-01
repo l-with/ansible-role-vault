@@ -29,7 +29,7 @@
 
 - name: Wait vault active
   ansible.builtin.shell:
-    cmd: docker exec vault vault status -format=json -address=http://127.0.0.1:8200 
+    cmd: docker exec vault vault status -format=json -address=http://127.0.0.1:{{ vault_docker_api_port }}
   register: _vault_status_output
   until: _vault_status_output.stdout.find("leader_") != -1
   retries: 10

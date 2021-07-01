@@ -44,8 +44,9 @@ fileignoreconfig:
 # +-------------------------+--------------------------------+----------+
 # | tasks/secret_engine.yml | Potential secret pattern :     | low      |
 # |                         |       vault secrets enable     |          |
-# |                         | -address=http://127.0.0.1:8200 |          |
-# |                         | {{ _vault_secret_engine }}     |          |
+# |                         | -address=http://127.0.0.1:{{   |          |
+# |                         | vault_docker_api_port }} {{    |          |
+# |                         | _vault_secret_engine }}        |          |
 # +-------------------------+--------------------------------+----------+
 - filename: tasks/secret_engine.yml
-  checksum: 463c63db89a516faadc4d20c3ed1e78a0169782bed67923b36788a06bb0a7a44
+  checksum: 302a6bdf0f428318482560533346975e775e0b338c951d303331cf840fccf98e
