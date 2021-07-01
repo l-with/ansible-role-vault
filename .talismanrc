@@ -29,3 +29,14 @@ fileignoreconfig:
 # +----------------+--------------------------------+----------+
 - filename: tasks/main.yml
   checksum: 4ae31858dd850d5452ad201810a30cdceadbda28299c97e469ef3e4beedee352
+
+# checked
+# +-------------------+--------------------------------+----------+
+# |       FILE        |             ERRORS             | SEVERITY |
+# +-------------------+--------------------------------+----------+
+# | defaults/main.yml | Potential secret pattern :     | low      |
+# |                   | vault_show_unseal_keys:        |          |
+# |                   | no                             |          |
+# +-------------------+--------------------------------+----------+
+- filename: defaults/main.yml
+  checksum: aa01f5baf9747eba7353061cb9f19bc3bd3ec1d62a9aba591790a8049269767c

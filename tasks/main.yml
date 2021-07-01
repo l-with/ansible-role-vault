@@ -14,8 +14,8 @@
     capabilities:
       - ipc_lock
     ports:
-      - 0.0.0.0:8200:8200
-      - 0.0.0.0:8201:8201
+      - "{{ vault_docker_expose_api }}"
+      - "{{ vault_docker_expose_cluster }}"
     volumes:
       - "{{ vault_home }}/logs:/vault/logs"
       - "{{ vault_home }}/file:/vault/file"
