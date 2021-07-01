@@ -7,18 +7,20 @@
       vars:
         vault_auth_methods:
           - jwt
-        vault_policies:
-          - policy:
-            name: gitlab
-            hcl: |
-              path "gitlab/secret*" {
-                capabilities = [ "read" ]
-              }
-          - policy:
-            name: gitlab
-            hcl: |
-              path "gitlab/*" {
-                capabilities = [ "read" ]
-              }
+        vault_secret_engines:
+          - ssh
+        # vault_policies:
+        #   - policy:
+        #     name: gitlab
+        #     hcl: |
+        #       path "gitlab/secret*" {
+        #         capabilities = [ "read" ]
+        #       }
+        #   - policy:
+        #     name: gitlab
+        #     hcl: |
+        #       path "gitlab/*" {
+        #         capabilities = [ "read" ]
+        #       }
 
 ...
