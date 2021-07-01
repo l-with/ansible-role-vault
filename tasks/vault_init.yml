@@ -12,7 +12,10 @@
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
-    cmd:  docker exec vault vault operator init -key-shares 1 -key-threshold 1 -format=json -address=http://127.0.0.1:8200 | tee {{ vault_home }}/ansible_done_vault_init
+    cmd: >
+      docker exec vault 
+      vault operator init -key-shares 1 -key-threshold 1 -format=json 
+      | tee {{ vault_home }}/ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   when: not _vault_initialized
 
@@ -50,7 +53,10 @@
 
 - name: Ensure unseal vault
   ansible.builtin.shell:
-    cmd: docker exec vault vault operator unseal -address=http://127.0.0.1:8200 {{ _vault_unseal_key }} | tee {{ vault_home }}/ansible_done_vault_unseal
+    cmd: >
+      docker exec vault 
+      vault operator unseal {{ _vault_unseal_key }} 
+      | tee {{ vault_home }}/ansible_done_vault_unseal
     creates: tee {{ vault_home }}/ansible_done_vault_unseal
 
 ...
