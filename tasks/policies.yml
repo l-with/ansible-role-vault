@@ -1,0 +1,16 @@
+---
+
+- name: Ensure policy hcl
+  ansible.builtin.template:
+    src:  policy.hcl.j2
+    dest: "{{ vault_home }}/config/policies/{{ _vault_policy.name }}.hcl"
+
+- name: Ensure vault write policies
+  ansible.builtin.shell:
+    cmd: >
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      vault policy write -address=http://127.0.0.1:8200 {{ _vault_policy.name }} /vault/config/policies/{{ _vault_policy.name }}.hcl
+      | tee {{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy.name }}
+    creates: "{{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy.name }}"
+
+...
