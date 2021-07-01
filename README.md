@@ -2,7 +2,7 @@
 
 Install vault as docker container
 
-This is simple installation on one host, nevertheless the default storage configuration is `raft` (kind of for extensibility).
+This is as a first step build for a simple installation on one host, nevertheless the default storage configuration is `raft` (kind of for extensibility) and waiting for the cluster to become ready before adding configruations is builtin.
 
 There are role variables to
 
