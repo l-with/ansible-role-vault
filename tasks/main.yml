@@ -16,6 +16,8 @@
     ports:
       - "{{ vault_docker_expose_api }}"
       - "{{ vault_docker_expose_cluster }}"
+    env:
+      VAULT_ADDR: http://127.0.0.1:{{ vault_docker_api_port }}
     volumes:
       - "{{ vault_home }}/logs:/vault/logs"
       - "{{ vault_home }}/file:/vault/file"
@@ -29,7 +31,7 @@
 
 - name: Wait vault active
   ansible.builtin.shell:
-    cmd: docker exec vault vault status -format=json -address=http://127.0.0.1:{{ vault_docker_api_port }}
+    cmd: docker exec vault vault status -format=json
   register: _vault_status_output
   until: _vault_status_output.stdout.find("leader_") != -1
   retries: 10
