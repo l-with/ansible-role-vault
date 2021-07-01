@@ -59,7 +59,7 @@
     loop_var: _vault_secret_engine
 
 - name: Ensure vault write policies
-  ansible.builtin.include_tasks: policies.yml
+  ansible.builtin.include_tasks: policy.yml
   loop: "{{ vault_policies }}"
   loop_control:
     loop_var: _vault_policy

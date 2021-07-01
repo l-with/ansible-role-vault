@@ -5,7 +5,7 @@
     src:  policy.hcl.j2
     dest: "{{ vault_home }}/config/policies/{{ _vault_policy.name }}.hcl"
 
-- name: Ensure vault write policies
+- name: Ensure vault write policy
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
