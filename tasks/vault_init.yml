@@ -57,6 +57,6 @@
       docker exec vault 
       vault operator unseal {{ _vault_unseal_key }} 
       | tee {{ vault_home }}/ansible_done_vault_unseal
-    creates: tee {{ vault_home }}/ansible_done_vault_unseal
+    creates: "{{ vault_home }}/ansible_done_vault_unseal"
 
 ...
