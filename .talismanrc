@@ -37,3 +37,15 @@ fileignoreconfig:
 # +----------------+--------------------------------+----------+
 - filename: tasks/main.yml
   checksum: 5d41bf7e7f407a2b38ad24eb078cf4fc1d4125356ea86623a617dec2453e693a
+
+# checked
+# +-------------------------+--------------------------------+----------+
+# |          FILE           |             ERRORS             | SEVERITY |
+# +-------------------------+--------------------------------+----------+
+# | tasks/secret_engine.yml | Potential secret pattern :     | low      |
+# |                         |       vault secrets enable     |          |
+# |                         | -address=http://127.0.0.1:8200 |          |
+# |                         | {{ _vault_secret_engine }}     |          |
+# +-------------------------+--------------------------------+----------+
+- filename: tasks/secret_engine.yml
+  checksum: 463c63db89a516faadc4d20c3ed1e78a0169782bed67923b36788a06bb0a7a44
