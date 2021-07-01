@@ -2,8 +2,8 @@
 
 vault_version:                1.7.3
 vault_home:                   /srv/vault
-vault_docker_expose_api:      0.0.0.0:8200:8200
-vault_docker_expose_cluster:  0.0.0.0:8200:8201
+vault_docker_expose_api:      127.0.0.1:8200:8200
+vault_docker_expose_cluster:  127.0.0.1:8201:8201
 vault_show_unseal_keys:       no
 vault_show_root_token:        no
 
