@@ -2,16 +2,11 @@
 
 ui = true
 log_level = "Debug"
-api_addr = "http://0.0.0.0:{{ vault_docker_api_port }}"
+api_addr = "http://127.0.0.1:{{ vault_docker_api_port }}"
 
 listener "tcp" {  
-    address = "0.0.0.0:{{ vault_docker_api_port }}"
+    address = "127.0.0.1:{{ vault_docker_api_port }}"
     tls_disable = true
 }
 
-storage "raft" {
-    path    = "/vault/file/raft"
-    node_id = "raft_node_1"
-}
-
-cluster_addr = "http://127.0.0.1:8201"
+{{ vault_storage_config }}
