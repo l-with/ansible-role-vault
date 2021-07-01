@@ -9,7 +9,7 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault policy write -address=http://127.0.0.1:{{ vault_docker_api_port }} {{ _vault_policy.name }} /vault/config/policies/{{ _vault_policy.name }}.hcl
+      vault policy write {{ _vault_policy.name }} /vault/config/policies/{{ _vault_policy.name }}.hcl
       | tee {{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy.name }}
     creates: "{{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy.name }}"
 
