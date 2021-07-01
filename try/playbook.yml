@@ -4,5 +4,21 @@
   # become: yes
   roles:
     - role: ../../ansible-role-vault
+      vars:
+        vault_auth_methods:
+          - jwt
+        vault_policies:
+          - policy:
+            name: gitlab
+            hcl: |
+              path "gitlab/secret*" {
+                capabilities = [ "read" ]
+              }
+          - policy:
+            name: gitlab
+            hcl: |
+              path "gitlab/*" {
+                capabilities = [ "read" ]
+              }
 
 ...
