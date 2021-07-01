@@ -1,23 +1,15 @@
 fileignoreconfig:
 # checked
-# +----------------------+-------------------------------------+----------+
-# |         FILE         |               ERRORS                | SEVERITY |
-# +----------------------+-------------------------------------+----------+
-# | tasks/vault_init.yml | Potential secret pattern :          | low      |
-# |                      |  cmd:  docker exec vault vault      |          |
-# |                      | operator init -key-shares 1         |          |
-# |                      | -key-threshold 1 -format=json       |          |
-# |                      | -address=http://127.0.0.1:8200      |          |
-# |                      |  | tee {{ vault_init_file }}        |          |
-# +----------------------+-------------------------------------+----------+
-# | tasks/vault_init.yml | Potential secret pattern :          | low      |
-# |                      |     _vault_unseal_key:  "{{         |          |
-# |                      | _vault_init_info.unseal_keys_b64[0] |          |
-# |                      | }}"                                 |          |
-# +----------------------+-------------------------------------+----------+
-# | tasks/vault_init.yml | Potential secret pattern :          | low      |
-# |                      |   msg: "_vault_unseal_key: {{       |          |
-# |                      | _vault_unseal_key }}"               |          |
-# +----------------------+-------------------------------------+----------+
+# +----------------------+--------------------------------+----------+
+# |         FILE         |             ERRORS             | SEVERITY |
+# +----------------------+--------------------------------+----------+
+# | tasks/vault_init.yml | Potential secret pattern :     | low      |
+# |                      |  cmd:  docker exec vault vault |          |
+# |                      | operator init -key-shares 1    |          |
+# |                      | -key-threshold 1 -format=json  |          |
+# |                      | -address=http://127.0.0.1:8200 |          |
+# |                      |  | tee {{ vault_home           |          |
+# |                      | }}/ansible_done_vault_init     |          |
+# +----------------------+--------------------------------+----------+
 - filename: tasks/vault_init.yml
-  checksum: 3e973147b2556608aa45765032a712ad1f4180f3608b8d625be6fad1ed1b62aa
+  checksum: 7e6f1d5019a7078b0cd3f667738bf0e7adee17cdc44cff020a57094017f7fb8d

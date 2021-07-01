@@ -2,7 +2,7 @@
 
 - name: Read nomad init file stat
   ansible.builtin.stat:
-    path: "{{ vault_init_file }}"
+    path: "{{ vault_home }}/ansible_done_vault_init"
   ignore_errors: true
   register: _vault_init_file_stat
 
@@ -12,13 +12,13 @@
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
-    cmd:  docker exec vault vault operator init -key-shares 1 -key-threshold 1 -format=json -address=http://127.0.0.1:8200 | tee {{ vault_init_file }}
-    creates: "{{ vault_init_file }}"
+    cmd:  docker exec vault vault operator init -key-shares 1 -key-threshold 1 -format=json -address=http://127.0.0.1:8200 | tee {{ vault_home }}/ansible_done_vault_init
+    creates: "{{ vault_home }}/ansible_done_vault_init"
   when: not _vault_initialized
 
 - name: Skurp vault init info
   ansible.builtin.slurp:
-    src: "{{ vault_init_file }}"
+    src: "{{ vault_home }}/ansible_done_vault_init"
   register: _vault_init_file_slurp
 
 - name: Set fact _vault_init_info from slurp
@@ -50,7 +50,7 @@
 
 - name: Ensure unseal vault
   ansible.builtin.shell:
-    cmd: docker exec vault vault operator unseal -address=http://127.0.0.1:8200 {{ _vault_unseal_key }} | tee {{ vault_unseal_file }}
-    creates: "{{ vault_unseal_file }}"
+    cmd: docker exec vault vault operator unseal -address=http://127.0.0.1:8200 {{ _vault_unseal_key }} | tee {{ vault_home }}/ansible_done_vault_unseal
+    creates: tee {{ vault_home }}/ansible_done_vault_unseal
 
 ...
