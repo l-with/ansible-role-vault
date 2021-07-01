@@ -6,10 +6,10 @@
     - role: ../../ansible-role-vault
       vars:
         vault_docker_expose_api: 127.0.0.1:9200:{{ vault_docker_api_port }}
-        vault_storage_config: |
-          storage "file" {
-              path    = "/vault/file"
-          }
+        # vault_storage_config: |
+        #   storage "file" {
+        #       path    = "/vault/file"
+        #   }
         vault_auth_methods:
           - jwt
         vault_secret_engines:
