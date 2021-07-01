@@ -4,7 +4,7 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault auth enable -address=http://127.0.0.1:{{ vault_docker_api_port }} {{ _vault_auth_method }}
+      vault auth enable {{ _vault_auth_method }}
       | tee {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }} 
     creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
 
