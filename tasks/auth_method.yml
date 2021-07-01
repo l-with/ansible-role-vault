@@ -7,5 +7,6 @@
       vault auth enable {{ _vault_auth_method }}
       | tee {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }} 
     creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
+  run_once: yes
 
 ...
