@@ -29,21 +29,15 @@
 - name: Ensure vault init
   ansible.builtin.include_tasks: vault_init.yml
 
-- name: Wait vault active
-  ansible.builtin.shell:
-    cmd: docker exec vault vault status -format=json
-  register: _vault_status_output
-  until: _vault_status_output.stdout.find("leader_") != -1
-  retries: 10
-  delay: 2
-  changed_when: false
+- name: Ensure vault is active
+  ansible.builtin.include_tasks: vault_wait.yml
 
 - name: Ensure vault enable auth methods 
   ansible.builtin.include_tasks: auth_method.yml
   loop: "{{ vault_auth_methods }}"
   loop_control:
     loop_var: _vault_auth_method
-
+  
 - name: Ensure vault enable secret engines 
   ansible.builtin.include_tasks: secret_engine.yml
   loop: "{{ vault_secret_engines }}"

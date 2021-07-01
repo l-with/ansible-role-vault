@@ -1,0 +1,28 @@
+---
+
+- name: Get vault status output
+  ansible.builtin.shell:
+    cmd: >
+      docker exec vault 
+      vault status -format=json
+  register: _vault_status_output
+  changed_when: false
+  run_once: yes
+
+- name: Set fact _vault_status
+  set_fact:
+    _vault_status: "{{ _vault_status_output.stdout }}"
+  run_once: yes
+
+- name: Wait vault active when HA
+  ansible.builtin.shell:
+    cmd: docker exec vault vault status -format=json
+  register: _vault_status_output
+  until: _vault_status_output.stdout.find("leader_") != -1
+  retries: 10
+  delay: 2
+  changed_when: false
+  when: _vault_status.ha_enabled
+  run_once: yes
+
+...
