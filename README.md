@@ -10,3 +10,47 @@ Note that this also requires installation of the python libraries `docker` and `
 ## Role Variables
 
 ### `vault_version`: `1.7.3`
+
+the vault version (docker image tag)
+
+### `vault_home`: `/srv/vault`
+
+the home of the vault docker volumes
+
+### `vault_docker_expose_api`: `127.0.0.1:8200:8200`
+
+the docker expose of the vault api
+
+### `vault_docker_expose_cluster`: `127.0.0.1:8201:8201`
+
+the docker expose of the cluster
+
+### `vault_auth_methods`
+
+the list of auth methods to be enable by `vault auth enable`
+
+### `vault_secret_engines`
+
+the list of secret engines to be enabled by `vault secrets enable`
+
+### `vault_policies`
+
+the list of policies to be added by vault policy write
+
+A policy has two parts: `name` and `hcl`, for example:
+
+```yaml
+- name: gitlab
+  hcl: |
+    path "gitlab/secret*" {
+      capabilities = [ "read" ]
+    }
+```
+
+### `vault_show_unseal_keys`: `no`
+
+if the unseal keys are shown
+
+### `vault_show_root_token`: `no`
+
+if the root token is shown
