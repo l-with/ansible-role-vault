@@ -1,6 +1,16 @@
 # Ansible Role Vault
 
-Install vault
+Install vault as docker container
+
+This is simple installation on one host, nevertheless the default storage configuration is `raft` (kind of for extensibility).
+
+There are role variables to
+
+* add auth methods (`vault_auth_methods`)
+* add secret engines (`vault_secret_engines`)
+* add policies (`vault_policies`)
+
+All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home`.
 
 ## Collection dependencies
 
