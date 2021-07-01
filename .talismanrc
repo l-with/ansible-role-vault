@@ -1,4 +1,5 @@
 fileignoreconfig:
+
 # checked
 # +----------------------+--------------------------------+----------+
 # |         FILE         |             ERRORS             | SEVERITY |
@@ -13,3 +14,18 @@ fileignoreconfig:
 # +----------------------+--------------------------------+----------+
 - filename: tasks/vault_init.yml
   checksum: 7e6f1d5019a7078b0cd3f667738bf0e7adee17cdc44cff020a57094017f7fb8d
+
+# checked
+# +----------------+--------------------------------+----------+
+# |      FILE      |             ERRORS             | SEVERITY |
+# +----------------+--------------------------------+----------+
+# | tasks/main.yml | Potential secret pattern       | low      |
+# |                | :       docker exec            |          |
+# |                | -e VAULT_TOKEN='{{             |          |
+# |                | _vault_root_token }}'          |          |
+# |                | vault vault secrets enable     |          |
+# |                | -address=http://127.0.0.1:8200 |          |
+# |                | {{ _va ult_secret_engine }}    |          |
+# +----------------+--------------------------------+----------+
+- filename: tasks/main.yml
+  checksum: 4ae31858dd850d5452ad201810a30cdceadbda28299c97e469ef3e4beedee352
