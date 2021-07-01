@@ -37,12 +37,7 @@
   changed_when: false
 
 - name: Ensure vault enable auth methods 
-  ansible.builtin.shell:
-    cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault auth enable -address=http://127.0.0.1:8200 {{ _vault_auth_method }}
-      | tee {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }} 
-    creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
+  ansible.builtin.include_tasks: auth_method.yml
   loop: "{{ vault_auth_methods }}"
   loop_control:
     loop_var: _vault_auth_method
