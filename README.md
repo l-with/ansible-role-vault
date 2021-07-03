@@ -35,15 +35,15 @@ the docker expose of the vault api
 
 the docker expose of the cluster
 
-### `vault_auth_methods`
+### `vault_auth_methods`: `[]`
 
 the list of auth methods to be enable by `vault auth enable`
 
-### `vault_secret_engines`
+### `vault_secret_engines`: `[]`
 
 the list of secret engines to be enabled by `vault secrets enable`
 
-### `vault_policies`
+### `vault_policies`: `[]`
 
 the list of policies to be added by vault policy write
 

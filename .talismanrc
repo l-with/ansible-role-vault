@@ -1,52 +1,12 @@
 fileignoreconfig:
 
-# checked
-# +----------------------+--------------------------------+----------+
-# |         FILE         |             ERRORS             | SEVERITY |
-# +----------------------+--------------------------------+----------+
-# | tasks/vault_init.yml | Potential secret pattern :     | low      |
-# |                      |  cmd:  docker exec vault vault |          |
-# |                      | operator init -key-shares 1    |          |
-# |                      | -key-threshold 1 -format=json  |          |
-# |                      | -address=http://127.0.0.1:8200 |          |
-# |                      |  | tee {{ vault_home           |          |
-# |                      | }}/ansible_done_vault_init     |          |
-# +----------------------+--------------------------------+----------+
-- filename: tasks/vault_init.yml
-  checksum: 7e6f1d5019a7078b0cd3f667738bf0e7adee17cdc44cff020a57094017f7fb8d
-
-# checked
-# +-------------------+--------------------------------+----------+
-# |       FILE        |             ERRORS             | SEVERITY |
-# +-------------------+--------------------------------+----------+
-# | defaults/main.yml | Potential secret pattern :     | low      |
-# |                   | vault_show_unseal_keys:        |          |
-# |                   | no                             |          |
-# +-------------------+--------------------------------+----------+
 - filename: defaults/main.yml
-  checksum: aa01f5baf9747eba7353061cb9f19bc3bd3ec1d62a9aba591790a8049269767c
-
-# checked
-# +----------------+--------------------------------+----------+
-# |      FILE      |             ERRORS             | SEVERITY |
-# +----------------+--------------------------------+----------+
-# | tasks/main.yml | Potential secret pattern :     | low      |
-# |                |       vault secrets enable     |          |
-# |                | -address=http://127.0.0.1:8200 |          |
-# |                | {{ _vault_secret_engine }}     |          |
-# +----------------+--------------------------------+----------+
-- filename: tasks/main.yml
-  checksum: 5d41bf7e7f407a2b38ad24eb078cf4fc1d4125356ea86623a617dec2453e693a
-
-# checked
-# +-------------------------+--------------------------------+----------+
-# |          FILE           |             ERRORS             | SEVERITY |
-# +-------------------------+--------------------------------+----------+
-# | tasks/secret_engine.yml | Potential secret pattern :     | low      |
-# |                         |       vault secrets enable     |          |
-# |                         | -address=http://127.0.0.1:{{   |          |
-# |                         | vault_docker_api_port }} {{    |          |
-# |                         | _vault_secret_engine }}        |          |
-# +-------------------------+--------------------------------+----------+
-- filename: tasks/secret_engine.yml
-  checksum: 302a6bdf0f428318482560533346975e775e0b338c951d303331cf840fccf98e
+  checked: >
+    +-------------------+--------------------------------+----------+
+    |       FILE        |             ERRORS             | SEVERITY |
+    +-------------------+--------------------------------+----------+
+    | defaults/main.yml | Potential secret pattern :     | low      |
+    |                   | vault_secret_engines:          |          |
+    |                   | []                             |          |
+    +-------------------+--------------------------------+----------+
+  checksum: 2fb70765b0cb26fcb568e8bc88b2adb913edabd8bc4f55a83b6ffc45f33aead5
