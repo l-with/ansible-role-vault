@@ -17,6 +17,10 @@
           - engine: kv
             options:
               version: 1
+          - engine: kv
+            options:
+              path: secret
+              version: 1
         vault_policies:
           - name: gitlab
             hcl: |
@@ -29,14 +33,12 @@
             kv:
               jwks_url: https://gitlab.with42.de/-/jwks
               bound_issuer: gitlab.with42.de
-          - path: auth/jwt/empty
-            force: yes
         vault_kv_puts:
           - path: secret/cred
             kv:
               pass: secret
               user: user
-          - path: secret/config
+          - path: kv/config
             cas: 0
             kv:
               security: high
