@@ -53,6 +53,7 @@
   loop: "{{ vault_policies }}"
   loop_control:
     loop_var: _vault_policy
+    label: "{{ _vault_policy.name }}"
   run_once: yes
 
 - name: Ensure vault writes
