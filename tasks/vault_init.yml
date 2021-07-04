@@ -42,6 +42,7 @@
     _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
   run_once: yes
 
+# FIXME: does not work after masking secrets!!
 - name: Set fact _vault_root_token
   ansible.builtin.set_fact:
     _vault_root_token: "{{ _vault_init_info.root_token }}"
