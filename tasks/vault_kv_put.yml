@@ -49,7 +49,7 @@
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
       vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} {{ _vault_kv_put_kv_string }}
-      | tee {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') }}
+      && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') }}
     creates: "{{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') }}"
   run_once: yes
 
