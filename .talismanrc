@@ -37,3 +37,28 @@ fileignoreconfig:
     |                      | _vault_unseal_keys }}"           |          |
     +----------------------+----------------------------------+----------+
   checksum: 87867e323bd2ac9da2a2ae8a973172945f66eb4793fe8f650f22e97e1366abd8
+
+- filename: tasks/vault_init.yml
+  checked: >
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern :     | low      |
+    |                      |  msg: "_vault_mask_secrets: {{ |          |
+    |                      | _vault_mask_secrets }}"        |          |
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern       | low      |
+    |                      | :     _unseal_keys_masked:     |          |
+    |                      | "{{ (_unseal_keys_masked |     |          |
+    |                      | default([])) + ['[masked]']    |          |
+    |                      | }}"                            |          |
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret               | low      |
+    |                      | pattern :       |              |          |
+    |                      | combine({'unseal_keys_b64':    |          |
+    |                      | _unseal_keys_masked})          |          |
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret               | low      |
+    |                      | pattern :       |              |          |
+    |                      | combine({'unseal_keys_hex':    |          |
+    |                      | _unseal_keys_masked})          |          |
+    +----------------------+--------------------------------+----------+
+  checksum: fab538aa06ef7c082ed2581e5db163b55ef25d494f02153bec68325043a11535

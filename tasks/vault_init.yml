@@ -71,4 +71,42 @@
     index_var: _vault_unseal_key_index
   run_once: yes
 
+- name: Read "{{ vault_home }}/ansible_done_vault_init" stat
+  ansible.builtin.stat:
+    path: "{{ vault_home }}/ansible_done_vault_init"
+  register: _ansible_done_vault_init_stat_output
+
+- name: Set fact _ansible_done_vault_init_stat
+  ansible.builtin.set_fact:
+    _vault_init_time: "{{ _ansible_done_vault_init_stat_output.stat.ctime }}"
+
+- name: Set fact _vault_mask_secrets
+  ansible.builtin.set_fact:
+    _vault_mask_secrets: "{{ 
+      false 
+      if vault_mask_secrets_after == -1 
+      else ((ansible_date_time.epoch | float) - (_vault_init_time | float)) > (vault_mask_secrets_after | float)
+    }}"
+
+- name: Print fact _vault_mask_secrets
+  ansible.builtin.debug:
+    msg: "_vault_mask_secrets: {{ _vault_mask_secrets }}"
+
+- name: Set fact _unseal_keys_masked
+  ansible.builtin.set_fact:
+    _unseal_keys_masked: "{{ (_unseal_keys_masked | default([])) + ['[masked]'] }}"
+  loop: "{{ range(0, vault_key_shares) | list }}"
+  when: _vault_mask_secrets
+
+- name: Ensure mask secrets in "{{ vault_home }}/ansible_done_vault_init"
+  ansible.builtin.copy:
+    content: "{{ _vault_init_info 
+      | combine({'unseal_keys_b64': _unseal_keys_masked})
+      | combine({'unseal_keys_hex': _unseal_keys_masked})
+      | combine({'root_token': '[masked]'})
+      | to_nice_json
+    }}"
+    dest: "{{ vault_home }}/ansible_done_vault_init"
+  when: _vault_mask_secrets
+
 ...
