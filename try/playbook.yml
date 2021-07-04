@@ -31,5 +31,14 @@
               bound_issuer: gitlab.with42.de
           - path: auth/jwt/empty
             force: yes
+        vault_kv_puts:
+          - path: secret/cred
+            kv:
+              pass: secret
+              user: user
+          - path: secret/config
+            cas: 0
+            kv:
+              security: high
 
 ...
