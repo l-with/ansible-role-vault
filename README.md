@@ -88,7 +88,7 @@ An item in `vault_writes` has the following parts:
 * `force` use the `-force` option, the default is `no`
 * `kv` for the key-values
 
-for example
+for example:
 
 ```yaml
 vault_writes:
@@ -98,6 +98,29 @@ vault_writes:
       bound_issuer: gitlab.with42.de
 ```
 
+### `vault_kv_puts`: `[]`
+
+the list of key-values to put into vault by `vault kv put`
+
+An item in `vault_kv_puts` has the following parts:
+
+* `path` for the path
+* `cas` the value for the `-cas` option, this part is optional
+* `kv` for the key-values
+
+for example:
+
+```yaml
+vault_kv_puts:
+  - path: secret/cred
+    kv:
+      pass: secret
+      user: user
+  - path: secret/config
+    cas: 0
+    kv:
+      security: high
+```
 
 ### `vault_show_unseal_keys`: `no`
 
@@ -109,6 +132,6 @@ if the root token is shown
 
 ### `vault_mask_secrets_after`: `-1`
 
-the time in seconds since the initialization after which the secrets in {{ vault_home }}/ansible_done_vault_init are masked if the deployment with this role is execeuted again
+the time in seconds since the initialization after which the secrets in `{{ vault_home }}/ansible_done_vault_init` are masked if the deployment with this role is execeuted again
 
--1 deactivates the masking
+`-1` deactivates the masking
