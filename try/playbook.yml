@@ -25,8 +25,11 @@
               }
         vault_writes:
           - path: auth/jwt/config
+            force: yes
             kv:
               jwks_url: https://gitlab.with42.de/-/jwks
-              # bound_issuer: gitlab.with42.de
+              bound_issuer: gitlab.with42.de
+          - path: auth/jwt/empty
+            force: yes
 
 ...
