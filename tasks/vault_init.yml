@@ -14,8 +14,8 @@
   ansible.builtin.shell:
     cmd: >
       docker exec vault 
-      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json 
-      | tee {{ vault_home }}/ansible_done_vault_init
+      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >/tmp/ansible_done_vault_init
+      && mv /tmp/ansible_done_vault_init {{ vault_home }}/ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   when: not _vault_initialized
   run_once: yes
@@ -64,7 +64,7 @@
     cmd: >
       docker exec vault 
       vault operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }} 
-      | tee {{ vault_home }}/ansible_done_vault_unseal_{{ _vault_unseal_key_index }}
+      && touch {{ vault_home }}/ansible_done_vault_unseal_{{ _vault_unseal_key_index }}
     creates: "{{ vault_home }}/ansible_done_vault_unseal_{{ _vault_unseal_key_index }}"
   loop: "{{ range(0, vault_key_threshold) | list }}"
   loop_control:

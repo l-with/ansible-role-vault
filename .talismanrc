@@ -151,3 +151,17 @@ fileignoreconfig:
     |                                | _vault_secret_engine_path }}"         |          |
     +--------------------------------+---------------------------------------+----------+
   checksum: 3b263d4d1adabdf8e1b5eb9c6a77750f3e0d48a29cb4c88c56458857b5e84923
+
+- filename: tasks/vault_init.yml
+  checked: >
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern       | low      |
+    |                      | :       vault operator         |          |
+    |                      | init -key-shares {{            |          |
+    |                      | vault_key_shares }}            |          |
+    |                      | -key-threshold {{              |          |
+    |                      | vault_key_threshold }}         |          |
+    |                      | -format=json >/tmp/an          |          |
+    |                      | sible_done_vault_init          |          |
+    +----------------------+--------------------------------+----------+
+  checksum: 09c747d718066e1131f3e65efb8337cbc58ed8ddd1732ed05537754f29199c96
