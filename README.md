@@ -43,7 +43,12 @@ the list of auth methods to be enable by `vault auth enable`
 
 the list of secret engines to be enabled by `vault secrets enable`
 
-An item in `vault_secret_engines` has two parts: `engine` for the name of the engine and `options` for the options for the engine, for example:
+An item in `vault_secret_engines` has the following parts:
+
+* `engine` for the name of the engine
+* `options` for the options for the engine, the default is `{}`
+
+for example:
 
 ```yaml
 vault_secret_engines:
@@ -57,7 +62,12 @@ vault_secret_engines:
 
 the list of policies to be added by `vault policy write`
 
-An item in `vault_policies` has two parts: `name` for the name of the policy and `hcl` for the policy definition, for example:
+An item in `vault_policies` has the following parts:
+
+* `name` for the name of the policy
+* `hcl` for the policy definition
+
+for example:
 
 ```yaml
 vault_policies
@@ -72,7 +82,13 @@ vault_policies
 
 the list of data to write vault by `vault write`
 
-An item in `vault_writes` two parts: `path` for the path and `kv` for the key-values, for example
+An item in `vault_writes` has the following parts:
+
+* `path` for the path
+* `force` use the `-force` option, the default is `no`
+* `kv` for the key-values
+
+for example
 
 ```yaml
 vault_writes:
