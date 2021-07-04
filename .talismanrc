@@ -122,3 +122,32 @@ fileignoreconfig:
     |                        | }}={{ item.value }}"           |          |
     +------------------------+--------------------------------+----------+
   checksum: f55e541ab1bf0feeb20ccf37aa2c093f40464afaff906cb3e5201408d726eeb0
+
+- filename: tasks/vault_secrets_enable.yml
+  checked: >
+    +--------------------------------+---------------------------------------+----------+
+    | tasks/vault_secrets_enable.yml | Potential secret pattern :            | low      |
+    |                                | _vault_secret_engine_options_string:  |          |
+    |                                | "{{                                   |          |
+    |                                | _vault_secret_engine_options_string   |          |
+    |                                | | default('') }} -{{ item.key }}={{   |          |
+    |                                | item.v alue }}"                       |          |
+    +--------------------------------+---------------------------------------+----------+
+    | tasks/vault_secrets_enable.yml | Potential secret pattern : #     msg: | low      |
+    |                                | "_vault_secret_engine_options_string: |          |
+    |                                | {{                                    |          |
+    |                                | _vault_secret_engine_options_string   |          |
+    |                                | }}"                                   |          |
+    +--------------------------------+---------------------------------------+----------+
+    | tasks/vault_secrets_enable.yml | Potential secret pattern :            | low      |
+    |                                | _vault_secret_engine_path: "{{        |          |
+    |                                | _vault_secret_engine_options.path |   |          |
+    |                                | default(_vault_secret_engine.engine)  |          |
+    |                                | | default(omit)  }}"                  |          |
+    +--------------------------------+---------------------------------------+----------+
+    | tasks/vault_secrets_enable.yml | Potential secret                      | low      |
+    |                                | pattern : #     msg:                  |          |
+    |                                | "_vault_secret_engine_path: {{        |          |
+    |                                | _vault_secret_engine_path }}"         |          |
+    +--------------------------------+---------------------------------------+----------+
+  checksum: 3b263d4d1adabdf8e1b5eb9c6a77750f3e0d48a29cb4c88c56458857b5e84923
