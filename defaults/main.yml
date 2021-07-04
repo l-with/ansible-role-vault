@@ -17,6 +17,7 @@ vault_key_threshold:          3
 vault_auth_methods:           []
 vault_secret_engines:         []
 vault_policies:               []
+vault_writes:                 []
 vault_log_level:              "Info"        
 vault_show_unseal_keys:       no
 vault_show_root_token:        no
