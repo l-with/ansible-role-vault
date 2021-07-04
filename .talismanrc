@@ -66,8 +66,6 @@ fileignoreconfig:
 - filename: tasks/write.yml
   checked: >
     +-----------------+--------------------------------+----------+
-    |      FILE       |             ERRORS             | SEVERITY |
-    +-----------------+--------------------------------+----------+
     | tasks/write.yml | Potential secret pattern :     | low      |
     |                 |     _vault_write_kv_string:    |          |
     |                 | "{{ _vault_write_kv_string     |          |
@@ -75,3 +73,29 @@ fileignoreconfig:
     |                 | }}={{ item.value }}"           |          |
     +-----------------+--------------------------------+----------+
   checksum: f5d34a51f2f6ccd522d82f721160a8ec13dbc6a7d23a907973671d0aab9bc038
+
+- filename: tasks/secret_engine.yml
+  checked: >
+    +-------------------------+--------------------------------+----------+
+    | tasks/secret_engine.yml | Potential secret pattern :     | low      |
+    |                         |  _vault_secret_engine_options: |          |
+    |                         | "{{                            |          |
+    |                         | _vault_secret_engine.options   |          |
+    |                         | | default({}) | default(omit)  |          |
+    |                         | }}"                            |          |
+    +-------------------------+--------------------------------+----------+
+    | tasks/secret_engine.yml | Potential secret pattern :     | low      |
+    |                         |  _vault_secret_options_string: |          |
+    |                         | "{{                            |          |
+    |                         | _vault_secret_options_string   |          |
+    |                         | | default('') }} -{{ item.key  |          |
+    |                         | }}={{ item.value }}"           |          |
+    +-------------------------+--------------------------------+----------+
+    | tasks/secret_engine.yml | Potential secret               | low      |
+    |                         | pattern : #     msg:           |          |
+    |                         | "_vault_secret_options_string: |          |
+    |                         | {{                             |          |
+    |                         | _vault_secret_options_string   |          |
+    |                         | }}"                            |          |
+    +-------------------------+--------------------------------+----------+
+  checksum: 2817e8b3aebb01e3fcc97d63ad5fedfdfb53296151042764702c3da5b02bfe69
