@@ -20,7 +20,7 @@
 
 # - name: Print _vault_write_kv_string
 #   ansible.builtin.debug:
-#     msg: "_vault_write_kv_string: {{ _vault_write_kv_string }}"
+#     msg: "_vault_write_kv_string: '{{ _vault_write_kv_string }}'"
 #   run_once: yes
 
 - name: Ensure _vault_write_force
@@ -32,6 +32,11 @@
   ansible.builtin.set_fact:
     _vault_write_force_string: "{{ '-force' if _vault_write_force else '' }}"
   run_once: yes
+
+# - name: Print _vault_write_force_string
+#   ansible.builtin.debug:
+#     msg: "_vault_write_force_string: '{{ _vault_write_force_string }}'"
+#   run_once: yes
 
 - name: Ensure vault write
   ansible.builtin.shell:
