@@ -35,21 +35,21 @@
   run_once: yes
 
 - name: Ensure vault enable auth methods 
-  ansible.builtin.include_tasks: auth_method.yml
+  ansible.builtin.include_tasks: vault_auth_enable.yml
   loop: "{{ vault_auth_methods }}"
   loop_control:
     loop_var: _vault_auth_method
   run_once: yes
   
 - name: Ensure vault enable secret engines 
-  ansible.builtin.include_tasks: secret_engine.yml
+  ansible.builtin.include_tasks: vault_secrets_enable.yml
   loop: "{{ vault_secret_engines }}"
   loop_control:
     loop_var: _vault_secret_engine
   run_once: yes
 
 - name: Ensure vault write policies
-  ansible.builtin.include_tasks: policy.yml
+  ansible.builtin.include_tasks: vault_policy_write.yml
   loop: "{{ vault_policies }}"
   loop_control:
     loop_var: _vault_policy
@@ -57,7 +57,7 @@
   run_once: yes
 
 - name: Ensure vault writes
-  ansible.builtin.include_tasks: write.yml
+  ansible.builtin.include_tasks: vault_write.yml
   loop: "{{ vault_writes }}"
   loop_control:
     loop_var: _vault_write
