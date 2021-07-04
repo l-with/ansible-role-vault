@@ -13,12 +13,20 @@
         vault_auth_methods:
           - jwt
         vault_secret_engines:
-          - ssh
+          - engine: ssh
+          - engine: kv
+            options:
+              version: 1
         vault_policies:
           - name: gitlab
             hcl: |
               path "gitlab/secret*" {
                 capabilities = [ "read" ]
               }
+        vault_writes:
+          - path: auth/jwt/config
+            kv:
+              jwks_url: https://gitlab.with42.de/-/jwks
+              # bound_issuer: gitlab.with42.de
 
 ...
