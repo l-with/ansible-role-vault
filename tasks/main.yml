@@ -64,4 +64,12 @@
     label: "{{ _vault_write.path }}"
   run_once: yes
 
+- name: Ensure vault kv puts
+  ansible.builtin.include_tasks: vault_kv_put.yml
+  loop: "{{ vault_kv_puts }}"
+  loop_control:
+    loop_var: _vault_kv_put
+    label: "{{ _vault_kv_put.path }}"
+  run_once: yes
+
 ...
