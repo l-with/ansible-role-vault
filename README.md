@@ -64,3 +64,9 @@ if the unseal keys are shown
 ### `vault_show_root_token`: `no`
 
 if the root token is shown
+
+### `vault_mask_secrets_after`: `-1`
+
+the time in seconds since the initialization after which the secrets in {{ vault_home }}/ansible_done_vault_init are masked if the deployment with this role is execeuted again
+
+-1 deactivates the masking
