@@ -62,3 +62,16 @@ fileignoreconfig:
     |                      | _unseal_keys_masked})          |          |
     +----------------------+--------------------------------+----------+
   checksum: fab538aa06ef7c082ed2581e5db163b55ef25d494f02153bec68325043a11535
+
+- filename: tasks/write.yml
+  checked: >
+    +-----------------+--------------------------------+----------+
+    |      FILE       |             ERRORS             | SEVERITY |
+    +-----------------+--------------------------------+----------+
+    | tasks/write.yml | Potential secret pattern :     | low      |
+    |                 |     _vault_write_kv_string:    |          |
+    |                 | "{{ _vault_write_kv_string     |          |
+    |                 | | default('') }} {{ item.key   |          |
+    |                 | }}={{ item.value }}"           |          |
+    +-----------------+--------------------------------+----------+
+  checksum: f5d34a51f2f6ccd522d82f721160a8ec13dbc6a7d23a907973671d0aab9bc038
