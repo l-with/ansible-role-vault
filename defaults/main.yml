@@ -20,5 +20,6 @@ vault_policies:               []
 vault_log_level:              "Info"        
 vault_show_unseal_keys:       no
 vault_show_root_token:        no
+vault_mask_secrets_after:     -1
 
 ...
