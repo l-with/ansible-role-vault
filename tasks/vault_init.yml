@@ -1,6 +1,6 @@
 ---
 
-- name: Read nomad init file stat
+- name: Read vault init file stat
   ansible.builtin.stat:
     path: "{{ vault_home }}/ansible_done_vault_init"
   ignore_errors: true
