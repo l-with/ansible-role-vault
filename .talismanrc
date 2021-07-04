@@ -99,3 +99,15 @@ fileignoreconfig:
     |                         | }}"                            |          |
     +-------------------------+--------------------------------+----------+
   checksum: 2817e8b3aebb01e3fcc97d63ad5fedfdfb53296151042764702c3da5b02bfe69
+
+- filename: README.md
+  checked: >
+    +-----------+--------------------------------+----------+
+    | README.md | Potential secret pattern : An  | low      |
+    |           | item in `vault_secret_engines` |          |
+    |           | has two parts: `engine` for    |          |
+    |           | the name of the engine and     |          |
+    |           | `options` for the options for  |          |
+    |           | the  engine                    |          |
+    +-----------+--------------------------------+----------+
+  checksum: 64ce890b86b8ddad6b1e19c55f8f6722a92a8da3440e1b33800a8621cdc91ecb

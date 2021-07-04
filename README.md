@@ -43,19 +43,45 @@ the list of auth methods to be enable by `vault auth enable`
 
 the list of secret engines to be enabled by `vault secrets enable`
 
-### `vault_policies`: `[]`
-
-the list of policies to be added by vault policy write
-
-A policy has two parts: `name` and `hcl`, for example:
+An item in `vault_secret_engines` has two parts: `engine` for the name of the engine and `options` for the options for the engine, for example:
 
 ```yaml
+vault_secret_engines:
+  - engine: ssh
+  - engine: kv
+    options:
+      version: 1
+```
+
+### `vault_policies`: `[]`
+
+the list of policies to be added by `vault policy write`
+
+An item in `vault_policies` has two parts: `name` for the name of the policy and `hcl` for the policy definition, for example:
+
+```yaml
+vault_policies
 - name: gitlab
   hcl: |
     path "gitlab/secret*" {
       capabilities = [ "read" ]
     }
 ```
+
+### `vault_writes`: `[]`
+
+the list of data to write vault by `vault write`
+
+An item in `vault_writes` two parts: `path` for the path and `kv` for the key-values, for example
+
+```yaml
+vault_writes:
+  - path: auth/jwt/config
+    kv:
+      jwks_url: https://gitlab.with42.de/-/jwks
+      bound_issuer: gitlab.with42.de
+```
+
 
 ### `vault_show_unseal_keys`: `no`
 
