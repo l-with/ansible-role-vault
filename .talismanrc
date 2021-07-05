@@ -213,3 +213,16 @@ fileignoreconfig:
     |                      | }}/ansible_done_vault_init      |          |
     +----------------------+---------------------------------+----------+
   checksum: 314f788fd48207465eefdbc304e56cd618059e8c981f543d453b1d2a432f5738
+
+- filename: defaults/main.yml
+  checked: >
+    +-------------------+--------------------------------+----------+
+    | defaults/main.yml | Potential secret pattern :     | low      |
+    |                   | vault_key_shares:              |          |
+    |                   |                              1 |          |
+    +-------------------+--------------------------------+----------+
+    | defaults/main.yml | Potential secret pattern :     | low      |
+    |                   | vault_key_threshold:           |          |
+    |                   |                              1 |          |
+    +-------------------+--------------------------------+----------+
+  checksum: cfef67f553076321da54e61bad2a7edc65234bdaa39a4bd76780291e657dc0bb

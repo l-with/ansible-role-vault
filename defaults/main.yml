@@ -12,8 +12,8 @@ vault_storage_config: |
   }
   cluster_addr = "http://127.0.0.1:8201"
 
-vault_key_shares:             5
-vault_key_threshold:          3
+vault_key_shares:             1
+vault_key_threshold:          1
 vault_auth_methods:           []
 vault_secret_engines:         []
 vault_policies:               []
