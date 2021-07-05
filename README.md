@@ -35,6 +35,14 @@ the docker expose of the vault api
 
 the docker expose of the cluster
 
+### `vault_key_shares`: `1`
+
+the value for the `vault init` parameter `-key-shares`
+
+### `vault_key_threshold`: `1`
+
+the value for the `vault init` parameter `-key-threshold`
+
 ### `vault_auth_methods`: `[]`
 
 the list of auth methods to be enable by `vault auth enable`
