@@ -226,3 +226,12 @@ fileignoreconfig:
     |                   |                              1 |          |
     +-------------------+--------------------------------+----------+
   checksum: cfef67f553076321da54e61bad2a7edc65234bdaa39a4bd76780291e657dc0bb
+
+- filename: defaults/main.yml
+  checked: >
+    +-------------------+--------------------------------+----------+
+    | defaults/main.yml | Potential secret pattern :     | low      |
+    |                   | vault_encrypt_secret:          |          |
+    |                   | CHANGE!vault_encrypt_secret    |          |
+    +-------------------+--------------------------------+----------+
+  checksum: be71006219ab1341a3fe961fd6351cd1e2c36e49455528516fda8ebd52ac946d
