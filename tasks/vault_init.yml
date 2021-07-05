@@ -19,7 +19,7 @@
       && rm {{ vault_home }}/.ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   environment:
-    SECRET: "{{ vault_encrypt_secret | default('vault_encrypt_secret') }}"
+    SECRET: "{{ vault_encrypt_secret }}"
   when: not _vault_initialized
   run_once: yes
 
@@ -28,7 +28,7 @@
     cmd: >
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home }}/.ansible_done_vault_init -in {{ vault_home }}/ansible_done_vault_init
   environment:
-    SECRET: "{{ vault_encrypt_secret | default('vault_encrypt_secret') }}"
+    SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
 
 - name: Slurp vault init info

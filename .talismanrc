@@ -235,3 +235,13 @@ fileignoreconfig:
     |                   | CHANGE!vault_encrypt_secret    |          |
     +-------------------+--------------------------------+----------+
   checksum: be71006219ab1341a3fe961fd6351cd1e2c36e49455528516fda8ebd52ac946d
+
+- filename: tasks/vault_init.yml
+  checked: >
+    +----------------------+--------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern       | low      |
+    |                      | :     SECRET: "{{              |          |
+    |                      | vault_encrypt_secret }}"       |          |
+    +----------------------+--------------------------------+----------+
+  checksum: b7278e6ee7292e0cbf01b9ae994d4ab74e29cf57812d0be117b8e42d9bd9efa8
+  
