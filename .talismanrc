@@ -253,4 +253,21 @@ fileignoreconfig:
     |           | `CHANGE!vault_encrypt_secret`  |          |
     +-----------+--------------------------------+----------+
   checksum: e15bc32581630dd5ad505a36ac4519f400ef684d016bdd71d49572481f48065a
+
+- filename: README.md
+  checked: >
+    +-------------------+--------------------------------+----------+
+    | README.md         | Potential secret pattern :     | low      |
+    |                   | ### `vault_encrypt_secret`:    |          |
+    |                   | `CHANGE_vault_encrypt_secret`  |          |
+    +-------------------+--------------------------------+----------+
+  checksum: e13784801fe955fb11c8c67039a47d72510788211c97c7018dc70f6e8ecb4dad
+- filename: defaults/main.yml
+  checked: >
+    +-------------------+--------------------------------+----------+
+    | defaults/main.yml | Potential secret pattern :     | low      |
+    |                   | vault_encrypt_secret:          |          |
+    |                   | CHANGE_vault_encrypt_secret    |          |
+    +-------------------+--------------------------------+----------+
+  checksum: aa6f8aa755b81c00d9261bbe68986c368cc4e6b1a81013ef4c0e23659635a20c
   

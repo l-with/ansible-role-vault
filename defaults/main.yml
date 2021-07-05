@@ -22,6 +22,6 @@ vault_kv_puts:                []
 vault_log_level:              "Info"        
 vault_show_unseal_keys:       no
 vault_show_root_token:        no
-vault_encrypt_secret:         CHANGE!vault_encrypt_secret
+vault_encrypt_secret:         CHANGE_vault_encrypt_secret
 
 ...

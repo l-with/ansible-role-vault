@@ -142,7 +142,7 @@ if the unseal keys are shown
 
 if the root token is shown
 
-### `vault_encrypt_secret`: `CHANGE!vault_encrypt_secret`
+### `vault_encrypt_secret`: `CHANGE_vault_encrypt_secret`
 
 the secret the output of the vault initialization is encoded
 
