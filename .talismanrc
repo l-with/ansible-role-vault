@@ -165,3 +165,51 @@ fileignoreconfig:
     |                      | sible_done_vault_init          |          |
     +----------------------+--------------------------------+----------+
   checksum: 09c747d718066e1131f3e65efb8337cbc58ed8ddd1732ed05537754f29199c96
+
+- filename: tasks/vault_init.yml
+  checked: >
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern        | low      |
+    |                      | :       vault operator          |          |
+    |                      | init -key-shares {{             |          |
+    |                      | vault_key_shares }}             |          |
+    |                      | -key-threshold {{               |          |
+    |                      | vault_key_threshold }}          |          |
+    |                      | -format=json >{{ vaul t_home    |          |
+    |                      | }}/.ansible_done_vault_init     |          |
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern        | low      |
+    |                      | :       && openssl enc          |          |
+    |                      | -aes-256-cbc -pbkdf2 -pass      |          |
+    |                      | env:SECRET -in {{ vault_home    |          |
+    |                      | }}/.ansible_done_vault_init     |          |
+    |                      | -out {{ vault_home              |          |
+    |                      | }}/ansible_done_vault_init      |          |
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern        | low      |
+    |                      | :     SECRET: "{{               |          |
+    |                      | vault_encrypt_secret |          |          |
+    |                      | default('vault_encrypt_secret') |          |
+    |                      | }}"                             |          |
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern :      | low      |
+    |                      |     openssl enc -aes-256-cbc    |          |
+    |                      | -pbkdf2 -pass env:SECRET        |          |
+    |                      | -d -out {{ vault_home           |          |
+    |                      | }}/.ansible_done_vault_init     |          |
+    |                      | -in {{ vault_home               |          |
+    |                      | }}/ansible_done_vault_init      |          |
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern :      | low      |
+    |                      | :SECRET -in {{ vault_home       |          |
+    |                      | }}/.ansible_done_vault_init     |          |
+    |                      | -out {{ vault_home              |          |
+    |                      | }}/ansible_done_vault_init      |          |
+    +----------------------+---------------------------------+----------+
+    | tasks/vault_init.yml | Potential secret pattern :      | low      |
+    |                      | :SECRET -d -out {{ vault_home   |          |
+    |                      | }}/.ansible_done_vault_init     |          |
+    |                      | -in {{ vault_home               |          |
+    |                      | }}/ansible_done_vault_init      |          |
+    +----------------------+---------------------------------+----------+
+  checksum: 314f788fd48207465eefdbc304e56cd618059e8c981f543d453b1d2a432f5738
