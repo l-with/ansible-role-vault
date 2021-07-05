@@ -9,8 +9,12 @@ There are role variables to
 * add auth methods (`vault_auth_methods`)
 * add secret engines (`vault_secret_engines`)
 * add policies (`vault_policies`)
+* add data (`vault_writes`)
+* add key-values (`vault_kv_puts`)
 
 All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home`.
+
+The output of `vault init` is saved as JSON and encrypted with `openssl` with the secret `vault_encrypt_secret`.
 
 ## Collection dependencies
 
@@ -138,7 +142,7 @@ if the unseal keys are shown
 
 if the root token is shown
 
-### `vault_encrypt_secret`
+### `vault_encrypt_secret`: `CHANGE!vault_encrypt_secret`
 
 the secret the output of the vault initialization is encoded
 

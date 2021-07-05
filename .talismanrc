@@ -244,4 +244,13 @@ fileignoreconfig:
     |                      | vault_encrypt_secret }}"       |          |
     +----------------------+--------------------------------+----------+
   checksum: b7278e6ee7292e0cbf01b9ae994d4ab74e29cf57812d0be117b8e42d9bd9efa8
+
+- filename: README.md
+  checked: >
+    +-----------+--------------------------------+----------+
+    | README.md | Potential secret pattern :     | low      |
+    |           | ### `vault_encrypt_secret`:    |          |
+    |           | `CHANGE!vault_encrypt_secret`  |          |
+    +-----------+--------------------------------+----------+
+  checksum: e15bc32581630dd5ad505a36ac4519f400ef684d016bdd71d49572481f48065a
   
