@@ -72,7 +72,4 @@
     label: "{{ _vault_kv_put.path }}"
   run_once: yes
 
-# TODO
-# implement vault token create
-
 ...
