@@ -16,4 +16,8 @@
   ansible.builtin.pip:
     name: docker
 
+- name: Ensure openssl
+  ansible.builtin.apt:
+    name: openssl
+    
 ...
