@@ -271,3 +271,19 @@ fileignoreconfig:
     +-------------------+--------------------------------+----------+
   checksum: aa6f8aa755b81c00d9261bbe68986c368cc4e6b1a81013ef4c0e23659635a20c
   
+- filename: tasks/vault_kv_put.yml
+  checked: >
+    +------------------------+--------------------------------+----------+
+    | tasks/vault_kv_put.yml | Potential secret pattern : #   | low      |
+    |                        |     _vault_kv_put_kv_string:   |          |
+    |                        | "{{ _vault_kv_put_kv_string    |          |
+    |                        | | default('') }} {{ item.key   |          |
+    |                        | }}={{ item.value }}"           |          |
+    +------------------------+--------------------------------+----------+
+    | tasks/vault_kv_put.yml | Potential secret pattern       | low      |
+    |                        | :       vault kv put {{        |          |
+    |                        | _vault_kv_put_cas_string }}    |          |
+    |                        | {{ _vault_kv_put.path }} {{    |          |
+    |                        | item.key }}={{ item.value }}   |          |
+    +------------------------+--------------------------------+----------+
+  checksum: 93d6e682a5531ffd76b95f838047f1c6649859709afa2c393963c9227cf199c6

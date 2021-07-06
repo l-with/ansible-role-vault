@@ -5,18 +5,18 @@
     _vault_kv_put_kv: "{{ _vault_kv_put.kv | default({}) | default(omit) }}"
   run_once: yes
 
-- name: Ensure initialize _vault_kv_put_kv_string
-  ansible.builtin.set_fact:
-    _vault_kv_put_kv_string: ''
-  run_once: yes
+# - name: Ensure initialize _vault_kv_put_kv_string
+#   ansible.builtin.set_fact:
+#     _vault_kv_put_kv_string: ''
+#   run_once: yes
 
-- name: Ensure _vault_kv_put_kv_string
-  ansible.builtin.set_fact:
-    _vault_kv_put_kv_string: "{{ _vault_kv_put_kv_string | default('') }} {{ item.key }}={{ item.value }}"
-  loop: "{{ query('dict', _vault_kv_put_kv) }}"
-  loop_control:
-    label: "{{ item.key }}"
-  run_once: yes
+# - name: Ensure _vault_kv_put_kv_string
+#   ansible.builtin.set_fact:
+#     _vault_kv_put_kv_string: "{{ _vault_kv_put_kv_string | default('') }} {{ item.key }}={{ item.value }}"
+#   loop: "{{ query('dict', _vault_kv_put_kv) }}"
+#   loop_control:
+#     label: "{{ item.key }}"
+#   run_once: yes
 
 # - name: Print _vault_kv_put_kv_string
 #   ansible.builtin.debug:
@@ -48,9 +48,13 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} {{ _vault_kv_put_kv_string }}
-      && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') }}
-    creates: "{{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') }}"
+      vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} {{ item.key }}={{ item.value }}
+      && rm -f {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
+      && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}_{{ item.key }}
+    creates: "{{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}_{{ item.key }}"
+  loop: "{{ query('dict', _vault_kv_put_kv) }}"
+  loop_control:
+    label: "{{ item.key }}"
   run_once: yes
 
 ...
