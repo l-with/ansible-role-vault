@@ -134,6 +134,31 @@ vault_kv_puts:
       security: high
 ```
 
+The idempotence of `vault_kv_puts` is restricted to the `path`.
+If you need to put new key-values to a path, run your playbook play two times with different assignments to `vault_kv_deletes` and `vault_kv_puts`:
+
+* first delete the path with `vault_kv_deletes`
+* second put the new key-values to the path with `vault_kv_puts`
+
+### `vault_kv_deletes`: `[]`
+
+the paths to be delete by `vault kv delete`
+
+An item in `vault_kv_deletes` has the following parts:
+
+* `path` for the path
+* `versions` the value for the `-versions` option, this part is optional
+
+### `vault_kv_deletes` and `vault_kv_puts`
+
+Deleting a key-value path in vault is destructive.
+The variable `vault_kv_deletes` should only be used for undos.
+
+The deleting of the key-value paths in `vault_kv_deletes` is done before putting the key-values in `vault_kv_puts` to vault.
+
+Using the same path in `vault_kv_deletes` and `vault_kv_puts` is not idempotent.
+This is because using `vault_kv_deletes` with a path, destroys the idempotence for `vault_kv_puts` with the same path and vice versa.
+
 ### `vault_show_unseal_keys`: `no`
 
 if the unseal keys are shown
