@@ -64,6 +64,14 @@
     label: "{{ _vault_write.path }}"
   run_once: yes
 
+- name: Ensure vault kv deletes
+  ansible.builtin.include_tasks: vault_kv_delete.yml
+  loop: "{{ vault_kv_deletes }}"
+  loop_control:
+    loop_var: _vault_kv_delete
+    label: "{{ _vault_kv_delete.path }}"
+  run_once: yes
+
 - name: Ensure vault kv puts
   ansible.builtin.include_tasks: vault_kv_put.yml
   loop: "{{ vault_kv_puts }}"
