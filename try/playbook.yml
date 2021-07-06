@@ -19,7 +19,7 @@
               version: 1
           - engine: kv
             options:
-              path: secret
+              path: hetzner
               version: 1
         vault_policies:
           - name: gitlab
@@ -33,11 +33,13 @@
             kv:
               jwks_url: https://gitlab.with42.de/-/jwks
               bound_issuer: gitlab.with42.de
+        # vault_kv_deletes:
+        #   - path: hetzner/project/with*.de
+        #   - path: kv/config
         vault_kv_puts:
-          - path: secret/cred
+          - path: hetzner/project/with*.de
             kv:
-              pass: secret
-              user: user
+              hcloud_token: abcdefghijklmn
           - path: kv/config
             cas: 0
             kv:
