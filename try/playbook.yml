@@ -47,5 +47,9 @@
             cas: 0
             kv:
               security: high
+  tasks:
+    - name: Print root token
+      ansible.builtin.debug:
+        msg: "{{ _vault_root_token }}"
 
 ...
