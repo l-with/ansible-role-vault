@@ -16,6 +16,11 @@
     path:  "{{ vault_home }}/config/policies"
     state: directory
 
+- name: Ensure vault tmp path
+  ansible.builtin.file:
+    path:  "{{ vault_home }}/config/tmp"
+    state: directory
+
 - name: Ensure vault file/raft path
   ansible.builtin.file:
     path:  "{{ vault_home }}/file/raft"
