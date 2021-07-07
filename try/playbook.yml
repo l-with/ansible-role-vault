@@ -40,6 +40,9 @@
           - path: hetzner/project/with*.de
             kv:
               hcloud_token: abcdefghijklmn
+              ssh_key: |
+                line 1
+                line 2
           - path: kv/config
             cas: 0
             kv:

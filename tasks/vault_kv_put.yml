@@ -12,7 +12,7 @@
 
 # - name: Ensure _vault_kv_put_kv_string
 #   ansible.builtin.set_fact:
-#     _vault_kv_put_kv_string: "{{ _vault_kv_put_kv_string | default('') }} {{ item.key }}={{ item.value }}"
+#     _vault_kv_put_kv_string: "{{ _vault_kv_put_kv_string | default('') }} {{ item.key }}="{{ item.value }}"
 #   loop: "{{ query('dict', _vault_kv_put_kv) }}"
 #   loop_control:
 #     label: "{{ item.key }}"
@@ -48,7 +48,7 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} {{ item.key }}={{ item.value }}
+      vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} {{ item.key }}="{{ item.value }}"
       && rm -f {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
       && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}_{{ item.key }}
     creates: "{{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}_{{ item.key }}"
