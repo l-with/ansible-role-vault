@@ -1,27 +1,15 @@
 ---
 
-- name: Ensure _vault_write_kv
+- name: Ensure _vault_write_data
   ansible.builtin.set_fact:
-    _vault_write_kv: "{{ _vault_write.kv | default({}) | default(omit) }}"
+    _vault_write_data: "{{ _vault_write.data | default({}) | default(omit) }}"
   run_once: yes
 
-- name: Ensure initialize _vault_write_kv_string
-  ansible.builtin.set_fact:
-    _vault_write_kv_string: ''
+- name: Ensure vault write "{{ vault_home }}/{{ _vault_write_json }}"
+  ansible.builtin.copy:
+    dest: "{{ vault_home }}/{{ _vault_write_json }}"
+    content: "{{ _vault_write_data | to_json }} "
   run_once: yes
-
-- name: Ensure _vault_write_kv_string
-  ansible.builtin.set_fact:
-    _vault_write_kv_string: "{{ _vault_write_kv_string | default('') }} {{ item.key }}={{ item.value }}"
-  loop: "{{ query('dict', _vault_write_kv) }}"
-  loop_control:
-    label: "{{ item.key }}"
-  run_once: yes
-
-# - name: Print _vault_write_kv_string
-#   ansible.builtin.debug:
-#     msg: "_vault_write_kv_string: '{{ _vault_write_kv_string }}'"
-#   run_once: yes
 
 - name: Ensure _vault_write_force
   ansible.builtin.set_fact:
@@ -42,11 +30,11 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault write {{ _vault_write_force_string }} {{ _vault_write.path }} {{ _vault_write_kv_string }} 
-      >{{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') }}
-      && mv {{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') }} 
-      {{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') }}
-    creates: "{{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') }}"
+      vault write {{ _vault_write_force_string }} {{ _vault_write.path }} @/vault/{{ _vault_write_json }}
+      >{{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
+      && mv {{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }} 
+      {{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
+    creates: "{{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}"
   run_once: yes
 
 ...

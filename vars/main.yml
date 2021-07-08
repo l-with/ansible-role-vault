@@ -1,5 +1,6 @@
 ---
 
-_vault_kv_put_kv_json: config/tmp/.vault_kv_put_kv.json
+_vault_kv_put_kv_json:   config/tmp/.vault_kv_put_kv.json
+_vault_write_json:       config/tmp/.vault_write.json
 
 ...
