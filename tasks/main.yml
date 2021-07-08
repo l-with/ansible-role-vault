@@ -48,12 +48,12 @@
     loop_var: _vault_secret_engine
   run_once: yes
 
-- name: Ensure vault write policies
+- name: Ensure vault policy writes
   ansible.builtin.include_tasks: vault_policy_write.yml
-  loop: "{{ vault_policies }}"
+  loop: "{{ vault_policy_writes }}"
   loop_control:
-    loop_var: _vault_policy
-    label: "{{ _vault_policy.name }}"
+    loop_var: _vault_policy_write
+    label: "{{ _vault_policy_write.name }}"
   run_once: yes
 
 - name: Ensure vault writes
