@@ -16,7 +16,7 @@ vault_key_shares:             1
 vault_key_threshold:          1
 vault_auth_methods:           []
 vault_secret_engines:         []
-vault_policies:               []
+vault_policy_writes:          []
 vault_writes:                 []
 vault_kv_deletes:             []
 vault_kv_puts:                []
