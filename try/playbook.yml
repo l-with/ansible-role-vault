@@ -21,18 +21,56 @@
             options:
               path: hetzner
               version: 1
-        vault_policies:
-          - name: gitlab
-            hcl: |
-              path "gitlab/secret*" {
+        vault_policy_writes:
+          - name: with*.de
+            hcl: |-
+              path "hetzner/project/with*.de/*" {
+                capabilities = [ "read" ]
+              }
+          - name: le   
+            hcl: |-
+              path "gitlab/le/*" {
+                capabilities = [ "read" ]
+              }
+          - name: runner          
+            hcl: |-
+              path "gitlab/runner/*" {
+                capabilities = [ "read" ]
+              }
+          - name: docker
+            hcl: |-
+              path "gitlab/docker/*" {
                 capabilities = [ "read" ]
               }
         vault_writes:
           - path: auth/jwt/config
             force: yes
-            kv:
+            data:
               jwks_url: https://gitlab.with42.de/-/jwks
               bound_issuer: gitlab.with42.de
+          - path: auth/jwt/role/hetzner
+            data:
+              role_type: jwt
+              policies:
+                - with*.de
+                - le
+              token_explicit_max_ttl: 60
+              bound_claims_type: glob
+              bound_claims:
+                namespace_id:  '40'  # Terraform / Hetzner
+                ref_protected: 'true'
+          - path: auth/jwt/role/docker
+            data:
+              role_type: jwt
+              policies:
+                - docker
+              token_explicit_max_ttl: 60
+              bound_claims_type: glob
+              bound_claims:
+                project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
+                ref_protected: 'true'
+          
+
         # vault_kv_deletes:
         #   - path: hetzner/project/with*.de
         #   - path: kv/config
@@ -47,6 +85,9 @@
             cas: 0
             kv:
               security: high
+          # - path: kv
+          #   kv:
+          #     without_subpath: doesnotwork
   tasks:
     - name: Print root token
       ansible.builtin.debug:
