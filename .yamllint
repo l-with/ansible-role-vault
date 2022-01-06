@@ -1,0 +1,12 @@
+---
+
+extends: default
+
+rules:
+  colons:
+    max-spaces-before: 0
+    max-spaces-after: 20
+  line-length:
+    max: 132
+
+...

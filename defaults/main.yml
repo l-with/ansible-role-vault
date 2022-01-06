@@ -20,9 +20,9 @@ vault_policy_writes:          []
 vault_writes:                 []
 vault_kv_deletes:             []
 vault_kv_puts:                []
-vault_log_level:              "Info"        
-vault_show_unseal_keys:       no
-vault_show_root_token:        no
+vault_log_level:              "Info"
+vault_show_unseal_keys:       false
+vault_show_root_token:        false
 vault_encrypt_secret:         CHANGE_vault_encrypt_secret
 
 ...

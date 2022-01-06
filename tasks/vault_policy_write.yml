@@ -3,8 +3,9 @@
 - name: Ensure vault policy write "{{ vault_home }}/config/policies/{{ _vault_policy_write.name }}.hcl"
   ansible.builtin.copy:
     dest: "{{ vault_home }}/config/policies/{{ _vault_policy_write.name }}.hcl"
-    content: "{{ _vault_policy_write.hcl }} "
-  run_once: yes
+    content: "{{ _vault_policy_write.hcl }}"
+    mode: o-rwx
+  run_once: true
 
 # - name: Ensure policy write hcl
 #   ansible.builtin.template:
@@ -14,10 +15,10 @@
 - name: Ensure vault write policy
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault policy write {{ _vault_policy_write.name }} /vault/config/policies/{{ _vault_policy_write.name }}.hcl
       && touch {{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy_write.name }}
     creates: "{{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy_write.name }}"
-  run_once: yes
+  run_once: true
 
 ...

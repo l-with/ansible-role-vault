@@ -1,67 +1,15 @@
 fileignoreconfig:
 
 - filename: defaults/main.yml
-  checked: >
-    +-------------------+--------------------------------+----------+
-    |       FILE        |             ERRORS             | SEVERITY |
-    +-------------------+--------------------------------+----------+
-    | defaults/main.yml | Potential secret pattern :     | low      |
-    |                   | vault_secret_engines:          |          |
-    |                   | []                             |          |
-    +-------------------+--------------------------------+----------+
-  checksum: 2fb70765b0cb26fcb568e8bc88b2adb913edabd8bc4f55a83b6ffc45f33aead5
+  allowed_patterns:
+    - >
+      vault_show_unseal_keys: +false
 
-- filename: defaults/main.yml
-  checked: >
-    +----------------------+----------------------------------+----------+
-    | defaults/main.yml    | Potential secret pattern :       | low      |
-    |                      | vault_key_shares:                |          |
-    |                      |                                5 |          |
-    +----------------------+----------------------------------+----------+
-    | defaults/main.yml    | Potential secret pattern :       | low      |
-    |                      | vault_key_threshold:             |          |
-    |                      |                                3 |          |
-    +----------------------+----------------------------------+----------+
-  checksum: 998cc6fda341772304b40ed86a757f175a3311e0166c04dc0d5bfdb5f4643f3d
 
 - filename: tasks/vault_init.yml
-  checked: >
-    +----------------------+----------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret pattern :       | low      |
-    |                      |    _vault_unseal_keys:  "{{      |          |
-    |                      | _vault_init_info.unseal_keys_b64 |          |
-    |                      | }}"                              |          |
-    +----------------------+----------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret pattern :       | low      |
-    |                      |  msg: "_vault_unseal_keys: {{    |          |
-    |                      | _vault_unseal_keys }}"           |          |
-    +----------------------+----------------------------------+----------+
-  checksum: 87867e323bd2ac9da2a2ae8a973172945f66eb4793fe8f650f22e97e1366abd8
-
-- filename: tasks/vault_init.yml
-  checked: >
-    +----------------------+--------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret pattern :     | low      |
-    |                      |  msg: "_vault_mask_secrets: {{ |          |
-    |                      | _vault_mask_secrets }}"        |          |
-    +----------------------+--------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret pattern       | low      |
-    |                      | :     _unseal_keys_masked:     |          |
-    |                      | "{{ (_unseal_keys_masked |     |          |
-    |                      | default([])) + ['[masked]']    |          |
-    |                      | }}"                            |          |
-    +----------------------+--------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret               | low      |
-    |                      | pattern :       |              |          |
-    |                      | combine({'unseal_keys_b64':    |          |
-    |                      | _unseal_keys_masked})          |          |
-    +----------------------+--------------------------------+----------+
-    | tasks/vault_init.yml | Potential secret               | low      |
-    |                      | pattern :       |              |          |
-    |                      | combine({'unseal_keys_hex':    |          |
-    |                      | _unseal_keys_masked})          |          |
-    +----------------------+--------------------------------+----------+
-  checksum: fab538aa06ef7c082ed2581e5db163b55ef25d494f02153bec68325043a11535
+  allowed_patterns:
+    - >
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d
 
 - filename: tasks/write.yml
   checked: >

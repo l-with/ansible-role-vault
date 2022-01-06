@@ -1,7 +1,7 @@
 ---
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - role: ../../ansible-role-vault
       vars:
@@ -27,12 +27,12 @@
               path "hetzner/project/with*.de/*" {
                 capabilities = [ "read" ]
               }
-          - name: le   
+          - name: le
             hcl: |-
               path "gitlab/le/*" {
                 capabilities = [ "read" ]
               }
-          - name: runner          
+          - name: runner
             hcl: |-
               path "gitlab/runner/*" {
                 capabilities = [ "read" ]
@@ -44,7 +44,7 @@
               }
         vault_writes:
           - path: auth/jwt/config
-            force: yes
+            force: true
             data:
               jwks_url: https://gitlab.with42.de/-/jwks
               bound_issuer: gitlab.with42.de
@@ -69,7 +69,7 @@
               bound_claims:
                 project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
                 ref_protected: 'true'
-          
+
 
         # vault_kv_deletes:
         #   - path: hetzner/project/with*.de
@@ -85,9 +85,9 @@
             cas: 0
             kv:
               security: high
-          # - path: kv
-          #   kv:
-          #     without_subpath: doesnotwork
+              # - path: kv
+              #   kv:
+              #     without_subpath: doesnotwork
   tasks:
     - name: Print root token
       ansible.builtin.debug:

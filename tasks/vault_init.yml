@@ -13,20 +13,25 @@
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
     cmd: >
-      docker exec vault 
-      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init
-      && openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home }}/.ansible_done_vault_init -out {{ vault_home }}/ansible_done_vault_init
+      docker exec vault
+      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json
+        >{{ vault_home }}/.ansible_done_vault_init
+      && openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET
+        -in {{ vault_home }}/.ansible_done_vault_init
+        -out {{ vault_home }}/ansible_done_vault_init
       && rm {{ vault_home }}/.ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   when: not _vault_initialized
-  run_once: yes
+  run_once: true
 
 - name: Ensure decrypt ansible_done_vault_init
   ansible.builtin.shell:
     cmd: >
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home }}/.ansible_done_vault_init -in {{ vault_home }}/ansible_done_vault_init
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d
+        -out {{ vault_home }}/.ansible_done_vault_init
+        -in {{ vault_home }}/ansible_done_vault_init
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
@@ -35,7 +40,7 @@
   ansible.builtin.slurp:
     src: "{{ vault_home }}/.ansible_done_vault_init"
   register: _vault_init_file_slurp
-  run_once: yes
+  run_once: true
 
 - name: Ensure remove "{{ vault_home }}/.ansible_done_vault_init"
   ansible.builtin.file:
@@ -46,61 +51,61 @@
 - name: Set fact _vault_init_info from slurp
   ansible.builtin.set_fact:
     _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
-  run_once: yes
+  run_once: true
 
 - name: Print fact _vault_init_info
   ansible.builtin.debug:
     msg: "_vault_init_info: {{ _vault_init_info }}"
   when: vault_show_unseal_keys
-  run_once: yes
+  run_once: true
 
 - name: Set fact _vault_unseal_keys
   ansible.builtin.set_fact:
     _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
-  run_once: yes
+  run_once: true
 
 - name: Set fact _vault_root_token
   ansible.builtin.set_fact:
     _vault_root_token: "{{ _vault_init_info.root_token }}"
-  run_once: yes
+  run_once: true
 
 - name: Print fact _vault_unseal_keys
   ansible.builtin.debug:
     msg: "_vault_unseal_keys: {{ _vault_unseal_keys }}"
   when: vault_show_unseal_keys
-  run_once: yes
+  run_once: true
 
 - name: Print fact _vault_root_token
   ansible.builtin.debug:
     msg: "_vault_root_token: {{ _vault_root_token }}"
   when: vault_show_root_token
-  run_once: yes
+  run_once: true
 
-- name: Set facts vault status exit codes
+- name: Set facts vault status exit codes  ## noqa var-naming
   ansible.builtin.set_fact:
     _VAULT_STATUS_UNSEALED: 0
-    _VAULT_STATUS_ERROR: 1
-    _VAULT_STATUS_SEALED: 2
+    _VAULT_STATUS_ERROR:    1
+    _VAULT_STATUS_SEALED:   2
 
 - name: Get vault status output
   ansible.builtin.shell:
     cmd: >
-      docker exec vault 
+      docker exec vault
       vault status -format=json
   register: _vault_status_output
   failed_when: _vault_status_output.rc == _VAULT_STATUS_ERROR
   changed_when: false
-  run_once: yes
+  run_once: true
 
 - name: Ensure unseal vault
   ansible.builtin.shell:
     cmd: >
-      docker exec vault 
-      vault operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }} 
+      docker exec vault
+      vault operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
   loop: "{{ range(0, vault_key_threshold) | list }}"
   loop_control:
     index_var: _vault_unseal_key_index
   when: _vault_status_output.rc == _VAULT_STATUS_SEALED
-  run_once: yes
+  run_once: true
 
 ...

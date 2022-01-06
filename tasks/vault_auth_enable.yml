@@ -3,10 +3,10 @@
 - name: Ensure vault enable auth method
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault auth enable {{ _vault_auth_method }}
-      && touch {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }} 
+      && touch {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}
     creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
-  run_once: yes
+  run_once: true
 
 ...

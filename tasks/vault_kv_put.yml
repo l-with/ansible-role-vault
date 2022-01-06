@@ -3,30 +3,31 @@
 - name: Ensure _vault_kv_put_kv
   ansible.builtin.set_fact:
     _vault_kv_put_kv: "{{ _vault_kv_put.kv | default({}) | default(omit) }}"
-  run_once: yes
+  run_once: true
 
 
 - name: Ensure vault kv put "{{ vault_home }}/{{ _vault_kv_put_kv_json }}"
   ansible.builtin.copy:
     dest: "{{ vault_home }}/{{ _vault_kv_put_kv_json }}"
-    content: "{{ _vault_kv_put_kv | to_json }} "
-  run_once: yes
+    content: "{{ _vault_kv_put_kv | to_json }}"
+    mode: o-rwx
+  run_once: true
 
 - name: Ensure _vault_kv_put_cas
   ansible.builtin.set_fact:
     _vault_kv_put_cas: "{{ _vault_kv_put.cas | default(false) | default(omit) }}"
-  run_once: yes
+  run_once: true
 
 - name: Ensure initialize _vault_kv_put_cas_string
   ansible.builtin.set_fact:
     _vault_kv_put_cas_string: ''
-  run_once: yes
+  run_once: true
 
 - name: Ensure _vault_kv_put_cas_string
   ansible.builtin.set_fact:
     _vault_kv_put_cas_string: "-cas={{ _vault_kv_put_cas }}"
   when: _vault_kv_put_cas
-  run_once: yes
+  run_once: true
 
 # - name: Print _vault_kv_put_cas_string
 #   ansible.builtin.debug:
@@ -36,12 +37,12 @@
 - name: Ensure vault kv put
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} @/vault/{{ _vault_kv_put_kv_json }}
       && rm -f {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
       && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
       && rm {{ vault_home }}/{{ _vault_kv_put_kv_json }}
     creates: "{{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}"
-  run_once: yes
+  run_once: true
 
 ...

@@ -3,18 +3,18 @@
 - name: Ensure _vault_kv_delete_versions
   ansible.builtin.set_fact:
     _vault_kv_delete_versions: "{{ _vault_kv_delete.versions | default(false) | default(omit) }}"
-  run_once: yes
+  run_once: true
 
 - name: Ensure initialize _vault_kv_delete_versions_string
   ansible.builtin.set_fact:
     _vault_kv_delete_versions_string: ''
-  run_once: yes
+  run_once: true
 
 - name: Ensure _vault_kv_delete_versions_string
   ansible.builtin.set_fact:
     _vault_kv_delete_versions_string: "-versions={{ _vault_kv_delete_versions }}"
   when: _vault_kv_delete_versions
-  run_once: yes
+  run_once: true
 
 # - name: Print _vault_kv_delete_versions_string
 #   ansible.builtin.debug:
@@ -24,11 +24,11 @@
 - name: Ensure vault kv delete
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault kv delete {{ _vault_kv_delete_versions_string }} {{ _vault_kv_delete.path }}
       && rm -f {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}
       && touch {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}
     creates: "{{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}"
-  run_once: yes
+  run_once: true
 
 ...

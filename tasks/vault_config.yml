@@ -3,32 +3,38 @@
 - name: Ensure vault home
   ansible.builtin.file:
     path:    "{{ vault_home }}"
-    recurse: yes
+    recurse: true
     state:   directory
+    mode: g-rwx
 
 - name: Ensure vault config path
   ansible.builtin.file:
     path:  "{{ vault_home }}/config"
     state: directory
+    mode: g-rwx
 
 - name: Ensure vault policies path
   ansible.builtin.file:
     path:  "{{ vault_home }}/config/policies"
     state: directory
+    mode: g-rwx
 
 - name: Ensure vault tmp path
   ansible.builtin.file:
     path:  "{{ vault_home }}/config/tmp"
     state: directory
+    mode: g-rwx
 
 - name: Ensure vault file/raft path
   ansible.builtin.file:
     path:  "{{ vault_home }}/file/raft"
     state: directory
+    mode: g-rwx
 
 - name: Ensure vault config
   ansible.builtin.template:
     src: main.hcl.j2
     dest: "{{ vault_home }}/config/main.hcl"
+    mode: g-rwx
 
 ...
