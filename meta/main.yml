@@ -14,8 +14,8 @@ galaxy_info:
   license: MIT
   min_ansible_version: '2.9'
   platforms:
-    - name: Ubuntu
-      versions:
-        - focal
+  - name: Ubuntu
+    versions:
+      - focal
 
 ...
