@@ -29,6 +29,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_version` | `1.7.3` | the vault version (docker image tag) |
 | basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
+| basic | `vault_ui`| `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
 | basic | `vault_storage_config` | <code style="display:block">storage "raft" {<br />&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;= "/vault/file/raft"<br />&nbsp;&nbsp;node_id = "raft_node_1"<br />}<br />cluster_addr = "http://127.0.0.1:8201"</code> | the vault storage config |
 | docker | `vault_docker_expose_api` | `127.0.0.1:8200:8200` | the docker expose of the vault api |
 | docker | `vault_docker_expose_cluster` | `127.0.0.1:8201:8201` | the docker expose of the cluster |

@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-ui = true
+ui = {{ vault_ui }}
 log_level = "{{ vault_log_level }}"
 api_addr = "http://127.0.0.1:{{ vault_docker_api_port }}"
 

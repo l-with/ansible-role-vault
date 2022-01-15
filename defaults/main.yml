@@ -4,6 +4,7 @@
 vault_version:                1.7.3
 vault_home:                   /srv/vault
 vault_log_level:              "Info"
+vault_ui:                     'false'
 vault_storage_config: |
   storage "raft" {
       path    = "/vault/file/raft"
