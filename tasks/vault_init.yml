@@ -14,12 +14,9 @@
   ansible.builtin.shell:
     cmd: >
       docker exec vault
-      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json
-        >{{ vault_home }}/.ansible_done_vault_init
-      && openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET
-        -in {{ vault_home }}/.ansible_done_vault_init
-        -out {{ vault_home }}/ansible_done_vault_init
-      && rm {{ vault_home }}/.ansible_done_vault_init
+      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home }}/.ansible_done_vault_init -out {{ vault_home }}/ansible_done_vault_init &&
+      rm {{ vault_home }}/.ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
@@ -29,9 +26,7 @@
 - name: Ensure decrypt ansible_done_vault_init
   ansible.builtin.shell:
     cmd: >
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d
-        -out {{ vault_home }}/.ansible_done_vault_init
-        -in {{ vault_home }}/ansible_done_vault_init
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home }}/.ansible_done_vault_init -in {{ vault_home }}/ansible_done_vault_init
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
@@ -80,6 +75,13 @@
     msg: "_vault_root_token: {{ _vault_root_token }}"
   when: vault_show_root_token
   run_once: true
+
+# - name: Ensure revoke _vault_root_token
+#   ansible.builtin.shell:
+#     cmd: >
+#       docker exec vault
+#       vault token revoke unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
+#   run_once: true
 
 - name: Set facts vault status exit codes  ## noqa var-naming
   ansible.builtin.set_fact:
