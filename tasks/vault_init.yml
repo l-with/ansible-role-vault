@@ -82,13 +82,6 @@
   when: vault_show_initial_root_token
   run_once: true
 
-# - name: Ensure revoke _vault_root_token
-#   ansible.builtin.shell:
-#     cmd: >
-#       docker exec vault
-#       vault token revoke unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
-#   run_once: true
-
 - name: Set facts vault status exit codes  ## noqa var-naming
   ansible.builtin.set_fact:
     _VAULT_STATUS_UNSEALED: 0
