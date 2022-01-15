@@ -1,0 +1,36 @@
+---
+
+- name: Ensure vault get root token
+  ansible.builtin.shell:
+    cmd: >
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      vault token create -ttl {{ vault_root_token_ttl }} -format=json
+  register: _vault_create_root_token_result
+  run_once: yes
+
+- name: Set fact _vault_create_root_token
+  ansible.builtin.set_fact:
+    _vault_create_root_token: "{{ _vault_create_root_token_result.stdout }}"
+  run_once: yes
+
+- name: Set fact vault_root_token
+  ansible.builtin.set_fact:
+    vault_root_token: "{{ _vault_create_root_token.auth.client_token }}"
+  run_once: yes
+
+- name: Ensure vault revoke root token
+  ansible.builtin.shell:
+    cmd: >
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      vault token revoke -mode=orphan {{ _vault_root_token }}
+  register: _vault_revoke_root_token_result
+  when: vault_revoke_root_token
+  run_once: yes
+
+- name: Ensure _vault_root_token
+  ansible.builtin.set_fact:
+    _vault_root_token: "{{  vault_root_token }}"
+  when: vault_revoke_root_token
+  run_once: yes
+
+...

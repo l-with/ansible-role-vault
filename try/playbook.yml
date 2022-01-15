@@ -5,6 +5,7 @@
   roles:
     - role: ../../ansible-role-vault
       vars:
+        vault_encrypt_secret: 'vault_encrypt_secret'
         vault_show_unseal_keys: true
         vault_docker_expose_api: 127.0.0.1:9200:{{ vault_docker_api_port }}
         # vault_storage_config: |

@@ -34,10 +34,12 @@ Note that this also requires installation of the python libraries `docker` and `
 | docker | `vault_docker_expose_cluster` | `127.0.0.1:8201:8201` | the docker expose of the cluster |
 | init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
 | init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
-| init | `vault_revoke_root_token` | `true` | if the initial root token should be revoked |
 | init | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
-| init | `vault_show_root_token` | `false` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!</span> |
+| init | `vault_show_initial_root_token` | `false` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!</span> |
 | init | `vault_encrypt_secret` | `CHANGE_vault_encrypt_secret` | the secret the output of the vault initialization is encoded with<br /> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.</span> |
+| init | `vault_create_root_token` | `true` | if a new root token with TTL should be created |
+| init | `vault_root_token_ttl` | `10m` | the TTL for the new root token |
+| init | `vault_revoke_root_token` | `true` | if the initial root token should be revoked |
 | auth | `vault_auth_methods` | `[]` | the list of auth methods to be enable by `vault auth enable` |
 | secret | `vault_secret_engines` | `[]` | the list of secret engines to be enabled by `vault secrets enable`, s. [`vault_secret_engines`](#section-vault_secret_engines) |
 | policies | `vault_policy_writes` | `[]` | the list of policies to be added by `vault policy write`, s. [`vault_policy_writes`](#section-vault_policy_writes) |
@@ -46,6 +48,12 @@ Note that this also requires installation of the python libraries `docker` and `
 | kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
 | approle | `vault_approles` | `[]` | the list of approles to get role_id and secret_id for <br />the result is put with the role name as key into<ul><li>`vault_approle_role_id`</li><li>`vault_approle_secret_id`</li></ul> |
 <!-- markdownlint-enable MD033 -->
+
+## Output Variables
+
+| group | variable | description |
+| --- | --- | --- |
+| init | `vault_root_token` | the created root token with TTL |
 
 <!-- markdownlint-disable MD033 -->
 ### <a name="section-vault_secret_engines">`vault_secret_engines`</a>

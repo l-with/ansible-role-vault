@@ -79,7 +79,7 @@
 - name: Print fact _vault_root_token
   ansible.builtin.debug:
     msg: "_vault_root_token: {{ _vault_root_token }}"
-  when: vault_show_root_token
+  when: vault_show_initial_root_token
   run_once: true
 
 # - name: Ensure revoke _vault_root_token

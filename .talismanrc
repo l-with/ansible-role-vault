@@ -4,7 +4,10 @@ fileignoreconfig:
   allowed_patterns:
     - >
       vault_show_unseal_keys: +false
-
+    - >
+      vault_key_shares: +\d+
+    - >
+      vault_key_threshold: +\d+
 
 - filename: tasks/vault_init.yml
   allowed_patterns:
@@ -21,6 +24,11 @@ fileignoreconfig:
       _vault_approle_get_secret_id: "{{ _vault_approle_get_secret_id_result.stdout }}"
     - >
       vault_approle_secret_id: "{{ vault_approle_secret_id | default({}) }}"
+
+- filename: try/playbook.yml
+  allowed_patterns:
+    - >
+      vault_encrypt_secret: 'vault_encrypt_secret'
 
 - filename: README.md
   allowed_patterns:

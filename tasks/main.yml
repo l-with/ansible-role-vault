@@ -34,6 +34,11 @@
   ansible.builtin.include_tasks: vault_wait.yml
   run_once: true
 
+- name: Ensure vault root token
+  ansible.builtin.include_tasks: vault_root_token.yml
+  when: vault_create_root_token
+  run_once: true
+
 - name: Ensure vault enable auth methods
   ansible.builtin.include_tasks: vault_auth_enable.yml
   loop: "{{ vault_auth_methods }}"

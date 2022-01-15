@@ -17,11 +17,13 @@ vault_docker_expose_api:      127.0.0.1:8200:{{ vault_docker_api_port }}
 vault_docker_expose_cluster:  127.0.0.1:8201:8201
 
 # init
-vault_key_shares:             1
-vault_key_threshold:          1
-vault_revoke_root_token:      true
-vault_show_unseal_keys:       false
-vault_show_root_token:        false
+vault_key_shares:              1
+vault_key_threshold:           1
+vault_show_unseal_keys:        false
+vault_show_initial_root_token: false
+vault_create_root_token:       true
+vault_root_token_ttl:          10m
+vault_revoke_root_token:       true
 
 # auth
 vault_auth_methods:           []
