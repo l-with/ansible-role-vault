@@ -12,7 +12,7 @@
 - name: Set fact _vault_initialized
   ansible.builtin.set_fact:
     _vault_initialized: "{{ _vault_init_file_stat.stat.exists }}"
-  run_once: yes
+  run_once: true
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
@@ -34,7 +34,7 @@
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
-  run_once: yes
+  run_once: true
 
 - name: Slurp vault init info
   ansible.builtin.slurp:
@@ -47,7 +47,7 @@
     path: "{{ vault_home }}/.ansible_done_vault_init"
     state: absent
   changed_when: false
-  run_once: yes
+  run_once: true
 
 - name: Set fact _vault_init_info from slurp
   ansible.builtin.set_fact:

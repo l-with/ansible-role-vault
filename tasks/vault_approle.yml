@@ -3,7 +3,7 @@
 - name: Ensure vault get role-id
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault read auth/approle/role/{{ _vault_approle }}/role-id -format=json
   register: _vault_approle_get_role_id_result
   run_once: true
@@ -25,7 +25,7 @@
 - name: Ensure vault get secret-id
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
       vault write -f auth/approle/role/{{ _vault_approle }}/secret-id -format=json
   register: _vault_approle_get_secret_id_result
   run_once: true
