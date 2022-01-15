@@ -1,7 +1,7 @@
 ---
 
 # basic
-vault_version:                1.7.3
+vault_version:                'latest'
 vault_home:                   /srv/vault
 vault_log_level:              "Info"
 vault_ui:                     'false'

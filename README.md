@@ -26,7 +26,7 @@ Note that this also requires installation of the python libraries `docker` and `
 <!-- markdownlint-disable MD033 -->
 | group | variable | default | description |
 | --- | --- | --- | --- |
-| basic | `vault_version` | `1.7.3` | the vault version (docker image tag) |
+| basic | `vault_version` | `latest` | the vault version (docker image tag) |
 | basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
 | basic | `vault_ui`| `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
