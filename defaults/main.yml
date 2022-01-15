@@ -39,4 +39,7 @@ vault_writes:                 []
 vault_kv_deletes:             []
 vault_kv_puts:                []
 
+# approles
+vault_approles:               []
+
 ...
