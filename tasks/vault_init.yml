@@ -1,14 +1,18 @@
 ---
 
+# should be include with run_once: true
+
 - name: Read vault init file stat
   ansible.builtin.stat:
     path: "{{ vault_home }}/ansible_done_vault_init"
   ignore_errors: true
   register: _vault_init_file_stat
+  run_once: true
 
 - name: Set fact _vault_initialized
   ansible.builtin.set_fact:
     _vault_initialized: "{{ _vault_init_file_stat.stat.exists }}"
+  run_once: yes
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
@@ -30,6 +34,7 @@
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
+  run_once: yes
 
 - name: Slurp vault init info
   ansible.builtin.slurp:
@@ -42,6 +47,7 @@
     path: "{{ vault_home }}/.ansible_done_vault_init"
     state: absent
   changed_when: false
+  run_once: yes
 
 - name: Set fact _vault_init_info from slurp
   ansible.builtin.set_fact:
