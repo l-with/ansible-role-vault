@@ -80,4 +80,11 @@
     label: "{{ _vault_kv_put.path }}"
   run_once: true
 
+- name: Ensure vault app role credentials
+  ansible.builtin.include_tasks: vault_approle.yml
+  loop: "{{ vault_approles }}"
+  loop_control:
+    loop_var: _vault_approle
+  run_once: true
+
 ...
