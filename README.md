@@ -44,6 +44,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | writes | `vault_writes` | `[]` | the list of data to write vault by `vault write`, s. [`vault_writes`](#section-vault_writes) |
 | kv | `vault_kv_puts` | `[]` | the list of key-values to put into vault by `vault kv put`, s. [`vault_kv_puts`](#section-vault_kv_puts) |
 | kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
+| approle | `vault_approles` | `[]` | the list of approles to get role_id and secret_id for <br />the result is put with the role name as key into<ul><li>`vault_approle_role_id`</li><li>`vault_approle_secret_id`</li></ul> |
 <!-- markdownlint-enable MD033 -->
 
 <!-- markdownlint-disable MD033 -->

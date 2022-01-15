@@ -27,5 +27,5 @@ fileignoreconfig:
   - >
     \| init \| `vault_encrypt_secret` \| `CHANGE_vault_encrypt_secret` \| the secret the output of the vault initialization is encoded with<br \/> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.<\/span> \|
   - >
-    ### <a name="section-vault_secret_engines">`vault_secret_engines`<\/a>
+    \| approle \| `vault_approles` \| `\[\]` \| the list of approles to get role_id and secret_id for <br \/>the result is put with the role name as key into<ul><li>`vault_approle_role_id`<\/li><li>`vault_approle_secret_id`<\/li><\/ul> \|
 
