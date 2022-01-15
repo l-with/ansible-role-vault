@@ -5,6 +5,7 @@
   roles:
     - role: ../../ansible-role-vault
       vars:
+        vault_show_unseal_keys: true
         vault_docker_expose_api: 127.0.0.1:9200:{{ vault_docker_api_port }}
         # vault_storage_config: |
         #   storage "file" {
@@ -46,8 +47,8 @@
           - path: auth/jwt/config
             force: true
             data:
-              jwks_url: https://gitlab.with42.de/-/jwks
-              bound_issuer: gitlab.with42.de
+              jwks_url: https://gitlab.with.de/-/jwks
+              bound_issuer: gitlab.with.de
           - path: auth/jwt/role/hetzner
             data:
               role_type: jwt
@@ -59,6 +60,7 @@
               bound_claims:
                 namespace_id:  '40'  # Terraform / Hetzner
                 ref_protected: 'true'
+              user_claim: 'user_email'
           - path: auth/jwt/role/docker
             data:
               role_type: jwt
@@ -69,6 +71,7 @@
               bound_claims:
                 project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
                 ref_protected: 'true'
+              user_claim: 'user_email'
 
 
         # vault_kv_deletes:
@@ -89,8 +92,11 @@
               #   kv:
               #     without_subpath: doesnotwork
   tasks:
-    - name: Print root token
+    - name: Print _vault_root_token
       ansible.builtin.debug:
         msg: "{{ _vault_root_token }}"
+    - name: Print vault_root_token
+      ansible.builtin.debug:
+        msg: "{{ vault_root_token }}"
 
 ...
