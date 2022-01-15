@@ -1,0 +1,47 @@
+---
+
+- name: Ensure vault get role-id
+  ansible.builtin.shell:
+    cmd: >
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      vault read auth/approle/role/{{ _vault_approle }}/role-id -format=json
+  register: _vault_approle_get_role_id_result
+  run_once: true
+
+- name: Set fact _vault_approle_get_role_id
+  ansible.builtin.set_fact:
+    _vault_approle_get_role_id: "{{ _vault_approle_get_role_id_result.stdout }}"
+
+- name: Ensure vault_approle_role_id initialized
+  ansible.builtin.set_fact:
+    vault_approle_role_id: "{{ vault_approle_role_id | default({}) }}"
+  run_once: true
+
+- name: Set fact "vault_approle_role_id.{{ _vault_approle }}
+  ansible.builtin.set_fact:
+    vault_approle_role_id: "{{ vault_approle_role_id | combine({ _vault_approle: _vault_approle_get_role_id.data.role_id }) }}"
+  run_once: true
+
+- name: Ensure vault get secret-id
+  ansible.builtin.shell:
+    cmd: >
+      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
+      vault write -f auth/approle/role/{{ _vault_approle }}/secret-id -format=json
+  register: _vault_approle_get_secret_id_result
+  run_once: true
+
+- name: Set fact _vault_approle_get_secret_id
+  ansible.builtin.set_fact:
+    _vault_approle_get_secret_id: "{{ _vault_approle_get_secret_id_result.stdout }}"
+
+- name: Ensure vault_approle_secret_id initialized
+  ansible.builtin.set_fact:
+    vault_approle_secret_id: "{{ vault_approle_secret_id | default({}) }}"
+  run_once: true
+
+- name: Set fact "vault_approle_secret_id.{{ _vault_approle }}
+  ansible.builtin.set_fact:
+    vault_approle_secret_id: "{{ vault_approle_secret_id | combine({ _vault_approle: _vault_approle_get_secret_id.data.secret_id }) }}"
+  run_once: true
+
+...
