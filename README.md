@@ -28,12 +28,15 @@ Note that this also requires installation of the python libraries `docker` and `
 | --- | --- | --- | --- |
 | basic | `vault_version` | `1.7.3` | the vault version (docker image tag) |
 | basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
+| basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
+| basic | `vault_storage_config` | <code style="display:block">storage "raft" {<br />&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;= "/vault/file/raft"<br />&nbsp;&nbsp;node_id = "raft_node_1"<br />}<br />cluster_addr = "http://127.0.0.1:8201"</code> | the vault storage config |
 | docker | `vault_docker_expose_api` | `127.0.0.1:8200:8200` | the docker expose of the vault api |
 | docker | `vault_docker_expose_cluster` | `127.0.0.1:8201:8201` | the docker expose of the cluster |
 | init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
 | init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
-| init | `vault_show_unseal_keys` | `no` | if the unseal keys are shown |
-| init | `vault_show_root_token` | `no` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revealed!</span> |
+| init | `vault_revoke_root_token` | `true` | if the initial root token should be revoked |
+| init | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
+| init | `vault_show_root_token` | `false` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!</span> |
 | init | `vault_encrypt_secret` | `CHANGE_vault_encrypt_secret` | the secret the output of the vault initialization is encoded with<br /> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.</span> |
 | auth | `vault_auth_methods` | `[]` | the list of auth methods to be enable by `vault auth enable` |
 | secret | `vault_secret_engines` | `[]` | the list of secret engines to be enabled by `vault secrets enable`, s. [`vault_secret_engines`](#section-vault_secret_engines) |
