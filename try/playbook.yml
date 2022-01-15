@@ -13,6 +13,7 @@
         #   }
         vault_auth_methods:
           - jwt
+          - approle
         vault_secret_engines:
           - engine: ssh
           - engine: kv
@@ -23,6 +24,11 @@
               path: hetzner
               version: 1
         vault_policy_writes:
+          - name: terraform
+            hcl: |-
+              path "/*" {
+                capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+              }
           - name: with*.de
             hcl: |-
               path "hetzner/project/with*.de/*" {
@@ -44,6 +50,13 @@
                 capabilities = [ "read" ]
               }
         vault_writes:
+          - path: auth/approle/role/terraform
+            data:
+              secret_id_ttl: 10m
+              token_num_uses: 10
+              token_ttl: 20m
+              token_max_ttl: 30m
+              secret_id_num_uses: 40
           - path: auth/jwt/config
             force: true
             data:
@@ -72,7 +85,8 @@
                 project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
                 ref_protected: 'true'
               user_claim: 'user_email'
-
+        vault_approles:
+          - terraform
 
         # vault_kv_deletes:
         #   - path: hetzner/project/with*.de
@@ -92,6 +106,12 @@
               #   kv:
               #     without_subpath: doesnotwork
   tasks:
+    - name: Print terraform role_id
+      ansible.builtin.debug:
+        msg: "{{ vault_approle_role_id['terraform'] }}"
+    - name: Print terraform secret_id
+      ansible.builtin.debug:
+        msg: "{{ vault_approle_secret_id['terraform'] }}"
     - name: Print _vault_root_token
       ansible.builtin.debug:
         msg: "{{ _vault_root_token }}"
