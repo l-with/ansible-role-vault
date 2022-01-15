@@ -1,10 +1,9 @@
 ---
 
+# basic
 vault_version:                1.7.3
 vault_home:                   /srv/vault
-vault_docker_api_port:        8200
-vault_docker_expose_api:      127.0.0.1:8200:{{ vault_docker_api_port }}
-vault_docker_expose_cluster:  127.0.0.1:8201:8201
+vault_log_level:              "Info"
 vault_storage_config: |
   storage "raft" {
       path    = "/vault/file/raft"
@@ -12,17 +11,32 @@ vault_storage_config: |
   }
   cluster_addr = "http://127.0.0.1:8201"
 
+# docker
+vault_docker_api_port:        8200
+vault_docker_expose_api:      127.0.0.1:8200:{{ vault_docker_api_port }}
+vault_docker_expose_cluster:  127.0.0.1:8201:8201
+
+# init
 vault_key_shares:             1
 vault_key_threshold:          1
-vault_auth_methods:           []
-vault_secret_engines:         []
-vault_policy_writes:          []
-vault_writes:                 []
-vault_kv_deletes:             []
-vault_kv_puts:                []
-vault_log_level:              "Info"
+vault_revoke_root_token:      true
 vault_show_unseal_keys:       false
 vault_show_root_token:        false
-vault_encrypt_secret:         CHANGE_vault_encrypt_secret
+
+# auth
+vault_auth_methods:           []
+
+# secret
+vault_secret_engines:         []
+
+# policies
+vault_policy_writes:          []
+
+# writes
+vault_writes:                 []
+
+# kv
+vault_kv_deletes:             []
+vault_kv_puts:                []
 
 ...
