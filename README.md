@@ -8,7 +8,7 @@ There are role variables to
 
 * add auth methods (`vault_auth_methods`)
 * add secret engines (`vault_secret_engines`)
-* add policies (`vault_policies`)
+* add policies (`vault_policy_writes`)
 * add data (`vault_writes`)
 * add key-values (`vault_kv_puts`)
 
@@ -40,7 +40,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | init | `vault_encrypt_secret` | `CHANGE_vault_encrypt_secret` | the secret the output of the vault initialization is encoded with<br /> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.</span> |
 | auth | `vault_auth_methods` | `[]` | the list of auth methods to be enable by `vault auth enable` |
 | secret | `vault_secret_engines` | `[]` | the list of secret engines to be enabled by `vault secrets enable`, s. [`vault_secret_engines`](#section-vault_secret_engines) |
-| policies | `vault_policies` | `[]` | the list of policies to be added by `vault policy write`, s. [`vault_policies`](#section-vault_policies) |
+| policies | `vault_policy_writes` | `[]` | the list of policies to be added by `vault policy write`, s. [`vault_policy_writes`](#section-vault_policy_writes) |
 | writes | `vault_writes` | `[]` | the list of data to write vault by `vault write`, s. [`vault_writes`](#section-vault_writes) |
 | kv | `vault_kv_puts` | `[]` | the list of key-values to put into vault by `vault kv put`, s. [`vault_kv_puts`](#section-vault_kv_puts) |
 | kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
@@ -66,12 +66,12 @@ vault_secret_engines:
 ```
 
 <!-- markdownlint-disable MD033 -->
-### <a name="section-vault_policies">`vault_policies`</a>
+### <a name="section-vault_policy_writes">`vault_policy_writes`</a>
 <!-- markdownlint-enable MD033 -->
 
 the list of policies to be added by `vault policy write`
 
-An item in `vault_policies` has the following parts:
+An item in `vault_policy_writes` has the following parts:
 
 * `name` for the name of the policy
 * `hcl` for the policy definition
@@ -79,7 +79,7 @@ An item in `vault_policies` has the following parts:
 for example:
 
 ```yaml
-vault_policies
+vault_policy_writes
 - name: gitlab
   hcl: |
     path "gitlab/secret*" {
