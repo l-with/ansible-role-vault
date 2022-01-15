@@ -23,37 +23,29 @@ Note that this also requires installation of the python libraries `docker` and `
 
 ## Role Variables
 
-### `vault_version`: `1.7.3`
+<!-- markdownlint-disable MD033 -->
+| group | variable | default | description |
+| --- | --- | --- | --- |
+| basic | `vault_version` | `1.7.3` | the vault version (docker image tag) |
+| basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
+| docker | `vault_docker_expose_api` | `127.0.0.1:8200:8200` | the docker expose of the vault api |
+| docker | `vault_docker_expose_cluster` | `127.0.0.1:8201:8201` | the docker expose of the cluster |
+| init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
+| init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
+| init | `vault_show_unseal_keys` | `no` | if the unseal keys are shown |
+| init | `vault_show_root_token` | `no` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revealed!</span> |
+| init | `vault_encrypt_secret` | `CHANGE_vault_encrypt_secret` | the secret the output of the vault initialization is encoded with<br /> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.</span> |
+| auth | `vault_auth_methods` | `[]` | the list of auth methods to be enable by `vault auth enable` |
+| secret | `vault_secret_engines` | `[]` | the list of secret engines to be enabled by `vault secrets enable`, s. [`vault_secret_engines`](#section-vault_secret_engines) |
+| policies | `vault_policies` | `[]` | the list of policies to be added by `vault policy write`, s. [`vault_policies`](#section-vault_policies) |
+| writes | `vault_writes` | `[]` | the list of data to write vault by `vault write`, s. [`vault_writes`](#section-vault_writes) |
+| kv | `vault_kv_puts` | `[]` | the list of key-values to put into vault by `vault kv put`, s. [`vault_kv_puts`](#section-vault_kv_puts) |
+| kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
+<!-- markdownlint-enable MD033 -->
 
-the vault version (docker image tag)
-
-### `vault_home`: `/srv/vault`
-
-the home of the vault docker volumes
-
-### `vault_docker_expose_api`: `127.0.0.1:8200:8200`
-
-the docker expose of the vault api
-
-### `vault_docker_expose_cluster`: `127.0.0.1:8201:8201`
-
-the docker expose of the cluster
-
-### `vault_key_shares`: `1`
-
-the value for the `vault init` parameter `-key-shares`
-
-### `vault_key_threshold`: `1`
-
-the value for the `vault init` parameter `-key-threshold`
-
-### `vault_auth_methods`: `[]`
-
-the list of auth methods to be enable by `vault auth enable`
-
-### `vault_secret_engines`: `[]`
-
-the list of secret engines to be enabled by `vault secrets enable`
+<!-- markdownlint-disable MD033 -->
+### <a name="section-vault_secret_engines">`vault_secret_engines`</a>
+<!-- markdownlint-enable MD033 -->
 
 An item in `vault_secret_engines` has the following parts:
 
@@ -70,7 +62,9 @@ vault_secret_engines:
       version: 1
 ```
 
-### `vault_policies`: `[]`
+<!-- markdownlint-disable MD033 -->
+### <a name="section-vault_policies">`vault_policies`</a>
+<!-- markdownlint-enable MD033 -->
 
 the list of policies to be added by `vault policy write`
 
@@ -90,7 +84,9 @@ vault_policies
     }
 ```
 
-### `vault_writes`: `[]`
+<!-- markdownlint-disable MD033 -->
+### <a name="section-vault_writes">`vault_writes`</a>
+<!-- markdownlint-enable MD033 -->
 
 the list of data to write vault by `vault write`
 
@@ -110,7 +106,9 @@ vault_writes:
       bound_issuer: gitlab.with42.de
 ```
 
-### `vault_kv_puts`: `[]`
+<!-- markdownlint-disable MD033 -->
+### <a name="section-vault_kv_puts">`vault_kv_puts`</a>
+<!-- markdownlint-enable MD033 -->
 
 the list of key-values to put into vault by `vault kv put`
 
@@ -140,7 +138,9 @@ If you need to put new key-values to a path, run your playbook play two times wi
 * first delete the path with `vault_kv_deletes`
 * second put the new key-values to the path with `vault_kv_puts`
 
-### `vault_kv_deletes`: `[]`
+<!-- markdownlint-disable MD033 -->
+### <a name="section-vault_kv_deletes">`vault_kv_deletes`</a>
+<!-- markdownlint-enable MD033 -->
 
 the paths to be delete by `vault kv delete`
 
@@ -149,8 +149,6 @@ An item in `vault_kv_deletes` has the following parts:
 * `path` for the path
 * `versions` the value for the `-versions` option, this part is optional
 
-### `vault_kv_deletes` and `vault_kv_puts`
-
 Deleting a key-value path in vault is destructive.
 The variable `vault_kv_deletes` should only be used for undos.
 
@@ -158,17 +156,3 @@ The deleting of the key-value paths in `vault_kv_deletes` is done before putting
 
 Using the same path in `vault_kv_deletes` and `vault_kv_puts` is not idempotent.
 This is because using `vault_kv_deletes` with a path, destroys the idempotence for `vault_kv_puts` with the same path and vice versa.
-
-### `vault_show_unseal_keys`: `no`
-
-if the unseal keys are shown
-
-### `vault_show_root_token`: `no`
-
-if the root token is shown
-
-### `vault_encrypt_secret`: `CHANGE_vault_encrypt_secret`
-
-the secret the output of the vault initialization is encoded
-
-ATTENTION: Keep this confidential! This is the root of the secret management in vault.
