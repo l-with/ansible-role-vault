@@ -31,10 +31,8 @@
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
-      vault write {{ _vault_write_force_string }} {{ _vault_write.path }} @/vault/{{ _vault_write_json }}
-      >{{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
-      && mv {{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
-      {{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
+      vault write {{ _vault_write_force_string }} {{ _vault_write.path }} @/vault/{{ _vault_write_json }} >{{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }} && 
+      mv {{ vault_home }}/.ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }} {{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
     creates: "{{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}"
   run_once: true
 
