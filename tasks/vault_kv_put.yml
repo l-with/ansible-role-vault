@@ -5,13 +5,13 @@
     _vault_kv_put_kv: "{{ _vault_kv_put.kv | default({}) | default(omit) }}"
   run_once: true
 
-
 - name: Ensure vault kv put "{{ vault_home }}/{{ _vault_kv_put_kv_json }}"
   ansible.builtin.copy:
     dest: "{{ vault_home }}/{{ _vault_kv_put_kv_json }}"
     content: "{{ _vault_kv_put_kv | to_json }}"
     mode: o-rwx
   run_once: true
+  changed_when: false
 
 - name: Ensure _vault_kv_put_cas
   ansible.builtin.set_fact:
