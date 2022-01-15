@@ -1,5 +1,11 @@
 ---
 
+- name: Check {{ vault_encrypt_secret }}
+  ansible.builtin.fail:
+    msg: "variable 'vault_encrypt_secret' is not set"
+  when: not lookup('vars', 'vault_encrypt_secret')
+  run_once: true
+
 - name: Ensure prepare dependencies
   ansible.builtin.include_tasks: dependencies.yml
 
