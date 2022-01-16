@@ -3,6 +3,10 @@
 - hosts: localhost
   become: true
   pre_tasks:
+    - name: add host
+      ansible.builtin.add_host:
+        groups: vault_instances
+        host: 127.0.0.1
     # - name: debug
     #   debug:
     #     msg: "ansible_play_hosts: {{ ansible_play_hosts }}"
