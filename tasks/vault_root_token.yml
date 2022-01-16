@@ -14,18 +14,6 @@
       ansible.builtin.set_fact:
         _vault_operator_generate_root_init: "{{ _vault_operator_generate_root_init_result.stdout }}"
 
-    - name: Print _vault_operator_generate_root_init
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root_init: {{ _vault_operator_generate_root_init }}"
-
-    - name: Print _vault_operator_generate_root_init.nonce
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root_init.nonce: {{ _vault_operator_generate_root_init.nonce }}"
-
-    - name: Print _vault_operator_generate_root_init.otp
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root_init.otp: {{ _vault_operator_generate_root_init.otp }}"
-
     - name: Ensure vault operator generate-root
       ansible.builtin.shell:
         cmd: >
@@ -37,17 +25,9 @@
         index_var: _vault_unseal_key_index
       register: _vault_operator_generate_root_results
 
-    - name: Print _vault_operator_generate_root_results
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root_results: {{ _vault_operator_generate_root_results }}"
-
     - name: Set fact _vault_operator_generate_root
       ansible.builtin.set_fact:
         _vault_operator_generate_root: "{{ _vault_operator_generate_root_results.results[vault_key_threshold-1].stdout }}"
-
-    - name: Print _vault_operator_generate_root
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root: {{ _vault_operator_generate_root }}"
 
     - name: Ensure vault operator generate-root decode
       ansible.builtin.shell:
@@ -60,10 +40,6 @@
       ansible.builtin.set_fact:
         _vault_operator_generate_root_decode: "{{ _vault_operator_generate_root_decode_result.stdout }}"
 
-    - name: Print _vault_operator_generate_root_decode
-      ansible.builtin.debug:
-        msg: "_vault_operator_generate_root_decode: {{ _vault_operator_generate_root_decode }}"
-
     - name: Set fact _vault_root_token
       ansible.builtin.set_fact:
         _vault_root_token: "{{ _vault_operator_generate_root_decode.token }}"
@@ -71,7 +47,7 @@
   run_once: true
   when: vault_revoke_root_token and _vault_initialized
 
-- name: Ensure vault get root token
+- name: Ensure vault create root token
   ansible.builtin.shell:
     cmd: >
       docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
