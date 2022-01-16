@@ -29,6 +29,9 @@ fileignoreconfig:
   allowed_patterns:
     - >
       vault_encrypt_secret: 'vault_encrypt_secret'
+    - >
+      vault_key_shares: +\d+
+
 
 - filename: README.md
   allowed_patterns:
