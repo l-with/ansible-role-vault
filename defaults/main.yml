@@ -2,20 +2,23 @@
 
 # basic
 vault_version:                'latest'
+vault_install_method:         'docker'
 vault_home:                   /srv/vault
 vault_log_level:              "Info"
 vault_ui:                     'false'
+vault_api_port:               8200
+vault_cluster_port:           8201
+vault_disable_mlock:          'true'
 vault_storage_config: |
   storage "raft" {
-      path    = "/vault/file/raft"
-      node_id = "raft_node_1"
+      path    = "{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"
+      node_id = "raft_node_{{ inventory_hostname }}"
   }
-  cluster_addr = "http://127.0.0.1:8201"
-
 # docker
-vault_docker_api_port:        8200
-vault_docker_expose_api:      127.0.0.1:8200:{{ vault_docker_api_port }}
-vault_docker_expose_cluster:  127.0.0.1:8201:8201
+vault_docker_api_port:        "{{ vault_api_port }}"
+vault_docker_cluster_port:    "{{ vault_cluster_port }}"
+vault_docker_expose_api:      "127.0.0.1:8200:{{ vault_docker_api_port }}"
+vault_docker_expose_cluster:  "127.0.0.1:8201:{{ vault_docker_cluster_port }}"
 
 # init
 vault_key_shares:              1

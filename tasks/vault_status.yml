@@ -3,8 +3,7 @@
 - name: Get vault status output
   ansible.builtin.shell:
     cmd: >
-      docker exec vault
-      vault status -format=json || /bin/true
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json || /bin/true
   register: _vault_status_output
   changed_when: false
   ignore_errors: true

@@ -1,0 +1,50 @@
+---
+
+- name: Ensure _vault_releases_latest
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/hashicorp/vault/releases/latest
+  register: _vault_releases_latest
+
+- name: Ensure _vault_latest_release
+  ansible.builtin.set_fact:
+    _vault_latest_release: "{{ _vault_releases_latest.json.name[1:] }}"
+
+- name: Ensure vault bin path
+  ansible.builtin.file:
+    path:  "{{ vault_home }}/bin"
+    state: directory
+    mode: g-rwx
+
+- name: Ensure vault binary
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: https://releases.hashicorp.com/vault/{{ _vault_latest_release }}/vault_{{ _vault_latest_release }}_linux_amd64.zip
+    dest: "{{ vault_home }}/bin"
+    mode: ug+x,o-rwx
+    creates: "{{ vault_home }}/bin/vault"
+
+- name: Check vault running
+  ansible.builtin.command:
+    cmd: pgrep vault
+  ignore_errors: true
+  register: _pgrep_vault
+
+- name: Print vault running
+  ansible.builtin.debug:
+    msg: "_pgrep_vault: {{ _pgrep_vault }}"
+
+- name: Decide vault running
+  ansible.builtin.debug:
+    msg: "running"
+  when: _pgrep_vault.stdout
+
+- name: Run vault
+  ansible.builtin.shell:
+    cmd: "{{ vault_home }}/bin/vault server -config={{ vault_home }}/config >{{ vault_home }}/logs/vault.log &"
+  when: not _pgrep_vault.stdout
+
+- name: Ensure _vault_command
+  ansible.builtin.set_fact:
+    _vault_command: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home }}/bin/vault"
+
+...

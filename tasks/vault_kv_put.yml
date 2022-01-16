@@ -37,8 +37,7 @@
 - name: Ensure vault kv put
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
-      vault kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} @/vault/{{ _vault_kv_put_kv_json }}
+      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} kv put {{ _vault_kv_put_cas_string }} {{ _vault_kv_put.path }} @/vault/{{ _vault_kv_put_kv_json }}
       && rm -f {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
       && touch {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_put.path | regex_replace('/', '_slash_') | urlencode }}
       && rm {{ vault_home }}/{{ _vault_kv_put_kv_json }}

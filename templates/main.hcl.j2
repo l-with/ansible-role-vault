@@ -2,11 +2,15 @@
 
 ui = {{ vault_ui }}
 log_level = "{{ vault_log_level }}"
-api_addr = "http://127.0.0.1:{{ vault_docker_api_port }}"
+api_addr = "http://127.0.0.1:{{ vault_api_port }}"
 
 listener "tcp" {  
-    address = "0.0.0.0:{{ vault_docker_api_port }}"
+    address = "0.0.0.0:{{ vault_api_port }}"
     tls_disable = true
 }
 
+cluster_addr = "http://127.0.0.1:8201"
+
 {{ vault_storage_config }}
+
+disable_mlock = {{ vault_disable_mlock }}

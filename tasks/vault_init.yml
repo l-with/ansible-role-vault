@@ -17,8 +17,7 @@
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
     cmd: >
-      docker exec vault
-      vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home }}/.ansible_done_vault_init -out {{ vault_home }}/ansible_done_vault_init &&
       rm {{ vault_home }}/.ansible_done_vault_init
     creates: "{{ vault_home }}/ansible_done_vault_init"
@@ -84,10 +83,9 @@
     _VAULT_STATUS_SEALED:   2
 
 - name: Get vault status output
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: >
-      docker exec vault
-      vault status -format=json
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
   register: _vault_status_output
   failed_when: _vault_status_output.rc == _VAULT_STATUS_ERROR
   changed_when: false
@@ -96,8 +94,7 @@
 - name: Ensure unseal vault
   ansible.builtin.shell:
     cmd: >
-      docker exec vault
-      vault operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
   loop: "{{ range(0, vault_key_threshold) | list }}"
   loop_control:
     index_var: _vault_unseal_key_index

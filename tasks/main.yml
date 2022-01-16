@@ -13,27 +13,21 @@
   ansible.builtin.include_tasks: vault_config.yml
 
 - name: Ensure vault
-  community.docker.docker_container:
-    name:    vault
-    image:   vault:{{ vault_version }}
-    command: server
-    capabilities:
-      - ipc_lock
-    ports:
-      - "{{ vault_docker_expose_api }}"
-      - "{{ vault_docker_expose_cluster }}"
-    env:
-      VAULT_ADDR: http://127.0.0.1:{{ vault_docker_api_port }}
-    volumes:
-      - "{{ vault_home }}/logs:/vault/logs"
-      - "{{ vault_home }}/file:/vault/file"
-      - "{{ vault_home }}/config:/vault/config"
-    restart_policy:             always
-    container_default_behavior: compatibility
-    # state: "{{ vault_docker_container_state }}"
+  ansible.builtin.include_tasks: "vault_install_{{ vault_install_method }}.yml"
 
 - name: Get vault status
   ansible.builtin.include_tasks: vault_status.yml
+  run_once: true
+
+- name: Wait vault
+  ansible.builtin.shell:
+    cmd: >
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json || /bin/true
+  register: _vault_status_output
+  until: _vault_status_output.stdout is defined
+  retries: 10
+  delay: 2
+  changed_when: false
   run_once: true
 
 - name: Ensure vault init
@@ -47,8 +41,7 @@
 - name: Wait vault active when HA
   ansible.builtin.command:
     cmd: >
-      docker exec vault
-      vault status -format=json
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
   register: _vault_status_output
   until: _vault_status_output.stdout.find("leader_") != -1
   retries: 10

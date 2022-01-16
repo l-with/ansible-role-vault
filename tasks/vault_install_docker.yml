@@ -1,0 +1,47 @@
+---
+
+- name: Ensure software-properties-common is installed
+  ansible.builtin.apt:
+    name: software-properties-common
+
+- name: Ensure python is installed
+  ansible.builtin.apt:
+    name: python3
+
+- name: Ensure pip is installed
+  ansible.builtin.apt:
+    name: python3-pip
+
+- name: Ensure Python library docker
+  ansible.builtin.pip:
+    name: docker
+
+- name: Ensure vault docker
+  community.docker.docker_container:
+    name:    vault
+    image:   vault:{{ vault_version }}
+    command: server
+    capabilities:
+      - ipc_lock
+    ports:
+      - "{{ vault_docker_expose_api }}"
+      - "{{ vault_docker_expose_cluster }}"
+    env:
+      VAULT_ADDR: http://127.0.0.1:{{ vault_docker_api_port }}
+    volumes:
+      - "{{ vault_home }}/logs:/vault/logs"
+      - "{{ vault_home }}/file:/vault/file"
+      - "{{ vault_home }}/config:/vault/config"
+    restart_policy:             always
+    container_default_behavior: compatibility
+    # state: "{{ vault_docker_container_state }}"
+
+- name: Ensure _vault_command_prefix
+  ansible.builtin.set_fact:
+    _vault_command_prefix: 'docker exec '
+
+- name: Ensure _vault_command_postfix
+  ansible.builtin.set_fact:
+    _vault_command_postfix: 'vault vault'
+
+...

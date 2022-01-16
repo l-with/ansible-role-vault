@@ -10,8 +10,7 @@
 - name: Ensure vault write policy
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
-      vault policy write {{ _vault_policy_write.name }} /vault/config/policies/{{ _vault_policy_write.name }}.hcl
+      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} policy write {{ _vault_policy_write.name }} /vault/config/policies/{{ _vault_policy_write.name }}.hcl
       && touch {{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy_write.name }}
     creates: "{{ vault_home }}/ansible_done_vault_write_policy_{{ _vault_policy_write.name }}"
   run_once: true

@@ -24,8 +24,7 @@
 - name: Ensure vault kv delete
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault
-      vault kv delete {{ _vault_kv_delete_versions_string }} {{ _vault_kv_delete.path }}
+      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} kv delete {{ _vault_kv_delete_versions_string }} {{ _vault_kv_delete.path }}
       && rm -f {{ vault_home }}/ansible_done_vault_kv_put_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}
       && touch {{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}
     creates: "{{ vault_home }}/ansible_done_vault_kv_delete_{{ _vault_kv_delete.path | regex_replace('/', '_slash_') | urlencode }}"

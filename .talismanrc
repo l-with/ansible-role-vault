@@ -14,6 +14,8 @@ fileignoreconfig:
     - >
       vault operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
     - >
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
+    - >
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home }}\/.ansible_done_vault_init -out {{ vault_home }}\/ansible_done_vault_init &&
     - >
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home }}\/.ansible_done_vault_init -in {{ vault_home }}\/ansible_done_vault_init
@@ -28,7 +30,7 @@ fileignoreconfig:
 - filename: try/playbook.yml
   allowed_patterns:
     - >
-      vault_encrypt_secret: 'vault_encrypt_secret'
+      vault_encrypt_secret: +'vault_encrypt_secret'
     - >
       vault_key_shares: +\d+
 
