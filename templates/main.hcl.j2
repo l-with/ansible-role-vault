@@ -18,4 +18,8 @@ storage "raft" {
 
 disable_mlock = {{ vault_disable_mlock }}
 
-{{ vault_storage_raft_retry_join }}
+{% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
+retry_join {
+    leader_api_addr = "https://{{ host }}"
+}
+{% endfor %}
