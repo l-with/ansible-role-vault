@@ -35,105 +35,100 @@
         vault_key_shares:        3
         vault_key_threshold:     2
         vault_show_unseal_keys:  true
-#        vault_docker_expose_api: 127.0.0.1:9200:{{ vault_docker_api_port }}
-        # vault_storage_config: |
-        #   storage "file" {
-        #       path    = "/vault/file"
-        #   }
-        vault_auth_methods:
-          - jwt
-          - approle
-        vault_secret_engines:
-          - engine: ssh
-          - engine: kv
-            options:
-              version: 1
-          - engine: kv
-            options:
-              path: hetzner
-              version: 1
-        vault_policy_writes:
-          - name: terraform
-            hcl: |-
-              path "/*" {
-                capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
-              }
-          - name: with*.de
-            hcl: |-
-              path "hetzner/project/with*.de/*" {
-                capabilities = [ "read" ]
-              }
-          - name: le
-            hcl: |-
-              path "gitlab/le/*" {
-                capabilities = [ "read" ]
-              }
-          - name: runner
-            hcl: |-
-              path "gitlab/runner/*" {
-                capabilities = [ "read" ]
-              }
-          - name: docker
-            hcl: |-
-              path "gitlab/docker/*" {
-                capabilities = [ "read" ]
-              }
-        vault_writes:
-          - path: auth/approle/role/terraform
-            data:
-              secret_id_ttl: 10m
-              token_num_uses: 10
-              token_ttl: 20m
-              token_max_ttl: 30m
-              secret_id_num_uses: 40
-          - path: auth/jwt/config
-            force: true
-            data:
-              jwks_url: https://gitlab.with.de/-/jwks
-              bound_issuer: gitlab.with.de
-          - path: auth/jwt/role/hetzner
-            data:
-              role_type: jwt
-              policies:
-                - with*.de
-                - le
-              token_explicit_max_ttl: 60
-              bound_claims_type: glob
-              bound_claims:
-                namespace_id:  '40'  # Terraform / Hetzner
-                ref_protected: 'true'
-              user_claim: 'user_email'
-          - path: auth/jwt/role/docker
-            data:
-              role_type: jwt
-              policies:
-                - docker
-              token_explicit_max_ttl: 60
-              bound_claims_type: glob
-              bound_claims:
-                project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
-                ref_protected: 'true'
-              user_claim: 'user_email'
-        vault_approles:
-          - terraform
+        # vault_auth_methods:
+        #   - jwt
+        #   - approle
+        # vault_secret_engines:
+        #   - engine: ssh
+        #   - engine: kv
+        #     options:
+        #       version: 1
+        #   - engine: kv
+        #     options:
+        #       path: hetzner
+        #       version: 1
+        # vault_policy_writes:
+        #   - name: terraform
+        #     hcl: |-
+        #       path "/*" {
+        #         capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+        #       }
+        #   - name: with*.de
+        #     hcl: |-
+        #       path "hetzner/project/with*.de/*" {
+        #         capabilities = [ "read" ]
+        #       }
+        #   - name: le
+        #     hcl: |-
+        #       path "gitlab/le/*" {
+        #         capabilities = [ "read" ]
+        #       }
+        #   - name: runner
+        #     hcl: |-
+        #       path "gitlab/runner/*" {
+        #         capabilities = [ "read" ]
+        #       }
+        #   - name: docker
+        #     hcl: |-
+        #       path "gitlab/docker/*" {
+        #         capabilities = [ "read" ]
+        #       }
+        # vault_writes:
+        #   - path: auth/approle/role/terraform
+        #     data:
+        #       secret_id_ttl: 10m
+        #       token_num_uses: 10
+        #       token_ttl: 20m
+        #       token_max_ttl: 30m
+        #       secret_id_num_uses: 40
+        #   - path: auth/jwt/config
+        #     force: true
+        #     data:
+        #       jwks_url: https://gitlab.with.de/-/jwks
+        #       bound_issuer: gitlab.with.de
+        #   - path: auth/jwt/role/hetzner
+        #     data:
+        #       role_type: jwt
+        #       policies:
+        #         - with*.de
+        #         - le
+        #       token_explicit_max_ttl: 60
+        #       bound_claims_type: glob
+        #       bound_claims:
+        #         namespace_id:  '40'  # Terraform / Hetzner
+        #         ref_protected: 'true'
+        #       user_claim: 'user_email'
+        #   - path: auth/jwt/role/docker
+        #     data:
+        #       role_type: jwt
+        #       policies:
+        #         - docker
+        #       token_explicit_max_ttl: 60
+        #       bound_claims_type: glob
+        #       bound_claims:
+        #         project_id:    '97'   # Packages and Registries / yrtsigeR reniatnoC
+        #         ref_protected: 'true'
+        #       user_claim: 'user_email'
+        # vault_approles:
+        #   - terraform
 
-        # vault_kv_deletes:
+        # # vault_kv_deletes:
+        # #   - path: hetzner/project/with*.de
+        # #   - path: kv/config
+        # vault_kv_puts:
         #   - path: hetzner/project/with*.de
+        #     kv:
+        #       hcloud_token: abcdefghijklmn
+        #       ssh_key: |
+        #         line 1
+        #         line 2
         #   - path: kv/config
-        vault_kv_puts:
-          - path: hetzner/project/with*.de
-            kv:
-              hcloud_token: abcdefghijklmn
-              ssh_key: |
-                line 1
-                line 2
-          - path: kv/config
-            cas: 0
-            kv:
-              security: high
-              # - path: kv
-              #   kv:
-              #     without_subpath: doesnotwork
+        #     cas: 0
+        #     kv:
+        #       security: high
+        #       # - path: kv
+        #       #   kv:
+        #       #     without_subpath: doesnotwork
   tasks:
     # - name: Print terraform role_id
     #   ansible.builtin.debug:

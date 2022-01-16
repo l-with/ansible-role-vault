@@ -11,6 +11,9 @@ listener "tcp" {
 
 cluster_addr = "http://127.0.0.1:8201"
 
-{{ vault_storage_config }}
+storage "raft" {
+    path    = "{{ vault_storage_raft_path }}"
+    node_id = "{{ vault_storage_raft_node_id }}"
+}
 
 disable_mlock = {{ vault_disable_mlock }}

@@ -35,7 +35,8 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
 | basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
-| basic | `vault_storage_config` | <code style="display:block">storage "raft" {<br />&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;= "/vault/file/raft"<br />&nbsp;&nbsp;node_id = "raft_node_1"<br />}<br />cluster_addr = "http://127.0.0.1:8201"</code> | the vault storage config |
+| basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
+| basic | `vault_storage_raft_node_id` | `"raft_node_{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
 | docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |

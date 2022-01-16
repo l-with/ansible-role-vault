@@ -9,11 +9,13 @@ vault_ui:                     'false'
 vault_api_port:               8200
 vault_cluster_port:           8201
 vault_disable_mlock:          'true'
-vault_storage_config: |
-  storage "raft" {
-      path    = "{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"
-      node_id = "raft_node_{{ inventory_hostname }}"
-  }
+vault_storage_raft_path:      "{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"
+vault_storage_raft_node_id:   "raft_node_{{ inventory_hostname }}"
+# vault_storage_config: |
+#   storage "raft" {
+#       path    = "{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"
+#       node_id = "raft_node_{{ inventory_hostname }}"
+#   }
 # docker
 vault_docker_api_port:        "{{ vault_api_port }}"
 vault_docker_cluster_port:    "{{ vault_cluster_port }}"
