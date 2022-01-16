@@ -8,6 +8,9 @@ fileignoreconfig:
       vault_key_shares: +\d+
     - >
       vault_key_threshold: +\d+
+    - >
+      vault_secret_engines: +\[\]
+
 
 - filename: tasks/vault_init.yml
   allowed_patterns:
