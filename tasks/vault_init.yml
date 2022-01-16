@@ -54,12 +54,6 @@
     _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
   run_once: true
 
-- name: Print fact _vault_init_info
-  ansible.builtin.debug:
-    msg: "_vault_init_info: {{ _vault_init_info }}"
-  when: vault_show_unseal_keys
-  run_once: true
-
 - name: Set fact _vault_unseal_keys
   ansible.builtin.set_fact:
     _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
@@ -68,6 +62,7 @@
 - name: Set fact _vault_root_token
   ansible.builtin.set_fact:
     _vault_root_token: "{{ _vault_init_info.root_token }}"
+  when: not vault_revoke_root_token or not _vault_initialized
   run_once: true
 
 - name: Print fact _vault_unseal_keys
