@@ -6,8 +6,7 @@
     - name: Ensure vault operator generate-root -init
       ansible.builtin.command:
         cmd: >
-          docker exec vault
-          vault operator generate-root -format=json -init
+          {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator generate-root -format=json -init
       register: _vault_operator_generate_root_init_result
 
     - name: Set fact _vault_operator_generate_root_init
@@ -18,8 +17,7 @@
       ansible.builtin.shell:
         cmd: >
           echo {{ _vault_unseal_keys[_vault_unseal_key_index] }} |
-          docker exec --interactive vault
-          vault operator generate-root -format=json -nonce={{ _vault_operator_generate_root_init.nonce }} -
+          {{ _vault_command_prefix }} --interactive {{ _vault_command_postfix }} operator generate-root -format=json -nonce={{ _vault_operator_generate_root_init.nonce }} -
       loop: "{{ range(0, vault_key_threshold) | list }}"
       loop_control:
         index_var: _vault_unseal_key_index
@@ -32,8 +30,7 @@
     - name: Ensure vault operator generate-root decode
       ansible.builtin.shell:
         cmd: >
-          docker exec vault
-          vault operator generate-root -format=json -decode={{ _vault_operator_generate_root.encoded_root_token }} -otp={{ _vault_operator_generate_root_init.otp }}
+          {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator generate-root -format=json -decode={{ _vault_operator_generate_root.encoded_root_token }} -otp={{ _vault_operator_generate_root_init.otp }}
       register: _vault_operator_generate_root_decode_result
 
     - name: Set fact _vault_operator_generate_root_decode
@@ -50,8 +47,7 @@
 - name: Ensure vault create root token
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault token create -ttl {{ vault_root_token_ttl }} -format=json
+      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
   register: _vault_create_root_token_result
   run_once: yes
 
@@ -68,8 +64,7 @@
 - name: Ensure vault revoke root token
   ansible.builtin.shell:
     cmd: >
-      docker exec -e VAULT_TOKEN='{{ _vault_root_token }}' vault 
-      vault token revoke -mode=orphan {{ _vault_root_token }}
+      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token revoke -mode=orphan {{ _vault_root_token }}
   register: _vault_revoke_root_token_result
   when: vault_revoke_root_token
   run_once: yes
