@@ -4,6 +4,10 @@ Install vault as docker container
 
 This is as a first step implemented for a simple installation on one host, nevertheless the default storage configuration is `raft` (kind of for extensibility) and waiting for the cluster to become ready before adding configuations is builtin.
 
+The output of `vault init` is saved as JSON and encrypted with `openssl` with the secret `vault_encrypt_secret`.
+
+## Configurations
+
 There are role variables to
 
 * add auth methods (`vault_auth_methods`)
@@ -13,8 +17,6 @@ There are role variables to
 * add key-values (`vault_kv_puts`)
 
 All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home`.
-
-The output of `vault init` is saved as JSON and encrypted with `openssl` with the secret `vault_encrypt_secret`.
 
 ## Collection dependencies
 
@@ -30,9 +32,14 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
 | basic | `vault_ui`| `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
+| basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
+| basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
+| basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
 | basic | `vault_storage_config` | <code style="display:block">storage "raft" {<br />&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;= "/vault/file/raft"<br />&nbsp;&nbsp;node_id = "raft_node_1"<br />}<br />cluster_addr = "http://127.0.0.1:8201"</code> | the vault storage config |
-| docker | `vault_docker_expose_api` | `127.0.0.1:8200:8200` | the docker expose of the vault api |
-| docker | `vault_docker_expose_cluster` | `127.0.0.1:8201:8201` | the docker expose of the cluster |
+| docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
+| docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
+| docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |
+| docker | `vault_docker_expose_cluster` | `"127.0.0.1:8201:{{ vault_docker_cluster_port }}"` | the docker expose of the cluster |
 | init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
 | init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
 | init | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
