@@ -43,8 +43,12 @@
     cmd: "{{ vault_home }}/bin/vault server -config={{ vault_home }}/config >{{ vault_home }}/logs/vault.log &"
   when: not _pgrep_vault.stdout
 
-- name: Ensure _vault_command
+- name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home }}/bin/vault"
+    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home }}/bin/vault"
+
+- name: Ensure _vault_command_postfix
+  ansible.builtin.set_fact:
+    _vault_command_postfix: ''
 
 ...
