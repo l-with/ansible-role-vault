@@ -14,12 +14,12 @@ cluster_addr = "http://127.0.0.1:8201"
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
     node_id = "{{ vault_storage_raft_node_id }}"
+    {% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
+    retry_join {
+        leader_api_addr = "https://{{ host.vault_instance_FQDN }}:9201"
+    }
+    {% endfor %}
 }
 
 disable_mlock = {{ vault_disable_mlock }}
 
-{% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
-retry_join {
-    leader_api_addr = "https://{{ host }}"
-}
-{% endfor %}
