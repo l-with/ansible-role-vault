@@ -17,7 +17,7 @@ storage "raft" {
 {% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
     retry_join {
         leader_api_addr = "https://{{ hostvars[host].ansible_fqdn }}:8201"
-        leader_tls_servername = "hostvars[host].ansible_fqdn"
+        leader_tls_servername = "{{ hostvars[host].ansible_fqdn }}"
     }
 {% endfor %}
 }
