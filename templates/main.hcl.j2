@@ -9,16 +9,17 @@ listener "tcp" {
     tls_disable = true
 }
 
-cluster_addr = "http://127.0.0.1:8201"
+cluster_addr = "http://127.0.0.1:{{ vault_cluster_port }}"
 
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
     node_id = "{{ vault_storage_raft_node_id }}"
-    {% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
+{% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
     retry_join {
         leader_api_addr = "https://{{ hostvars[host].ansible_fqdn }}:8201"
+        leader_tls_servername = "hostvars[host].ansible_fqdn"
     }
-    {% endfor %}
+{% endfor %}
 }
 
 disable_mlock = {{ vault_disable_mlock }}
