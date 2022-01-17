@@ -3,13 +3,13 @@
 ui = {{ vault_ui }}
 log_level = "{{ vault_log_level }}"
 api_addr = "http://127.0.0.1:{{ vault_api_port }}"
+cluster_addr = "http://127.0.0.1:{{ vault_cluster_port }}"
 
 listener "tcp" {  
     address = "0.0.0.0:{{ vault_api_port }}"
-    cluster_addr = "0.0.0.0:{{ vault_cluster_port }}"
+    cluster_address = "0.0.0.0:{{ vault_cluster_port }}"
     tls_disable = true
 }
-
 
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
