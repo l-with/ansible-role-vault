@@ -42,6 +42,6 @@
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:
-    _vault_command_postfix: 'vault vault '
+    _vault_command_postfix: ' vault vault '
 
 ...
