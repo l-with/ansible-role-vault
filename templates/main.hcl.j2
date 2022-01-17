@@ -6,10 +6,10 @@ api_addr = "http://127.0.0.1:{{ vault_api_port }}"
 
 listener "tcp" {  
     address = "0.0.0.0:{{ vault_api_port }}"
+    cluster_addr = "0.0.0.0:{{ vault_cluster_port }}"
     tls_disable = true
 }
 
-cluster_addr = "http://127.0.0.1:{{ vault_cluster_port }}"
 
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
