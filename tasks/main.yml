@@ -21,7 +21,7 @@
 
 - name: Get vault status
   ansible.builtin.include_tasks: vault_status.yml
-  run_once: true
+  # run_once: true
 
 - name: Wait vault
   ansible.builtin.shell:
@@ -32,15 +32,15 @@
   retries: 10
   delay: 2
   changed_when: false
-  run_once: true
+  # run_once: true
 
 - name: Ensure vault init
   ansible.builtin.include_tasks: vault_init.yml
-  run_once: true
+  # run_once: true
 
 - name: Get vault status
   ansible.builtin.include_tasks: vault_status.yml
-  run_once: true
+  # run_once: true
 
 - name: Wait vault active when HA
   ansible.builtin.command:
@@ -52,7 +52,7 @@
   delay: 2
   changed_when: false
   when: _vault_status.ha_enabled
-  run_once: true
+  # run_once: true
 
 - name: Ensure vault root token
   ansible.builtin.include_tasks: vault_root_token.yml
