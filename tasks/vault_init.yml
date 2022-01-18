@@ -83,7 +83,7 @@
     _VAULT_STATUS_SEALED:   2
 
 - name: Get vault status output
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
   register: _vault_status_output

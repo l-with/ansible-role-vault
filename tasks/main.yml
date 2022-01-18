@@ -46,7 +46,7 @@
   # run_once: true
 
 - name: Wait vault active when HA
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
   register: _vault_status_output

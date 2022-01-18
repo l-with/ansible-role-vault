@@ -4,7 +4,7 @@
 
   block:
     - name: Ensure vault operator generate-root -init
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: >
           {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator generate-root -format=json -init
       register: _vault_operator_generate_root_init_result
