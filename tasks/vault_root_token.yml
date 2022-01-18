@@ -75,7 +75,19 @@
     cmd: >
       {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token revoke -mode=orphan {{ _vault_root_token }}
   register: _vault_revoke_root_token_result
-  when: vault_revoke_root_token
+  when: 
+    - vault_revoke_root_token
+    - vault_install_method == 'docker'
+  run_once: yes
+
+- name: Ensure vault revoke root token
+  ansible.builtin.shell:
+    cmd: >
+      VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_prefix }} {{ _vault_command_postfix }} token revoke -mode=orphan {{ _vault_root_token }}
+  register: _vault_revoke_root_token_result
+  when: 
+    - vault_revoke_root_token
+    - vault_install_method == 'service'
   run_once: yes
 
 - name: Ensure _vault_root_token
