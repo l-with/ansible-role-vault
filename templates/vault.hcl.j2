@@ -9,7 +9,7 @@ listener "tcp" {
     address = "{{ vault_listener_bind_address }}:{{ vault_api_port }}"
     cluster_address = "{{ vault_listener_bind_cluster_address }}:{{ vault_cluster_port }}"
     tls_disable = {{ vault_tls_disable }}
-{% if tls_disable == 'false' %}
+{% if vault_tls_disable == 'false' %}
     tls_cert_file = "{{ vault_tls_cert_file }}"
     tls_key_file = "{{ vault_tls_key_file }}"
 {% endif %}
