@@ -1,17 +1,24 @@
 ---
 
 # basic
-vault_version:                 'latest'
-vault_install_method:          'docker'
-vault_home_path:               /srv/vault
-vault_config_path:             "{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"
-vault_log_level:               "Info"
-vault_ui:                      'false'
-vault_api_port:                8200
-vault_cluster_port:            8201
-vault_disable_mlock:           'true'
-vault_storage_raft_path:       "{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"
-vault_storage_raft_node_id:    "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+vault_version:                       'latest'
+vault_install_method:                'docker'
+vault_home_path:                     /srv/vault
+vault_config_path:                   "{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"
+vault_log_level:                     "Info"
+vault_ui:                            'false'
+vault_api_port:                      8200
+vault_cluster_port:                  8201
+vault_api_addr:                      "http://127.0.0.1:{{ vault_api_port }}"
+vault_cluster_addr:                  "http://127.0.0.1:{{ vault_cluster_port }}"
+vault_listener_bind_address:         127.0.0.1
+vault_listener_bind_cluster_address: 127.0.0.1
+vault_disable_mlock:                 'true'
+vault_storage_raft_path:             "{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"
+vault_storage_raft_node_id:          "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+vault_tls_disable:                   'true'
+vault_tls_cert_file:
+vault_tls_key_file:
 
 # docker
 vault_docker_api_port:         "{{ vault_api_port }}"

@@ -30,13 +30,21 @@ Note that this also requires installation of the python libraries `docker` and `
 | --- | --- | --- | --- |
 | basic | `vault_version` | `latest` | the vault version (docker image tag) |
 | basic | `vault_home_path` | `/srv/vault` | the home of the vault docker volumes |
+| basic | `vault_config_path` | `"{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"` |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
-| basic | `vault_ui`| `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
-| basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
-| basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
+| basic | `vault_ui` | `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
+| basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) and [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address)) |
+| basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) and [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address)) |
+| basic | `vault_api_addr` | `"http://127.0.0.1:{{ vault_api_port }}"` | the [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) |
+| basic | `vault_cluster_addr` | `"http://127.0.0.1:{{ vault_cluster_port }}"` | the [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) |
+| basic | `vault_listener_bind_address` | `127.0.0.1` | the vault bind address (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
+| basic | `vault_listener_bind_cluster_address` | `127.0.0.1` | the vault cluster bind address (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
+| basic | `vault_tls_disable` | `'true'` | if TLS should be disabled in the listener stanza ([`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable)) |
+| basic | `vault_tls_cert_file` | | the path of the certificate for TLS ([`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file)) |
+| basic | `vault_tls_key_file` | | the path of the private key for the certificate for TLS ([`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
 | basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
-| basic | `vault_storage_raft_node_id` | `"raft_node_{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
+| basic | `vault_storage_raft_node_id` | `"{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
 | docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |

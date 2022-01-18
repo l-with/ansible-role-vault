@@ -2,13 +2,17 @@
 
 ui = {{ vault_ui }}
 log_level = "{{ vault_log_level }}"
-api_addr = "http://127.0.0.1:{{ vault_api_port }}"
-cluster_addr = "http://127.0.0.1:{{ vault_cluster_port }}"
+api_addr = "{{ vault_api_addr }}"
+cluster_addr = "{{ vault_cluster_addr }}"
 
 listener "tcp" {  
-    address = "127.0.0.1:{{ vault_api_port }}"
-    cluster_address = "127.0.0.1:{{ vault_cluster_port }}"
-    tls_disable = true
+    address = "{{ vault_listener_bind_address }}:{{ vault_api_port }}"
+    cluster_address = "{{ vault_listener_bind_cluster_address }}:{{ vault_cluster_port }}"
+    tls_disable = {{ vault_tls_disable }}
+{% if tls_disable == 'false' %}
+    tls_cert_file = "{{ vault_tls_cert_file }}"
+    tls_key_file = "{{ vault_tls_key_file }}"
+{% endif %}
 }
 
 storage "raft" {
