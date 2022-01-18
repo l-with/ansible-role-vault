@@ -5,9 +5,9 @@
     _vault_write_data: "{{ _vault_write.data | default({}) | default(omit) }}"
   run_once: true
 
-- name: Ensure "{{ vault_home }}/{{ _vault_write_json }}"
+- name: Ensure "{{ vault_home_path }}/{{ _vault_write_json }}"
   ansible.builtin.copy:
-    dest: "{{ vault_home }}/{{ _vault_write_json }}"
+    dest: "{{ vault_home_path }}/{{ _vault_write_json }}"
     content: "{{ _vault_write_data | to_json }} "
     mode: o-rx
   run_once: true
@@ -32,8 +32,8 @@
   ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} write {{ _vault_write_force_string }} {{ _vault_write.path }} @/vault/{{ _vault_write_json }}
-      >{{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
-    creates: "{{ vault_home }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}"
+      >{{ vault_home_path }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}
+    creates: "{{ vault_home_path }}/ansible_done_vault_write_{{ _vault_write.path | regex_replace('/', '_slash_') | urlencode }}"
   run_once: true
 
 ...

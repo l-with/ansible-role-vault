@@ -11,7 +11,7 @@
 
 - name: Ensure vault bin path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/bin"
+    path:  "{{ vault_home_path }}/bin"
     state: directory
     mode: g-rwx
 
@@ -19,9 +19,15 @@
   ansible.builtin.unarchive:
     remote_src: true
     src: https://releases.hashicorp.com/vault/{{ _vault_latest_release }}/vault_{{ _vault_latest_release }}_linux_amd64.zip
-    dest: "{{ vault_home }}/bin"
+    dest: "{{ vault_home_path }}/bin"
     mode: ug+x,o-rwx
-    creates: "{{ vault_home }}/bin/vault"
+    creates: "{{ vault_home_path }}/bin/vault"
+
+- name: Ensure vault server systemd service configuration exists
+  ansible.builtin.template:
+    src: templates/vault.service.j2
+    dest: /etc/systemd/system/vault.service
+    mode: ug+x,o-rw
 
 - name: Check vault running
   ansible.builtin.command:
@@ -40,12 +46,12 @@
 
 - name: Run vault
   ansible.builtin.shell:
-    cmd: "{{ vault_home }}/bin/vault server -config={{ vault_home }}/config >{{ vault_home }}/logs/vault.log &"
+    cmd: "{{ vault_home_path }}/bin/vault server -config={{ vault_home_path }}/config >{{ vault_home_path }}/logs/vault.log &"
   when: not _pgrep_vault.stdout
 
 - name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home }}/bin/vault"
+    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home_path }}/bin/vault"
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:

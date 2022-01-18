@@ -4,7 +4,7 @@
 
 - name: Read vault init file stat
   ansible.builtin.stat:
-    path: "{{ vault_home }}/ansible_done_vault_init"
+    path: "{{ vault_home_path }}/ansible_done_vault_init"
   ignore_errors: true
   register: _vault_init_file_stat
   # run_once: true
@@ -17,10 +17,10 @@
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
     cmd: >
-      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home }}/.ansible_done_vault_init &&
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home }}/.ansible_done_vault_init -out {{ vault_home }}/ansible_done_vault_init &&
-      rm {{ vault_home }}/.ansible_done_vault_init
-    creates: "{{ vault_home }}/ansible_done_vault_init"
+      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home_path }}/.ansible_done_vault_init &&
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home_path }}/.ansible_done_vault_init -out {{ vault_home_path }}/ansible_done_vault_init &&
+      rm {{ vault_home_path }}/.ansible_done_vault_init
+    creates: "{{ vault_home_path }}/ansible_done_vault_init"
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   when: not _vault_initialized
@@ -29,7 +29,7 @@
 - name: Ensure decrypt ansible_done_vault_init
   ansible.builtin.shell:
     cmd: >
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home }}/.ansible_done_vault_init -in {{ vault_home }}/ansible_done_vault_init
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}/.ansible_done_vault_init -in {{ vault_home_path }}/ansible_done_vault_init
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
@@ -37,13 +37,13 @@
 
 - name: Slurp vault init info
   ansible.builtin.slurp:
-    src: "{{ vault_home }}/.ansible_done_vault_init"
+    src: "{{ vault_home_path }}/.ansible_done_vault_init"
   register: _vault_init_file_slurp
   # run_once: true
 
-- name: Ensure remove "{{ vault_home }}/.ansible_done_vault_init"
+- name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
   ansible.builtin.file:
-    path: "{{ vault_home }}/.ansible_done_vault_init"
+    path: "{{ vault_home_path }}/.ansible_done_vault_init"
     state: absent
   changed_when: false
   # run_once: true

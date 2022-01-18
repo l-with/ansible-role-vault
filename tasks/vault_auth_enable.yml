@@ -4,8 +4,8 @@
   ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} auth enable {{ _vault_auth_method }}
-      && touch {{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}
-    creates: "{{ vault_home }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
+      && touch {{ vault_home_path }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}
+    creates: "{{ vault_home_path }}/ansible_done_vault_auth_enable_{{ _vault_auth_method }}"
   run_once: true
 
 ...

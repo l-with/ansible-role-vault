@@ -2,44 +2,44 @@
 
 - name: Ensure vault home
   ansible.builtin.file:
-    path:    "{{ vault_home }}"
+    path:    "{{ vault_home_path }}"
     state:   directory
     mode:    g-rwx
 
 - name: Ensure vault config path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/config"
+    path:  "{{ vault_home_path }}/config"
     state: directory
     mode:  g-rwx
 
 - name: Ensure vault policies path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/config/policies"
+    path:  "{{ vault_home_path }}/config/policies"
     state: directory
     mode:  g-rwx
 
 - name: Ensure vault tmp path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/config/tmp"
+    path:  "{{ vault_home_path }}/config/tmp"
     state: directory
     mode:  g-rwx
 
 - name: Ensure vault logs path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/logs"
+    path:  "{{ vault_home_path }}/logs"
     state: directory
     mode: g-rwx
 
 - name: Ensure vault file/raft path
   ansible.builtin.file:
-    path:  "{{ vault_home }}/file/raft"
+    path:  "{{ vault_home_path }}/file/raft"
     state: directory
     mode:  g-rwx
 
 - name: Ensure vault config
   ansible.builtin.template:
     src:  main.hcl.j2
-    dest: "{{ vault_home }}/config/main.hcl"
+    dest: "{{ vault_home_path }}/config/main.hcl"
     mode: g-rwx
 
 ...

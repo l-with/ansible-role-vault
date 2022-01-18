@@ -16,7 +16,7 @@ There are role variables to
 * add data (`vault_writes`)
 * add key-values (`vault_kv_puts`)
 
-All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home`.
+All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home_path`.
 
 ## Collection dependencies
 
@@ -29,13 +29,13 @@ Note that this also requires installation of the python libraries `docker` and `
 | group | variable | default | description |
 | --- | --- | --- | --- |
 | basic | `vault_version` | `latest` | the vault version (docker image tag) |
-| basic | `vault_home` | `/srv/vault` | the home of the vault docker volumes |
+| basic | `vault_home_path` | `/srv/vault` | the home of the vault docker volumes |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
 | basic | `vault_ui`| `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
 | basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
 | basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
-| basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
+| basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
 | basic | `vault_storage_raft_node_id` | `"raft_node_{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
