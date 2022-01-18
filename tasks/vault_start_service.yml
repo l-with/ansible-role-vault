@@ -1,0 +1,9 @@
+---
+
+- name: Ensure vault service is running (and enabled)
+  ansible.builtin.service:
+    name: vault
+    state: started
+    enabled: yes
+
+...

@@ -20,36 +20,9 @@
     name: vault
     selection: hold
 
-- name: Ensure vauklt service is running (and enabled)
-  ansible.builtin.service:
-    name: consul
-    state: started
-    enabled: yes
-  tags: consul
-
-- name: Check vault running
-  ansible.builtin.command:
-    cmd: pgrep vault
-  ignore_errors: true
-  register: _pgrep_vault
-
-- name: Print vault running
-  ansible.builtin.debug:
-    msg: "_pgrep_vault: {{ _pgrep_vault }}"
-
-- name: Decide vault running
-  ansible.builtin.debug:
-    msg: "running"
-  when: _pgrep_vault.stdout
-
-- name: Run vault
-  ansible.builtin.shell:
-    cmd: "{{ vault_home_path }}/bin/vault server -config={{ vault_home_path }}/config >{{ vault_home_path }}/logs/vault.log &"
-  when: not _pgrep_vault.stdout
-
 - name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home_path }}/bin/vault"
+    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} vault"
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:
