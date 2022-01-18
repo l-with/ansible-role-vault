@@ -13,7 +13,7 @@
 
 - name: Set fact _vault_lsb_release_cs
   ansible.builtin.set_fact:
-    _vault_lsb_release_cs: _vault_lsb_release_cs_results.stdout
+    _vault_lsb_release_cs: "{{ _vault_lsb_release_cs_results.stdout }}"
 
 - name: Ensure Hashicorp repository
   ansible.builtin.apt_repository:
