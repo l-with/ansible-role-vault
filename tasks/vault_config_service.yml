@@ -5,7 +5,7 @@
     path:  "{{ vault_home_path }}/file/raft"
     state: directory
     group: vault
-    user:  vault
+    owner: vault
     mode:  o-rwx
   notify: restart vault service
 
@@ -21,7 +21,7 @@
     path:  "{{ vault_config_path }}/policies"
     state: directory
     group: vault
-    user:  vault
+    owner: vault
     mode:  o-rwx
   notify: restart vault service
     
