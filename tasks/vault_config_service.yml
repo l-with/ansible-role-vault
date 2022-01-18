@@ -7,12 +7,14 @@
     group: vault
     user:  vault
     mode:  o-rwx
+  notify: restart vault service
 
 - name: Ensure vault config
   ansible.builtin.template:
     src:  vault.hcl.j2
     dest: "{{ vault_config_path }}/vault.hcl"
     mode: o-rwx
+  notify: restart vault service
     
 - name: Ensure vault policies path
   ansible.builtin.file:
@@ -21,5 +23,6 @@
     group: vault
     user:  vault
     mode:  o-rwx
+  notify: restart vault service
     
 ...
