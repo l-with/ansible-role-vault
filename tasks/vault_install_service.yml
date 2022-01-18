@@ -12,7 +12,7 @@
   changed_when: false
 
 - name: Set fact _vault_lsb_release_cs
-  ansible.built.set_fact:
+  ansible.builtin.set_fact:
     _vault_lsb_release_cs: _vault_lsb_release_cs_results.stdout
 
 - name: Ensure Hashicorp repository
