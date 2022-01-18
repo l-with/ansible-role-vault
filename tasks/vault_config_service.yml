@@ -8,8 +8,8 @@
 
 - name: Ensure vault config
   ansible.builtin.template:
-    src:  main.hcl.j2
-    dest: "{{ vault_config_path }}/main.hcl"
+    src:  vault.hcl.j2
+    dest: "{{ vault_config_path }}/vault.hcl"
     mode: o-rwx,g-rwx
 
 - name: Ensure vault policies path

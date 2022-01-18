@@ -12,12 +12,6 @@
     state: directory
     mode:  o-rwx,g-rwx
 
-- name: Ensure vault policies path
-  ansible.builtin.file:
-    path:  "{{ vault_config_path }}/policies"
-    state: directory
-    mode:  o-rwx,g-rwx
-
 - name: Ensure vault tmp path
   ansible.builtin.file:
     path:  "{{ vault_config_path }}/tmp"
@@ -38,8 +32,14 @@
 
 - name: Ensure vault config
   ansible.builtin.template:
-    src:  main.hcl.j2
-    dest: "{{ vault_home_path }}/config/main.hcl"
+    src:  vault.hcl.j2
+    dest: "{{ vault_config_path }}/vault.hcl"
+    mode: o-rwx,g-rwx
+
+- name: Ensure vault policies path
+  ansible.builtin.file:
+    path:  "{{ vault_config_path }}/policies"
+    state: directory
     mode:  o-rwx,g-rwx
 
 ...
