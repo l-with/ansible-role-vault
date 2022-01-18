@@ -32,7 +32,7 @@
 
 - name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} vault"
+    _vault_command_prefix: "VAULT_ADDR={{ vault_api_addr }} vault"
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:
