@@ -8,7 +8,7 @@
 - name: Check {{ vault_install_method }}
   ansible.builtin.fail:
     msg: "vault_install_method '{{ vault_install_method }}' not supported"
-  when: vault_install_method not in ['docker']
+  when: vault_install_method not in ['docker', 'service']
   
 - name: Ensure prepare dependencies
   ansible.builtin.include_tasks: dependencies.yml
