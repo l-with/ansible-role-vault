@@ -5,9 +5,19 @@
     url: https://apt.releases.hashicorp.com/gpg
     state: present
 
+- name: lsb_release -cs
+  ansible.builtin.command:
+    cmd: lsb_release -cs
+  register: _vault_lsb_release_cs_results
+  changed_when: false
+
+- name: Set fact _vault_lsb_release_cs
+  ansible.built.set_fact:
+    _vault_lsb_release_cs: _vault_lsb_release_cs_results.stdout
+
 - name: Ensure Hashicorp repository
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main
+    repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ _vault_lsb_release_cs }} main
     update_cache: yes
     state: present
 
