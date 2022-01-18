@@ -44,7 +44,7 @@
   run_once: true
   when: vault_revoke_root_token and _vault_initialized
 
-- name: Ensure vault create root token
+- name: Ensure vault create root token (docker)
   ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
@@ -52,7 +52,7 @@
   when: vault_install_method == 'docker'
   run_once: yes
 
-- name: Ensure vault create root token
+- name: Ensure vault create root token (service)
   ansible.builtin.shell:
     cmd: >
       VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_prefix }} {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
