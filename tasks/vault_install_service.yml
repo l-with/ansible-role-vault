@@ -23,7 +23,7 @@
 
 - name: Ensure vault package installed
   ansible.builtin.apt:
-    name: vault={{ vault_version }}
+    name: "vault{% if vault_version != 'latest' %}={{ vault_version }}{% endif %}"
 
 - name: Ensure hold vault package version
   dpkg_selections:
