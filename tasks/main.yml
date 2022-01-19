@@ -19,6 +19,14 @@
 - name: Ensure vault config
   ansible.builtin.include_tasks: vault_config_{{ vault_install_method }}.yml
 
+- name: Ensure vault is group and owner of Let's Encrypt Certificate Package files
+  ansible.builtin.file:
+    path:    /etc/letsencrypt
+    recurse: true
+    group:   vault
+    owner:   vault
+  when: 
+
 - name: Ensure vault started
   ansible.builtin.include_tasks: vault_start_{{ vault_install_method }}.yml
 

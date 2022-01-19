@@ -45,6 +45,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
 | basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
 | basic | `vault_storage_raft_node_id` | `"{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
+| Let's Encrypt | `vault_lets_encrypt_chown` | false | if the owner of `/etc/letsencrypt` should be change to `vault:vault` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
 | docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |
