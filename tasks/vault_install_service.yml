@@ -38,4 +38,8 @@
   ansible.builtin.set_fact:
     _vault_command_postfix: ''
 
+- name: Ensure _vault_command_interactive
+  ansible.builtin.set_fact:
+    _vault_command_interactive: ''
+
 ...

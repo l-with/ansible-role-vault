@@ -17,7 +17,7 @@
       ansible.builtin.shell:
         cmd: >
           echo {{ _vault_unseal_keys[_vault_unseal_key_index] }} |
-          {{ _vault_command_prefix }} --interactive {{ _vault_command_postfix }} operator generate-root -format=json -nonce={{ _vault_operator_generate_root_init.nonce }} -
+          {{ _vault_command_prefix }} {{ _vault_command_interactive }}{{ _vault_command_postfix }} operator generate-root -format=json -nonce={{ _vault_operator_generate_root_init.nonce }} -
       loop: "{{ range(0, vault_key_threshold) | list }}"
       loop_control:
         index_var: _vault_unseal_key_index
