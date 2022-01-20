@@ -20,7 +20,10 @@ storage "raft" {
     node_id = "{{ vault_storage_raft_node_id }}"
 {% for host in groups['vault_instances'] | reject('search', inventory_hostname) | list %}
     retry_join {
-        leader_api_addr = "https://{{ hostvars[host].ansible_fqdn }}:8200"
+        leader_api_addr         = "https://{{ hostvars[host].ansible_fqdn }}:8200"
+        leader_ca_cert_file     = "{{ vault_storage_raft_leader_ca_cert_file }}"
+        leader_client_cert_file = "{{ vault_storage_raft_leader_client_cert_file }}"
+        leader_client_key_file  = "{{ vault_storage_raft_leader_client_key_file }}"
 {% if vault_raft_leader_tls_servername is defined %}
         leader_tls_servername = "{{ vault_raft_leader_tls_servername }}"
 {% endif %}

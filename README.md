@@ -29,7 +29,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | group | variable | default | description |
 | --- | --- | --- | --- |
 | basic | `vault_version` | `latest` | the vault version (docker image tag) |
-| basic | `vault_home_path` | `/srv/vault` | the home of the vault docker volumes |
+| basic | `vault_home_path` | `/srv/vault` | the home of the vault specific files and folders |
 | basic | `vault_config_path` | `"{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"` |
 | basic | `vault_log_level` | `"Info"` | the [vault log level](https://www.vaultproject.io/docs/configuration#log_level) |
 | basic | `vault_ui` | `'false'` | if the vault user interface should be activated (`'true'` or `'false'`) |
@@ -43,9 +43,12 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_tls_cert_file` | | the path of the certificate for TLS ([`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file)) |
 | basic | `vault_tls_key_file` | | the path of the private key for the certificate for TLS ([`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
-| basic | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
-| basic | `vault_storage_raft_node_id` | `"{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
-| basic | `vault_storage_raft_leader_tls_servername` | | the [`leader_tls_servername`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_tls_servername) |
+| raft | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
+| raft | `vault_storage_raft_node_id` | `"{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
+| raft | `vault_storage_raft_leader_tls_servername` | | the [`leader_tls_servername`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_tls_servername) |
+| raft | `vault_storage_raft_leader_ca_cert_file` |  `"{{ vault_home_path }}/ssl/ca.crt"` | the [`leader_ca_cert_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_ca_cert_file) |
+| raft | `vault_storage_raft_leader_client_cert_file` | `"{{ vault_home_path }}/ssl/tls-chain.crt"` | the [`leader_client_cert_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_cert_file) |
+| raft | `vault_storage_raft_leader_client_key_file` | `"{{ vault_home_path }}/ssl/tls.key"` | the [`leader_client_key_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_key_file) |
 | Let's Encrypt | `vault_lets_encrypt_chown` | false | if the owner of `/etc/letsencrypt` should be change to `vault:vault` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
