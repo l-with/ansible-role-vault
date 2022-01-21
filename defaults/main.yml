@@ -21,6 +21,7 @@ vault_storage_raft_node_id:                 "{{ hostvars[inventory_hostname].ans
 vault_storage_raft_leader_ca_cert_file:     "{{ vault_home_path }}/ssl/ca.crt"
 vault_storage_raft_leader_client_cert_file: "{{ vault_home_path }}/ssl/tls-chain.crt"
 vault_storage_raft_leader_client_key_file:  "{{ vault_home_path }}/ssl/tls.key"
+vault_storage_raft_cluster_members:
 
 vault_tls_disable:        'true'
 vault_lets_encrypt_chown: false
