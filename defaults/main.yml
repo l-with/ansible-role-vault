@@ -26,6 +26,8 @@ vault_tls_disable:        'true'
 vault_lets_encrypt_chown: false
 vault_tls_cert_file:
 vault_tls_key_file:
+vault_tls_client_ca:      false
+vault_tls_client_ca_file:
 
 # docker
 vault_docker_api_port:         "{{ vault_api_port }}"

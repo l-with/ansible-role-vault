@@ -13,6 +13,9 @@ listener "tcp" {
     tls_cert_file = "{{ vault_tls_cert_file }}"
     tls_key_file = "{{ vault_tls_key_file }}"
 {% endif %}
+{% if vault_tls_client_ca %}
+    tls_client_ca_file = "{{ vault_tls_client_ca_file }}"
+{% endif %}
 }
 
 storage "raft" {

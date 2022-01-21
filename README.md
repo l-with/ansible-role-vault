@@ -41,10 +41,12 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_cluster_addr` | `"http://127.0.0.1:{{ vault_cluster_port }}"` | the [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) |
 | basic | `vault_listener_bind_address` | `127.0.0.1` | the vault bind address (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
 | basic | `vault_listener_bind_cluster_address` | `127.0.0.1` | the vault cluster bind address (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
-| basic | `vault_tls_disable` | `'true'` | if TLS should be disabled in the listener stanza ([`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable)) |
-| basic | `vault_tls_cert_file` | | the path of the certificate for TLS ([`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file)) |
-| basic | `vault_tls_key_file` | | the path of the private key for the certificate for TLS ([`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
+| tls | `vault_tls_disable` | `'true'` | if TLS should be disabled in the listener stanza ([`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable)) |
+| tls | `vault_tls_cert_file` | | the path of the certificate for TLS ([`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file)) |
+| tls | `vault_tls_key_file` | | the path of the private key for the certificate for TLS ([`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file)) |
+| tls | `vault_tls_client_ca` | `false` |
+| tls | `vault_tls_client_ca_file` | | the [`tls_client_ca_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_client_ca_file) |
 | raft | `vault_storage_raft_path` | `"{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"` | the `path` value for `storage "raft"` |
 | raft | `vault_storage_raft_node_id` | `"{{ inventory_hostname }}"` | the `node_id`value for `storage "raft"` |
 | raft | `vault_storage_raft_leader_tls_servername` | | the [`leader_tls_servername`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_tls_servername) |
