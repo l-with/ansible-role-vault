@@ -1,9 +1,5 @@
 ---
 
-- name: Print vault_storage_raft_cluster_members
-  ansible.builtin.debug:
-    msg: "vault_storage_raft_cluster_members: {{ vault_storage_raft_cluster_members }}"
-
 - name: Check {{ vault_encrypt_secret }}
   ansible.builtin.fail:
     msg: "variable 'vault_encrypt_secret' is not set"
