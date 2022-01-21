@@ -32,7 +32,7 @@
 
 - name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command_prefix: "VAULT_ADDR={{ vault_external_api_addr }} vault"
+    _vault_command_prefix: "VAULT_ADDR={{ vault_external_api_addr }} {% if vault_tls_client_ca %}VAULT_CACERT={{ vault_tls_client_ca_file }}{% endif %} vault"
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:
