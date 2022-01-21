@@ -32,7 +32,16 @@ storage "raft" {
 {% endif %}
     }
 {% endfor %}
+
+    autopilot {
+        cleanup_dead_servers = "true"
+        last_contact_threshold = "200ms"
+        last_contact_failure_threshold = "10m"
+        max_trailing_logs = 250000
+        min_quorum = 3
+        server_stabilization_time = "10s"
+    }
+
 }
 
 disable_mlock = {{ vault_disable_mlock }}
-
