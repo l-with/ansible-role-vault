@@ -7,16 +7,13 @@
   register: _vault_status_output
   changed_when: false
   ignore_errors: true
-  run_once: true
 
 - name: Set fact _vault_status
   ansible.builtin.set_fact:
     _vault_status: "{{ _vault_status_output.stdout }}"
-  run_once: true
 
 - name: Print _vault_status
   ansible.builtin.debug:
     msg: "_vault_status: {{ _vault_status }}"
-  run_once: true
 
 ...
