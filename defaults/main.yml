@@ -10,6 +10,7 @@ vault_ui:                                   'false'
 vault_api_port:                             8200
 vault_cluster_port:                         8201
 vault_api_addr:                             "http://127.0.0.1:{{ vault_api_port }}"
+vault_external_api_addr:                    "{{ vault_api_addr }}"
 vault_cluster_addr:                         "http://127.0.0.1:{{ vault_cluster_port }}"
 vault_listener_bind_address:                127.0.0.1
 vault_listener_bind_cluster_address:        127.0.0.1

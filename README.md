@@ -28,6 +28,7 @@ Note that this also requires installation of the python libraries `docker` and `
 <!-- markdownlint-disable MD033 -->
 | group | variable | default | description |
 | --- | --- | --- | --- |
+| basic | `vault_install_method` | `'docker'` | the install method, supported methods are `'docker'` and `'service'` |
 | basic | `vault_version` | `latest` | the vault version (docker image tag) |
 | basic | `vault_home_path` | `/srv/vault` | the home of the vault specific files and folders |
 | basic | `vault_config_path` | `"{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"` |
@@ -36,6 +37,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) and [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address)) |
 | basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) and [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address)) |
 | basic | `vault_api_addr` | `"http://127.0.0.1:{{ vault_api_port }}"` | the [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) |
+| basic | `vault_external_api_addr` | `"{{ vault_api_addr }}"` | the external adress of the vault api (possible served by a reverse proxy) |
 | basic | `vault_cluster_addr` | `"http://127.0.0.1:{{ vault_cluster_port }}"` | the [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) |
 | basic | `vault_listener_bind_address` | `127.0.0.1` | the vault bind address (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
 | basic | `vault_listener_bind_cluster_address` | `127.0.0.1` | the vault cluster bind address (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
