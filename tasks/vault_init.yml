@@ -10,6 +10,10 @@
   ansible.builtin.set_fact:
     _vault_initialized_host: "{{ _vault_init_file_stat_host.stat.exists }}"
 
+- name: Print _vault_initialized_host
+  ansible.builtin.debug:
+    msg: "_vault_initialized_host: {{ _vault_initialized_host }}"
+
 - name: Read vault init file stat on localhost
   ansible.builtin.stat:
     path: ansible_done_vault_init_localhost
@@ -20,6 +24,10 @@
 - name: Set fact _vault_initialized_localhost
   ansible.builtin.set_fact:
     _vault_initialized_localhost: "{{ _vault_init_file_stat_localhost.stat.exists }}"
+
+- name: Print _vault_initialized_localhost
+  ansible.builtin.debug:
+    msg: "_vault_initialized_localhost: {{ _vault_initialized_localhost }}"
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
