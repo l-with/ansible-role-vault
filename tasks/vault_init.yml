@@ -6,13 +6,13 @@
   ignore_errors: true
   register: _vault_init_file_stat_host
 
-- name: Set fact _vault_initialized_host
+- name: Set fact _vault_init_file_on_host
   ansible.builtin.set_fact:
-    _vault_initialized_host: "{{ _vault_init_file_stat_host.stat.exists }}"
+    _vault_init_file_on_host: "{{ _vault_init_file_stat_host.stat.exists }}"
 
-- name: Print _vault_initialized_host
+- name: Print _vault_init_file_on_host
   ansible.builtin.debug:
-    msg: "_vault_initialized_host: {{ _vault_initialized_host }}"
+    msg: "_vault_init_file_on_host: {{ _vault_init_file_on_host }}"
 
 - name: Read vault init file stat on localhost
   ansible.builtin.stat:
@@ -21,108 +21,95 @@
   delegate_to: localhost
   register: _vault_init_file_stat_localhost
 
-- name: Set fact _vault_initialized_localhost
+- name: Set fact _vault_init_file_on_localhost
   ansible.builtin.set_fact:
-    _vault_initialized_localhost: "{{ _vault_init_file_stat_localhost.stat.exists }}"
+    _vault_init_file_on_localhost: "{{ _vault_init_file_stat_localhost.stat.exists }}"
 
-- name: Print _vault_initialized_localhost
+- name: Print _vault_init_file_on_localhost
   ansible.builtin.debug:
-    msg: "_vault_initialized_localhost: {{ _vault_initialized_localhost }}"
+    msg: "_vault_init_file_on_localhost: {{ _vault_init_file_on_localhost }}"
 
-- name: Ensure vault init when not initialized before
-  ansible.builtin.shell:
-    cmd: >
-      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home_path }}/.ansible_done_vault_init &&
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home_path }}/.ansible_done_vault_init -out {{ vault_home_path }}/ansible_done_vault_init &&
-      rm {{ vault_home_path }}/.ansible_done_vault_init
-    creates: "{{ vault_home_path }}/ansible_done_vault_init"
-  environment:
-    SECRET: "{{ vault_encrypt_secret }}"
-  when: not _vault_initialized_host and not _vault_initialized_localhost
+# Decision table
+# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                            |
+# | ------------------------ | ----------------------------- | ------------------------------------------------- |
+# | false                    | false                         | vault init, set '_vault_init_file_on_host' to true |
+# | *                        | true                          | -                                                 |
+# | true                     | *                             | -                                                 |
+- name: Ensure vault init when not initialized before and Set fact _vault_init_file_on_host to true
+  block:
 
-- name: Slurp encrypted vault init info
-  ansible.builtin.slurp:
-    src: "{{ vault_home_path }}/ansible_done_vault_init"
-  register: _vault_init_file_slurp
+  - name: Ensure vault init when not initialized before
+    ansible.builtin.shell:
+      cmd: >
+        {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator init -key-shares {{ vault_key_shares }} -key-threshold {{ vault_key_threshold }} -format=json >{{ vault_home_path }}/.ansible_done_vault_init &&
+        openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home_path }}/.ansible_done_vault_init -out {{ vault_home_path }}/ansible_done_vault_init &&
+        rm {{ vault_home_path }}/.ansible_done_vault_init
+      creates: "{{ vault_home_path }}/ansible_done_vault_init"
+    environment:
+      SECRET: "{{ vault_encrypt_secret }}"
 
-- name: Ensure vault init file on localhost
-  ansible.builtin.copy:
-    dest:    ansible_done_vault_init_localhost
-    content: "{{ _vault_init_file_slurp['content'] | b64decode }}"
-    mode:    "u+rw,g-wx,o-rwx"
-  delegate_to: localhost
-  when: not _vault_initialized_localhost
+  - name: Set fact _vault_init_file_on_host to true
+    ansible.builtin.set_fact:
+      _vault_init_file_on_host: true
+  
+  when: not _vault_init_file_on_host and not _vault_init_file_on_localhost
 
-- name: Ensure vault init file on host
-  ansible.builtin.copy:
-    dest: "{{ vault_home_path }}/ansible_done_vault_init"
-    src:  ansible_done_vault_init_localhost
-    mode: "u+rw,g-wx,o-rwx"
-  when: not _vault_initialized_host
+# Decision table
+# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                                                             |
+# | ------------------------ | ----------------------------- | ---------------------------------------------------------------------------------- |
+# | false                    | false                         | error                                                                              |
+# | *                        | false                         | slurp from host and copy to localhost, set '_vault_init_file_on_localhost' to true |
+# | false                    | *                             | copy from localhost to host, set '_vault_init_file_on_host' to true                |
+# | true                     | true                          | -                                                                                  |
+- name: Ensure _vault_init_file_on_host or _vault_init_file_on_localhost
+  ansible.builtin.fail:
+    msg: "not _vault_init_file_on_host and not _vault_init_file_on_localhost"
+  when: not _vault_init_file_on_host and not _vault_init_file_on_localhost
 
-- name: Ensure decrypt ansible_done_vault_init
-  ansible.builtin.shell:
-    cmd: >
-      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}/.ansible_done_vault_init -in {{ vault_home_path }}/ansible_done_vault_init
-  environment:
-    SECRET: "{{ vault_encrypt_secret }}"
-  changed_when: false
+- name: Ensure vault init file on localhost and Set fact _vault_init_file_on_localhost to true
+  block:
+  - name: Slurp encrypted vault init info
+    ansible.builtin.slurp:
+      src: "{{ vault_home_path }}/ansible_done_vault_init"
+    register: _vault_init_file_slurp
 
-- name: Slurp vault init info
-  ansible.builtin.slurp:
-    src: "{{ vault_home_path }}/.ansible_done_vault_init"
-  register: _vault_init_file_slurp
+  - name: Ensure copy vault init file on localhost
+    ansible.builtin.copy:
+      dest:    ansible_done_vault_init_localhost
+      content: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+      mode:    "u+rw,g-wx,o-rwx"
+    delegate_to: localhost
 
-- name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
-  ansible.builtin.file:
-    path: "{{ vault_home_path }}/.ansible_done_vault_init"
-    state: absent
-  changed_when: false
+  - name: Set fact _vault_init_file_on_localhost to true
+    ansible.builtin.set_fact:
+      _vault_init_file_on_localhost: true
 
-- name: Set fact _vault_init_info from slurp
-  ansible.builtin.set_fact:
-    _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+  when: not _vault_init_file_on_localhost
 
-- name: Set fact _vault_unseal_keys
-  ansible.builtin.set_fact:
-    _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
+- name: Ensure vault init file on host and fact _vault_init_file_on_host to true
+  block:
 
-- name: Set fact _vault_root_token
-  ansible.builtin.set_fact:
-    _vault_root_token: "{{ _vault_init_info.root_token }}"
-  when: not vault_revoke_root_token or not _vault_initialized
+  - name: Ensure vault init file on host
+    ansible.builtin.copy:
+      dest: "{{ vault_home_path }}/ansible_done_vault_init"
+      src:  ansible_done_vault_init_localhost
+      mode: "u+rw,g-wx,o-rwx"
 
-- name: Print fact _vault_unseal_keys
-  ansible.builtin.debug:
-    msg: "_vault_unseal_keys: {{ _vault_unseal_keys }}"
-  when: vault_show_unseal_keys
+  - name: Set fact _vault_init_file_on_host to true
+    ansible.builtin.set_fact:
+      _vault_init_file_on_host: true
 
-- name: Print fact _vault_root_token
-  ansible.builtin.debug:
-    msg: "_vault_root_token: {{ _vault_root_token }}"
-  when: vault_show_initial_root_token
+  when: not _vault_init_file_on_host
 
-- name: Set facts vault status exit codes  ## noqa var-naming
-  ansible.builtin.set_fact:
-    _VAULT_STATUS_UNSEALED: 0
-    _VAULT_STATUS_ERROR:    1
-    _VAULT_STATUS_SEALED:   2
-
-- name: Get vault status output
-  ansible.builtin.shell:
-    cmd: >
-      {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
-  register: _vault_status_output
-  failed_when: _vault_status_output.rc == _VAULT_STATUS_ERROR
-  changed_when: false
-
-- name: Ensure unseal vault
-  ansible.builtin.shell:
-    cmd: >
-      {{ _vault_command_prefix }} {{ _vault_command_postfix }} operator unseal {{ _vault_unseal_keys[_vault_unseal_key_index] }}
-  loop: "{{ range(0, vault_key_threshold) | list }}"
-  loop_control:
-    index_var: _vault_unseal_key_index
-  when: _vault_status_output.rc == _VAULT_STATUS_SEALED
+# Decision table
+# | _vault_init_file_on_host | _vault_init_file_on_localhost | action |
+# | ------------------------ | ----------------------------- | ------ |
+# | true                     | true                          | -      |
+# | *                        | false                         | error  |
+# | false                    | *                             | error  |
+- name: Ensure _vault_init_file_on_host and _vault_init_file_on_localhost
+  ansible.builtin.fail:
+    msg: "not (_vault_init_file_on_host and _vault_init_file_on_localhost)"
+  when: not (_vault_init_file_on_host and _vault_init_file_on_localhost)
 
 ...

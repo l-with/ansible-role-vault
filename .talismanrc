@@ -22,7 +22,18 @@ fileignoreconfig:
     - >
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -in {{ vault_home_path }}\/.ansible_done_vault_init -out {{ vault_home_path }}\/ansible_done_vault_init &&
     - >
+      SECRET: "{{ vault_encrypt_secret }}"
+
+- filename: tasks/vault_unseal.yml
+  allowed_patterns:
+    - >
       openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}\/.ansible_done_vault_init -in {{ vault_home_path }}\/ansible_done_vault_init
+    - >
+      SECRET: "{{ vault_encrypt_secret }}"
+    - >
+      _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
+    - >
+      msg: "_vault_unseal_keys: {{ _vault_unseal_keys }}"
 
 - filename: tasks/vault_approle.yml
   allowed_patterns:
