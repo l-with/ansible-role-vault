@@ -1,18 +1,25 @@
 ---
 
-# should be include with run_once: true
-
-- name: Read vault init file stat
+- name: Read vault init file stat on host
   ansible.builtin.stat:
     path: "{{ vault_home_path }}/ansible_done_vault_init"
   ignore_errors: true
-  register: _vault_init_file_stat
-  # run_once: true
+  register: _vault_init_file_stat_host
 
-- name: Set fact _vault_initialized
+- name: Set fact _vault_initialized_host
   ansible.builtin.set_fact:
-    _vault_initialized: "{{ _vault_init_file_stat.stat.exists }}"
-  # run_once: true
+    _vault_initialized_host: "{{ _vault_init_file_stat_host.stat.exists }}"
+
+- name: Read vault init file stat on localhost
+  ansible.builtin.stat:
+    path: ansible_done_vault_init_localhost
+  ignore_errors: true  
+  delegate_to: localhost
+  register: _vault_init_file_stat_localhost
+
+- name: Set fact _vault_initialized_localhost
+  ansible.builtin.set_fact:
+    _vault_initialized_localhost: "{{ _vault_init_file_stat_localhost.stat.exists }}"
 
 - name: Ensure vault init when not initialized before
   ansible.builtin.shell:
@@ -23,8 +30,27 @@
     creates: "{{ vault_home_path }}/ansible_done_vault_init"
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
-  when: not _vault_initialized
-  # run_once: true
+  when: not _vault_initialized_host and not _vault_initialized_localhost
+
+- name: Slurp encrypted vault init info
+  ansible.builtin.slurp:
+    src: "{{ vault_home_path }}/.ansible_done_vault_init"
+  register: _vault_init_file_slurp
+
+- name: Ensure vault init file on localhost
+  ansible.builtin.copy:
+    path: _vault_init_file_stat_localhost
+    content: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  delegate_to: localhost
+  when: not _vault_initialized_localhost
+
+- name: Ensure vault init file on host
+  ansible.builtin.copy:
+    path: "{{ vault_home_path }}/ansible_done_vault_init"
+    src:  _vault_init_file_stat_localhost
+    mode: "u+rw,g-wx,o-rwx"
+  when: not _vault_initialized_host
 
 - name: Ensure decrypt ansible_done_vault_init
   ansible.builtin.shell:
@@ -33,48 +59,40 @@
   environment:
     SECRET: "{{ vault_encrypt_secret }}"
   changed_when: false
-  # run_once: true
 
 - name: Slurp vault init info
   ansible.builtin.slurp:
     src: "{{ vault_home_path }}/.ansible_done_vault_init"
   register: _vault_init_file_slurp
-  # run_once: true
 
 - name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
   ansible.builtin.file:
     path: "{{ vault_home_path }}/.ansible_done_vault_init"
     state: absent
   changed_when: false
-  # run_once: true
 
 - name: Set fact _vault_init_info from slurp
   ansible.builtin.set_fact:
     _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
-  # run_once: true
 
 - name: Set fact _vault_unseal_keys
   ansible.builtin.set_fact:
     _vault_unseal_keys:  "{{ _vault_init_info.unseal_keys_b64 }}"
-  # run_once: true
 
 - name: Set fact _vault_root_token
   ansible.builtin.set_fact:
     _vault_root_token: "{{ _vault_init_info.root_token }}"
   when: not vault_revoke_root_token or not _vault_initialized
-  # run_once: true
 
 - name: Print fact _vault_unseal_keys
   ansible.builtin.debug:
     msg: "_vault_unseal_keys: {{ _vault_unseal_keys }}"
   when: vault_show_unseal_keys
-  # run_once: true
 
 - name: Print fact _vault_root_token
   ansible.builtin.debug:
     msg: "_vault_root_token: {{ _vault_root_token }}"
   when: vault_show_initial_root_token
-  # run_once: true
 
 - name: Set facts vault status exit codes  ## noqa var-naming
   ansible.builtin.set_fact:
@@ -89,7 +107,6 @@
   register: _vault_status_output
   failed_when: _vault_status_output.rc == _VAULT_STATUS_ERROR
   changed_when: false
-  # run_once: true
 
 - name: Ensure unseal vault
   ansible.builtin.shell:
@@ -99,6 +116,5 @@
   loop_control:
     index_var: _vault_unseal_key_index
   when: _vault_status_output.rc == _VAULT_STATUS_SEALED
-  # run_once: true
 
 ...
