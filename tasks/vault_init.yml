@@ -47,7 +47,7 @@
 
 - name: Ensure vault init file on localhost
   ansible.builtin.copy:
-    dest:    _vault_init_file_stat_localhost
+    dest:    ansible_done_vault_init_localhost
     content: "{{ _vault_init_file_slurp['content'] | b64decode }}"
     mode:    "u+rw,g-wx,o-rwx"
   delegate_to: localhost
@@ -56,7 +56,7 @@
 - name: Ensure vault init file on host
   ansible.builtin.copy:
     dest: "{{ vault_home_path }}/ansible_done_vault_init"
-    src:  _vault_init_file_stat_localhost
+    src:  ansible_done_vault_init_localhost
     mode: "u+rw,g-wx,o-rwx"
   when: not _vault_initialized_host
 
