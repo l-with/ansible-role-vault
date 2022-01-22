@@ -34,7 +34,7 @@
 
 - name: Slurp encrypted vault init info
   ansible.builtin.slurp:
-    src: "{{ vault_home_path }}/.ansible_done_vault_init"
+    src: "{{ vault_home_path }}/ansible_done_vault_init"
   register: _vault_init_file_slurp
 
 - name: Ensure vault init file on localhost
