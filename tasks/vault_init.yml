@@ -30,11 +30,13 @@
     msg: "_vault_init_file_on_localhost: {{ _vault_init_file_on_localhost }}"
 
 # Decision table
-# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                            |
-# | ------------------------ | ----------------------------- | ------------------------------------------------- |
+# | ------------------------ | ----------------------------- | -------------------------------------------------- |
+# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                             |
+# | ------------------------ | ----------------------------- | -------------------------------------------------- |
 # | false                    | false                         | vault init, set '_vault_init_file_on_host' to true |
-# | *                        | true                          | -                                                 |
-# | true                     | *                             | -                                                 |
+# | *                        | true                          | -                                                  |
+# | true                     | *                             | -                                                  |
+# | ------------------------ | ----------------------------- | -------------------------------------------------- |
 - name: Ensure vault init when not initialized before and Set fact _vault_init_file_on_host to true
   block:
 
@@ -55,12 +57,14 @@
   when: not _vault_init_file_on_host and not _vault_init_file_on_localhost
 
 # Decision table
+# | ------------------------ | ----------------------------- | ---------------------------------------------------------------------------------- |
 # | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                                                             |
 # | ------------------------ | ----------------------------- | ---------------------------------------------------------------------------------- |
 # | false                    | false                         | error                                                                              |
 # | *                        | false                         | slurp from host and copy to localhost, set '_vault_init_file_on_localhost' to true |
 # | false                    | *                             | copy from localhost to host, set '_vault_init_file_on_host' to true                |
 # | true                     | true                          | -                                                                                  |
+# | ------------------------ | ----------------------------- | ---------------------------------------------------------------------------------- |
 - name: Ensure _vault_init_file_on_host or _vault_init_file_on_localhost
   ansible.builtin.fail:
     msg: "not _vault_init_file_on_host and not _vault_init_file_on_localhost"
@@ -102,11 +106,13 @@
   when: not _vault_init_file_on_host
 
 # Decision table
+# | ------------------------ | ----------------------------- | ------ |
 # | _vault_init_file_on_host | _vault_init_file_on_localhost | action |
 # | ------------------------ | ----------------------------- | ------ |
 # | true                     | true                          | -      |
 # | *                        | false                         | error  |
 # | false                    | *                             | error  |
+# | ------------------------ | ----------------------------- | ------ |
 - name: Ensure _vault_init_file_on_host and _vault_init_file_on_localhost
   ansible.builtin.fail:
     msg: "not (_vault_init_file_on_host and _vault_init_file_on_localhost)"
