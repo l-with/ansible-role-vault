@@ -2,7 +2,7 @@
 
 - name: Ensure vault ssl path
   ansible.builtin.file:
-    path:  "{{ vault_config_path }}/ssl"
+    path:  "{{ vault_home_path }}/ssl"
     state: directory
     group: vault
     owner: vault
