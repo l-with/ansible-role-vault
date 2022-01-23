@@ -1,0 +1,32 @@
+---
+
+- name: Ensure vault ssl path
+  ansible.builtin.file:
+    path:  "{{ vault_config_path }}/ssl"
+    state: directory
+    group: vault
+    owner: vault
+    mode:  o-rwx
+
+- name: Ensure vault_storage_raft_leader_ca_cert_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_ca_cert_file }}"
+    content: "{{ vault_storage_raft_leader_ca_cert }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_ca_cert is defined and vault_storage_raft_leader_ca_cert
+
+- name: Ensure vault_storage_raft_leader_client_cert_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_client_cert_file }}"
+    content: "{{ vault_storage_raft_leader_client_cert }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_client_cert_file is defined and vault_storage_raft_leader_client_cert_file
+
+- name: Ensure vault_storage_raft_leader_client_key_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_client_key_file }}"
+    content: "{{ vault_storage_raft_leader_client_key }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_client_key is defined and vault_storage_raft_leader_client_key
+
+...
