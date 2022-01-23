@@ -29,8 +29,8 @@ vault_storage_raft_cluster_member_this:     "{{ [hostvars[inventory_hostname].an
 
 vault_tls_disable:        'true'
 vault_lets_encrypt_chown: false
-vault_tls_cert_file:
-vault_tls_key_file:
+vault_tls_cert_file:      "{{ vault_storage_raft_leader_client_cert_file }}"
+vault_tls_key_file:       "{{ vault_storage_raft_leader_client_key_file }}"
 vault_tls_client_ca:      false
 vault_tls_client_ca_file: "{{ vault_storage_raft_leader_ca_cert_file }}"
 

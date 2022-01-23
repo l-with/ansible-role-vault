@@ -11,7 +11,9 @@ fileignoreconfig:
     - >
       vault_secret_engines: +\[\]
     - >
-      vault_storage_raft_leader_client_key_file:  "{{ vault_home_path }}/ssl/tls.key"
+      vault_storage_raft_leader_client_key_file: +"{{ vault_home_path }}/ssl/tls.key"
+    - >
+      vault_tls_key_file: +"{{ vault_storage_raft_leader_client_key_file }}"
 
 - filename: tasks/vault_init.yml
   allowed_patterns:
@@ -56,8 +58,7 @@ fileignoreconfig:
   - >
     \| approle \| `vault_approles` \| `\[\]` \| the list of approles to get role_id and secret_id for <br \/>the result is put with the role name as key into<ul><li>`vault_approle_role_id`<\/li><li>`vault_approle_secret_id`<\/li><\/ul> \|
   - >
-    \| \w+ \| `vault_tls_key_file` \| \| the path of the private key for the certificate for TLS \(\[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\)\) \|
- 
+    \| \w+ \| `vault_tls_key_file` \| `"{{ vault_storage_raft_leader_client_key_file }}"` \| the path of the private key for the certificate for TLS \(\[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\)\) \|
   - >
     \| raft \| `vault_storage_raft_leader_client_key_file` \| `"{{ vault_home_path }}/ssl/tls.key"` \| the \[`leader_client_key_file`\]\(https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_key_file\) \|
 
