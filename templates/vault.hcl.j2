@@ -21,7 +21,7 @@ listener "tcp" {
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
     node_id = "{{ vault_storage_raft_node_id }}"
-{% for _vault_instance in vault_storage_raft_cluster_members | reject('search', inventory_hostname) | list %}
+{% for _vault_instance in vault_storage_raft_cluster_members | difference([hostvars[inventory_hostname].ansible_fqdn]) %}
     retry_join {
         leader_api_addr         = "https://{{ _vault_instance }}:8200"
         leader_ca_cert_file     = "{{ vault_storage_raft_leader_ca_cert_file }}"
