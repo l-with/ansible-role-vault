@@ -1,0 +1,57 @@
+---
+
+- name: Ensure vault enable auth methods
+  ansible.builtin.include_tasks: app_config/vault_auth_enable.yml
+  loop: "{{ vault_auth_methods }}"
+  loop_control:
+    loop_var: _vault_auth_method
+  run_once: true
+
+- name: Ensure vault enable secret engines
+  ansible.builtin.include_tasks: app_config/vault_secrets_enable.yml
+  loop: "{{ vault_secret_engines }}"
+  loop_control:
+    loop_var: _vault_secret_engine
+  run_once: true
+
+- name: Ensure vault policy writes
+  ansible.builtin.include_tasks: app_config/vault_policy_write.yml
+  loop: "{{ vault_policy_writes }}"
+  loop_control:
+    loop_var: _vault_policy_write
+    label: "{{ _vault_policy_write.name }}"
+  run_once: true
+
+- name: Ensure vault writes
+  ansible.builtin.include_tasks: app_config/vault_write.yml
+  loop: "{{ vault_writes }}"
+  loop_control:
+    loop_var: _vault_write
+    label: "{{ _vault_write.path }}"
+  run_once: true
+
+- name: Ensure vault kv deletes
+  ansible.builtin.include_tasks: app_config/vault_kv_delete.yml
+  loop: "{{ vault_kv_deletes }}"
+  loop_control:
+    loop_var: _vault_kv_delete
+    label: "{{ _vault_kv_delete.path }}"
+  run_once: true
+
+- name: Ensure vault kv puts
+  ansible.builtin.include_tasks: app_config/vault_kv_put.yml
+  loop: "{{ vault_kv_puts }}"
+  loop_control:
+    loop_var: _vault_kv_put
+    label: "{{ _vault_kv_put.path }}"
+  run_once: true
+
+- name: Ensure vault app role credentials
+  ansible.builtin.include_tasks: app_config/vault_approle.yml
+  loop: "{{ vault_approles }}"
+  loop_control:
+    loop_var: _vault_approle
+  run_once: true
+
+
+...

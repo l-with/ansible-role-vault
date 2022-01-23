@@ -27,7 +27,7 @@ storage "raft" {
         leader_ca_cert_file     = "{{ vault_storage_raft_leader_ca_cert_file }}"
         leader_client_cert_file = "{{ vault_storage_raft_leader_client_cert_file }}"
         leader_client_key_file  = "{{ vault_storage_raft_leader_client_key_file }}"
-{% if vault_raft_leader_tls_servername is defined %}
+{% if vault_raft_leader_tls_servername is defined and vault_raft_leader_tls_servername %}
         leader_tls_servername = "{{ vault_raft_leader_tls_servername }}"
 {% endif %}
     }

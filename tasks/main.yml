@@ -16,6 +16,27 @@
 - name: Ensure install vault
   ansible.builtin.include_tasks: "vault_install_{{ vault_install_method }}.yml"
 
+- name: Ensure vault_storage_raft_leader_ca_cert_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_ca_cert_file }}"
+    content: "{{ vault_storage_raft_leader_ca_cert }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_ca_cert is defined and vault_storage_raft_leader_ca_cert
+
+- name: Ensure vault_storage_raft_leader_client_cert_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_client_cert_file }}"
+    content: "{{ vault_storage_raft_leader_client_cert }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_client_cert_file is defined and vault_storage_raft_leader_client_cert_file
+
+- name: Ensure vault_storage_raft_leader_client_key_file
+  ansible.builtin.copy:
+    dest:    "{{ vault_storage_raft_leader_client_key_file }}"
+    content: "{{ vault_storage_raft_leader_client_key }}"
+    mode:    "u+rw,g-wx,o-rwx"
+  when: vault_storage_raft_leader_client_key is defined and vault_storage_raft_leader_client_key
+
 - name: Ensure vault config
   ansible.builtin.include_tasks: vault_config_{{ vault_install_method }}.yml
 
@@ -72,57 +93,8 @@
   when: vault_create_root_token
   run_once: true
 
-- name: Ensure vault enable auth methods
-  ansible.builtin.include_tasks: vault_auth_enable.yml
-  loop: "{{ vault_auth_methods }}"
-  loop_control:
-    loop_var: _vault_auth_method
-  run_once: true
-
-- name: Ensure vault enable secret engines
-  ansible.builtin.include_tasks: vault_secrets_enable.yml
-  loop: "{{ vault_secret_engines }}"
-  loop_control:
-    loop_var: _vault_secret_engine
-  run_once: true
-
-- name: Ensure vault policy writes
-  ansible.builtin.include_tasks: vault_policy_write.yml
-  loop: "{{ vault_policy_writes }}"
-  loop_control:
-    loop_var: _vault_policy_write
-    label: "{{ _vault_policy_write.name }}"
-  run_once: true
-
-- name: Ensure vault writes
-  ansible.builtin.include_tasks: vault_write.yml
-  loop: "{{ vault_writes }}"
-  loop_control:
-    loop_var: _vault_write
-    label: "{{ _vault_write.path }}"
-  run_once: true
-
-- name: Ensure vault kv deletes
-  ansible.builtin.include_tasks: vault_kv_delete.yml
-  loop: "{{ vault_kv_deletes }}"
-  loop_control:
-    loop_var: _vault_kv_delete
-    label: "{{ _vault_kv_delete.path }}"
-  run_once: true
-
-- name: Ensure vault kv puts
-  ansible.builtin.include_tasks: vault_kv_put.yml
-  loop: "{{ vault_kv_puts }}"
-  loop_control:
-    loop_var: _vault_kv_put
-    label: "{{ _vault_kv_put.path }}"
-  run_once: true
-
-- name: Ensure vault app role credentials
-  ansible.builtin.include_tasks: vault_approle.yml
-  loop: "{{ vault_approles }}"
-  loop_control:
-    loop_var: _vault_approle
+- name: Ensure vault application configurations
+  ansible.builtin.include_tasks: vault_app_config.yml
   run_once: true
 
 ...
