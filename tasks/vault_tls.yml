@@ -12,6 +12,8 @@
   ansible.builtin.copy:
     dest:    "{{ vault_storage_raft_leader_ca_cert_file }}"
     content: "{{ vault_storage_raft_leader_ca_cert }}"
+    group: vault
+    owner: vault
     mode:    "u+rw,g-wx,o-rwx"
   when: vault_storage_raft_leader_ca_cert is defined and vault_storage_raft_leader_ca_cert
 
@@ -19,6 +21,8 @@
   ansible.builtin.copy:
     dest:    "{{ vault_storage_raft_leader_client_cert_file }}"
     content: "{{ vault_storage_raft_leader_client_cert }}"
+    group: vault
+    owner: vault
     mode:    "u+rw,g-wx,o-rwx"
   when: vault_storage_raft_leader_client_cert_file is defined and vault_storage_raft_leader_client_cert_file
 
@@ -26,6 +30,8 @@
   ansible.builtin.copy:
     dest:    "{{ vault_storage_raft_leader_client_key_file }}"
     content: "{{ vault_storage_raft_leader_client_key }}"
+    group: vault
+    owner: vault
     mode:    "u+rw,g-wx,o-rwx"
   when: vault_storage_raft_leader_client_key is defined and vault_storage_raft_leader_client_key
 
