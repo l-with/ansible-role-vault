@@ -23,7 +23,7 @@ storage "raft" {
     node_id = "{{ vault_storage_raft_node_id }}"
 {% for _vault_instance in vault_storage_raft_cluster_members | difference(vault_storage_raft_cluster_member_this) %}
     retry_join {
-        leader_api_addr         = "https://{{ _vault_instance }}:8200"
+        leader_api_addr         = "https://{{ _vault_instance }}:{{ vault_api_port }}"
         leader_ca_cert_file     = "{{ vault_storage_raft_leader_ca_cert_file }}"
         leader_client_cert_file = "{{ vault_storage_raft_leader_client_cert_file }}"
         leader_client_key_file  = "{{ vault_storage_raft_leader_client_key_file }}"
