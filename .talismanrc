@@ -62,7 +62,6 @@ fileignoreconfig:
   - >
     \| raft \| `vault_storage_raft_leader_client_key_file` \| `"{{ vault_home_path }}/ssl/tls.key"` \| the \[`leader_client_key_file`\]\(https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_key_file\) \|
 
-
 - filename: templates/vault.hcl.j2
   allowed_patterns:
     - >
