@@ -118,4 +118,8 @@
     msg: "not (_vault_init_file_on_host and _vault_init_file_on_localhost)"
   when: not (_vault_init_file_on_host and _vault_init_file_on_localhost)
 
+- name: Set fact _vault_initialized
+  ansible.builtin.set_fact:
+    _vault_initialized: true
+
 ...

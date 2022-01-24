@@ -5,25 +5,29 @@ log_level = "{{ vault_log_level }}"
 api_addr = "{{ vault_api_addr }}"
 cluster_addr = "{{ vault_cluster_addr }}"
 
+{% for _vault_listener in vault_listeners %}
 listener "tcp" {  
-    address = "{{ vault_listener_bind_address }}:{{ vault_api_port }}"
-    cluster_address = "{{ vault_listener_bind_cluster_address }}:{{ vault_cluster_port }}"
-    tls_disable = {{ vault_tls_disable }}
-{% if vault_tls_disable == 'false' %}
-    tls_cert_file = "{{ vault_tls_cert_file }}"
-    tls_key_file = "{{ vault_tls_key_file }}"
+    address = "{{ _vault_listener.address }}"
+{% if _vault_listener.cluster_address is defined and _vault_listener.cluster_address %}
+    cluster_address = "{{ _vault_listener.cluster_address }}"
 {% endif %}
-{% if vault_tls_client_ca %}
-    tls_client_ca_file = "{{ vault_tls_client_ca_file }}"
+    tls_disable = {{ _vault_listener.tls_disable }}
+{% if _vault_listener.tls_disable == 'false' %}
+    tls_cert_file = "{{ _vault_listener.tls_cert_file | default(vault_tls_cert_file) }}"
+    tls_key_file = "{{ _vault_listener.tls_key_file | default(vault_tls_key_file) }}"
+{% endif %}
+{% if _vault_listener.tls_client_ca_file is defined and _vault_listener.tls_client_ca_file %}
+    tls_client_ca_file = "{{ _vault_listener.tls_client_ca_file | default(vault_tls_client_ca_file) }}"
 {% endif %}
 }
+{% endfor %}
 
 storage "raft" {
     path    = "{{ vault_storage_raft_path }}"
     node_id = "{{ vault_storage_raft_node_id }}"
 {% for _vault_instance in vault_storage_raft_cluster_members | difference(vault_storage_raft_cluster_member_this) %}
     retry_join {
-        leader_api_addr         = "https://{{ _vault_instance }}:{{ vault_api_port }}"
+        leader_api_addr         = "https://{{ _vault_instance }}:{{ vault_storage_raft_retry_join_api_port }}"
         leader_ca_cert_file     = "{{ vault_storage_raft_leader_ca_cert_file }}"
         leader_client_cert_file = "{{ vault_storage_raft_leader_client_cert_file }}"
         leader_client_key_file  = "{{ vault_storage_raft_leader_client_key_file }}"

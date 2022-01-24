@@ -37,10 +37,8 @@ Note that this also requires installation of the python libraries `docker` and `
 | basic | `vault_api_port` | `8200` | the vault api port (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) and [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address)) |
 | basic | `vault_cluster_port` | `8201` | the vault cluster port (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) and [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address)) |
 | basic | `vault_api_addr` | `"http://127.0.0.1:{{ vault_api_port }}"` | the [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr) |
-| basic | `vault_external_api_addr` | `"{{ vault_api_addr }}"` | the external adress of the vault api (possible served by a reverse proxy) |
+| basic | `vault_internal_api_addr` | `"{{ vault_api_addr }}"` | the internal adress of the vault api (possible served by a reverse proxy) used for init, unseal and configuration |
 | basic | `vault_cluster_addr` | `"http://127.0.0.1:{{ vault_cluster_port }}"` | the [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr) |
-| basic | `vault_listener_bind_address` | `127.0.0.1` | the vault bind address (for [`api_addr`](https://www.vaultproject.io/docs/configuration#api_addr)) |
-| basic | `vault_listener_bind_cluster_address` | `127.0.0.1` | the vault cluster bind address (for [`cluster_addr`](https://www.vaultproject.io/docs/configuration#cluster_addr)) |
 | basic | `vault_disable_mlock` | `'true'` | the value for [`disable_mlock`](https://www.vaultproject.io/docs/configuration#disable_mlock) |
 | tls | `vault_tls_disable` | `'true'` | if TLS should be disabled in the listener stanza ([`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable)) |
 | tls | `vault_tls_cert_file` | `"{{ vault_storage_raft_leader_client_cert_file }}"` | the path of the certificate for TLS ([`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file)) |
@@ -53,7 +51,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | raft | `vault_storage_raft_leader_ca_cert_file` |  `"{{ vault_home_path }}/ssl/ca.crt"` | the [`leader_ca_cert_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_ca_cert_file) |
 | raft | `vault_storage_raft_leader_client_cert_file` | `"{{ vault_home_path }}/ssl/tls-chain.crt"` | the [`leader_client_cert_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_cert_file) |
 | raft | `vault_storage_raft_leader_client_key_file` | `"{{ vault_home_path }}/ssl/tls.key"` | the [`leader_client_key_file`](https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_key_file) |
-| raft | `vault_storage_raft_cluster_members` | | the list of cluster members for the [`retry_join-stanza`](https://www.vaultproject.io/docs/configuration/storage/raft#retry_join-stanza)s |
+| raft | `vault_storage_raft_cluster_members` | `[]`| the list of cluster members for the [`retry_join-stanza`](https://www.vaultproject.io/docs/configuration/storage/raft#retry_join-stanza)s |
 | raft | `vault_storage_raft_cluster_member_this` | "{{ [hostvars[inventory_hostname].ansible_fqdn] }}" | the actual instance to be excluded for the [`retry_join-stanza`](https://www.vaultproject.io/docs/configuration/storage/raft#retry_join-stanza)s |
 | Let's Encrypt | `vault_lets_encrypt_chown` | false | if the owner of `/etc/letsencrypt` should be change to `vault:vault` |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
@@ -75,6 +73,25 @@ Note that this also requires installation of the python libraries `docker` and `
 | kv | `vault_kv_puts` | `[]` | the list of key-values to put into vault by `vault kv put`, s. [`vault_kv_puts`](#section-vault_kv_puts) |
 | kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
 | approle | `vault_approles` | `[]` | the list of approles to get role_id and secret_id for <br />the result is put with the role name as key into<ul><li>`vault_approle_role_id`</li><li>`vault_approle_secret_id`</li></ul> |
+| listener | `vault_listeners` | `[]` | the list of [`listener`](https://www.vaultproject.io/docs/configuration/listener/tcp)s as list of dicts |
+
+```yaml
+  - address:             vault.example.com:8200
+    cluster_address:     vault.example.com:8201
+    tls_disable:         'false'
+    tls_cert_file:       /srv/vault/ssl/ca.crt
+    tls_key_file:        /srv/vault/ssl/tls-chain.crt
+    tls_client_ca_file:  /srv/vault/ssl/tls.key
+```
+
+| dict | element | default | description |
+| --- | --- | --- | --- |
+| `vault_listeners` | `address` | | the [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address) for the listener |
+| `vault_listeners` | `cluster_address` | | the [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address) for the listener |
+| `vault_listeners` | `tls_disable` | `'false'` | the value for [`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable) for the listener |
+| `vault_listeners` | `tls_cert_file` | `"{{ vault_tls_cert_file }}"` | the [`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file) for the listener |
+| `vault_listeners` | `tls_key_file` | `"{{ vault_tls_key_file }}"` | the [`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file) for the listener |
+| `vault_listeners` | `tls_client_ca_file` | `"{{ vault_tls_client_ca_file }}"` | the [`tls_client_ca_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_client_ca_file) for the listener |
 <!-- markdownlint-enable MD033 -->
 
 ## Output Variables

@@ -34,11 +34,15 @@
   roles:
     - role: ../../ansible-role-vault
       vars:
-        # vault_install_method:    'binary'
+        vault_install_method:    'docker'
         vault_encrypt_secret:    'vault_encrypt_secret'
         vault_key_shares:        3
         vault_key_threshold:     2
         vault_show_unseal_keys:  true
+        vault_listeners:
+          - address:             "127.0.0.1:8200"
+            tls_disable:         'true'
+
         # vault_auth_methods:
         #   - jwt
         #   - approle

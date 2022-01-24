@@ -61,6 +61,14 @@ fileignoreconfig:
     \| \w+ \| `vault_tls_key_file` \| `"{{ vault_storage_raft_leader_client_key_file }}"` \| the path of the private key for the certificate for TLS \(\[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\)\) \|
   - >
     \| raft \| `vault_storage_raft_leader_client_key_file` \| `"{{ vault_home_path }}/ssl/tls.key"` \| the \[`leader_client_key_file`\]\(https://www.vaultproject.io/docs/configuration/storage/raft#leader_client_key_file\) \|
+  - >
+    \| listener \| `vault_listeners` \| `\[\]` | the list of \[`listener`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp\)s as list of dicts \|
+  - >
+    tls_key_file: +/srv/vault/ssl/tls-chain.crt
+  - >
+    tls_client_ca_file: +/srv/vault/ssl/tls.key
+  - >
+    \| `vault_listeners` \| `tls_key_file` \| `"{{ vault_tls_key_file }}"` \| the \[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\) for the listener |
 
 - filename: templates/vault.hcl.j2
   allowed_patterns:
@@ -68,4 +76,7 @@ fileignoreconfig:
       tls_key_file = "{{ vault_tls_key_file }}"
     - >
       leader_client_key_file  = "{{ vault_storage_raft_leader_client_key_file }}"
+    - >
+      tls_key_file = "{{ _vault_listener.tls_key_file \| default\(vault_tls_key_file\) }}"
+
 

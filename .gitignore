@@ -1,2 +1,6 @@
+# VS Code
 .cache
 .dccache
+
+# try
+try/ansible_done_*

@@ -10,10 +10,15 @@ vault_ui:                                   'false'
 vault_api_port:                             8200
 vault_cluster_port:                         8201
 vault_api_addr:                             "http://127.0.0.1:{{ vault_api_port }}"
-vault_external_api_addr:                    "{{ vault_api_addr }}"
+vault_internal_api_addr:                    "{{ vault_api_addr }}"
 vault_cluster_addr:                         "http://127.0.0.1:{{ vault_cluster_port }}"
-vault_listener_bind_address:                127.0.0.1
-vault_listener_bind_cluster_address:        127.0.0.1
+# vault_listeners:
+#   - address:
+#     cluster_address:
+#     tls_disable:
+#     tls_cert_file:
+#     tls_key_file:
+#     tls_client_ca_file:
 vault_disable_mlock:                        'true'
 vault_storage_raft_path:                    "{% if vault_install_method != 'docker' %}{{ vault_home_path }}{% else %}/vault{% endif %}/file/raft"
 vault_storage_raft_node_id:                 "{{ hostvars[inventory_hostname].ansible_fqdn }}"
@@ -24,8 +29,9 @@ vault_storage_raft_leader_client_key_file:  "{{ vault_home_path }}/ssl/tls.key"
 # vault_storage_raft_leader_ca_cert:
 # vault_storage_raft_leader_client_cert:
 # vault_storage_raft_leader_client_key:
-vault_storage_raft_cluster_members:
+vault_storage_raft_cluster_members:         []
 vault_storage_raft_cluster_member_this:     "{{ [hostvars[inventory_hostname].ansible_fqdn] }}"
+vault_storage_raft_retry_join_api_port:     "{{ vault_api_port }}"
 
 vault_tls_disable:        'true'
 vault_lets_encrypt_chown: false
