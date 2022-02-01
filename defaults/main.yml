@@ -41,6 +41,7 @@ vault_tls_client_ca:      false
 vault_tls_client_ca_file: "{{ vault_storage_raft_leader_ca_cert_file }}"
 
 # docker
+vault_docker_network_mode:     default
 vault_docker_api_port:         "{{ vault_api_port }}"
 vault_docker_cluster_port:     "{{ vault_cluster_port }}"
 vault_docker_expose_api:       "127.0.0.1:8200:{{ vault_docker_api_port }}"

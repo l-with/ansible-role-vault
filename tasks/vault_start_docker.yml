@@ -7,7 +7,7 @@
     command: server
     capabilities:
       - ipc_lock
-    network_mode: host
+    network_mode: "{{ vault_docker_network_mode }}"
     ports:
       - "{{ vault_docker_expose_api }}"
       - "{{ vault_docker_expose_cluster }}"

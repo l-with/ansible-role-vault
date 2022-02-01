@@ -54,6 +54,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | raft | `vault_storage_raft_cluster_members` | `[]`| the list of cluster members for the [`retry_join-stanza`](https://www.vaultproject.io/docs/configuration/storage/raft#retry_join-stanza)s |
 | raft | `vault_storage_raft_cluster_member_this` | "{{ [hostvars[inventory_hostname].ansible_fqdn] }}" | the actual instance to be excluded for the [`retry_join-stanza`](https://www.vaultproject.io/docs/configuration/storage/raft#retry_join-stanza)s |
 | Let's Encrypt | `vault_lets_encrypt_chown` | false | if the owner of `/etc/letsencrypt` should be change to `vault:vault` |
+| docker | `vault_docker_network_mode` | `default` |the value for the parameter `network_mode` of [community.docker.docker_container](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html) |
 | docker | `vault_docker_api_port` | `"{{ vault_api_port }}"` | the port for `vault_docker_expose_api` |
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
 | docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |
