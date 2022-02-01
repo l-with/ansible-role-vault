@@ -42,7 +42,7 @@
         _vault_root_token: "{{ _vault_operator_generate_root_decode.token }}"
 
   run_once: true
-  when: vault_revoke_root_token and _vault_initialized
+  when: vault_revoke_root_token and not (_vault_root_token is defined and _vault_root_token)
 
 - name: Ensure vault create root token (docker)
   ansible.builtin.shell:
