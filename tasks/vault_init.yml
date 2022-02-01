@@ -30,13 +30,14 @@
     msg: "_vault_init_file_on_localhost: {{ _vault_init_file_on_localhost }}"
 
 # Decision table
-# | ------------------------ | ----------------------------- | -------------------------------------------------- |
-# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                             |
-# | ------------------------ | ----------------------------- | -------------------------------------------------- |
-# | false                    | false                         | vault init, set '_vault_init_file_on_host' to true |
-# | *                        | true                          | -                                                  |
-# | true                     | *                             | -                                                  |
-# | ------------------------ | ----------------------------- | -------------------------------------------------- |
+# | ------------------------ | ----------------------------- | --------------------------------------------------- |
+# | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                              |
+# | ------------------------ | ----------------------------- | --------------------------------------------------- |
+# | false                    | false                         | vault init, set '_vault_init_file_on_host' to true, |
+# |                          |                               | set '_vault_root_token'                             |
+# | *                        | true                          | -                                                   |
+# | true                     | *                             | -                                                   |
+# | ------------------------ | ----------------------------- | --------------------------------------------------- |
 - name: Ensure vault init when not initialized before and Set fact _vault_init_file_on_host to true
   block:
 
@@ -53,6 +54,33 @@
   - name: Set fact _vault_init_file_on_host to true
     ansible.builtin.set_fact:
       _vault_init_file_on_host: true
+  
+  - name: Ensure decrypt ansible_done_vault_init
+    ansible.builtin.shell:
+      cmd: >
+        openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}/.ansible_done_vault_init -in {{ vault_home_path }}/ansible_done_vault_init
+    environment:
+      SECRET: "{{ vault_encrypt_secret }}"
+    changed_when: false
+
+  - name: Slurp vault init info
+    ansible.builtin.slurp:
+      src: "{{ vault_home_path }}/.ansible_done_vault_init"
+    register: _vault_init_file_slurp
+
+  - name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
+    ansible.builtin.file:
+      path: "{{ vault_home_path }}/.ansible_done_vault_init"
+      state: absent
+    changed_when: false
+
+  - name: Set fact _vault_init_info from slurp
+    ansible.builtin.set_fact:
+      _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+
+  - name: Set fact _vault_root_token
+    ansible.builtin.set_fact:
+      _vault_root_token: "{{ _vault_init_info.root_token }}"
   
   when: not _vault_init_file_on_host and not _vault_init_file_on_localhost
 
