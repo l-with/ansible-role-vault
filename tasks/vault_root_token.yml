@@ -44,26 +44,41 @@
   run_once: true
   when: vault_revoke_root_token and not (_vault_root_token is defined and _vault_root_token)
 
-- name: Ensure vault create root token (docker)
-  ansible.builtin.shell:
-    cmd: >
-      {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
-  register: _vault_create_root_token_result
+- name: Ensure _vault_create_root_token (docker)
+  
+  block:
+
+  - name: Ensure vault create root token (docker)
+    ansible.builtin.shell:
+      cmd: >
+        {{ _vault_command_prefix }} -e VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
+    register: _vault_create_root_token_result
+    run_once: yes
+
+  - name: Set fact _vault_create_root_token (docker)
+    ansible.builtin.set_fact:
+      _vault_create_root_token: "{{ _vault_create_root_token_result.stdout }}"
+    run_once: yes
+
   when: vault_install_method == 'docker'
-  run_once: yes
 
-- name: Ensure vault create root token (service)
-  ansible.builtin.shell:
-    cmd: >
-      VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_prefix }} {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
-  register: _vault_create_root_token_result
+- name: Ensure _vault_create_root_token (service)
+  
+  block:
+
+  - name: Ensure vault create root token (service)
+    ansible.builtin.shell:
+      cmd: >
+        VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_prefix }} {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
+    register: _vault_create_root_token_result
+    run_once: yes
+
+  - name: Set fact _vault_create_root_token (service)
+    ansible.builtin.set_fact:
+      _vault_create_root_token: "{{ _vault_create_root_token_result.stdout }}"
+    run_once: yes
+
   when: vault_install_method == 'service'
-  run_once: yes
-
-- name: Set fact _vault_create_root_token
-  ansible.builtin.set_fact:
-    _vault_create_root_token: "{{ _vault_create_root_token_result.stdout }}"
-  run_once: yes
 
 - name: Set fact vault_root_token
   ansible.builtin.set_fact:
