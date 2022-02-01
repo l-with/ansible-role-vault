@@ -7,6 +7,9 @@
     group: vault
     owner: vault
     mode:  o-rwx
+  when: (vault_storage_raft_leader_ca_cert is defined and vault_storage_raft_leader_ca_cert)
+        or (vault_storage_raft_leader_ca_cert is defined and vault_storage_raft_leader_ca_cert)
+        or (vault_storage_raft_leader_client_key is defined and vault_storage_raft_leader_client_key)
 
 - name: Ensure vault_storage_raft_leader_ca_cert_file
   ansible.builtin.copy:
