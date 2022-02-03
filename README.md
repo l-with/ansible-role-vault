@@ -74,7 +74,7 @@ Note that this also requires installation of the python libraries `docker` and `
 | kv | `vault_kv_puts` | `[]` | the list of key-values to put into vault by `vault kv put`, s. [`vault_kv_puts`](#section-vault_kv_puts) |
 | kv | `vault_kv_deletes` | `[]` | the paths to be delete by `vault kv delete`, s. [`vault_kv_deletes`](#section-vault_kv_deletes) |
 | approle | `vault_approles` | `[]` | the list of approles to get role_id and secret_id for <br />the result is put with the role name as key into<ul><li>`vault_approle_role_id`</li><li>`vault_approle_secret_id`</li></ul> |
-| listener | `vault_listeners` | `[]` | the list of [`listener`](https://www.vaultproject.io/docs/configuration/listener/tcp)s as list of dicts |
+| listener | `vault_listeners` | `[]` | the list of [`listener`](https://www.vaultproject.io/docs/configuration/listener/tcp)s as list of dicts `vault_listener`|
 
 ```yaml
   - address:             vault.example.com:8200
@@ -87,12 +87,12 @@ Note that this also requires installation of the python libraries `docker` and `
 
 | dict | element | default | description |
 | --- | --- | --- | --- |
-| `vault_listeners` | `address` | | the [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address) for the listener |
-| `vault_listeners` | `cluster_address` | | the [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address) for the listener |
-| `vault_listeners` | `tls_disable` | `'false'` | the value for [`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable) for the listener |
-| `vault_listeners` | `tls_cert_file` | `"{{ vault_tls_cert_file }}"` | the [`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file) for the listener |
-| `vault_listeners` | `tls_key_file` | `"{{ vault_tls_key_file }}"` | the [`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file) for the listener |
-| `vault_listeners` | `tls_client_ca_file` | `"{{ vault_tls_client_ca_file }}"` | the [`tls_client_ca_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_client_ca_file) for the listener |
+| `vault_listener` | `address` | | the [`address`](https://www.vaultproject.io/docs/configuration/listener/tcp#address) for the listener |
+| `vault_listener` | `cluster_address` | | the [`cluster_address`](https://www.vaultproject.io/docs/configuration/listener/tcp#cluster_address) for the listener |
+| `vault_listener` | `tls_disable` | `'false'` | the value for [`tls_disable`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_disable) for the listener |
+| `vault_listener` | `tls_cert_file` | `"{{ vault_tls_cert_file }}"` | the [`tls_cert_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_cert_file) for the listener |
+| `vault_listener` | `tls_key_file` | `"{{ vault_tls_key_file }}"` | the [`tls_key_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file) for the listener |
+| `vault_listener` | `tls_client_ca_file` | `"{{ vault_tls_client_ca_file }}"` | the [`tls_client_ca_file`](https://www.vaultproject.io/docs/configuration/listener/tcp#tls_client_ca_file) for the listener |
 <!-- markdownlint-enable MD033 -->
 
 ## Output Variables
