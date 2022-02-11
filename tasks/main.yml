@@ -22,13 +22,23 @@
 - name: Ensure vault config
   ansible.builtin.include_tasks: vault_config_{{ vault_install_method }}.yml
 
+- name: Read /etc/letsencrypt stat
+  ansible.builtin.stat:
+    path: /etc/letsencrypt
+  ignore_errors: true
+  register: _vault_etc_lets_encrypt_path_stat
+
+- name: Set fact _vault_etc_lets_encrypt_path
+  ansible.builtin.set_fact:
+    _vault_etc_lets_encrypt_path: "{{ _vault_etc_lets_encrypt_path_stat.stat.exists }}"
+
 - name: Ensure vault is group and owner of Let's Encrypt Certificate Package files
   ansible.builtin.file:
     path:    /etc/letsencrypt
     recurse: true
     group:   vault
     owner:   vault
-  when: vault_install_method == 'service'
+  when: vault_install_method == 'service' and _vault_etc_lets_encrypt_path
 
 - name: Ensure vault started
   ansible.builtin.include_tasks: vault_start_{{ vault_install_method }}.yml
