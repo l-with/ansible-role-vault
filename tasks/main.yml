@@ -74,8 +74,8 @@
       {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
   register: _vault_status_output
   until: _vault_status_output.stdout.find("leader_") != -1
-  retries: 20
-  delay: 2
+  retries: 30
+  delay: 3
   changed_when: false
   when: _vault_status.ha_enabled
   # run_once: true
