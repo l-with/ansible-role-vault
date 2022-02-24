@@ -75,7 +75,7 @@
   register: _vault_status_output
   until: _vault_status_output.stdout.find("leader_") != -1
   retries: 30
-  delay: 3
+  delay: 5
   changed_when: false
   when: _vault_status.ha_enabled
   # run_once: true
