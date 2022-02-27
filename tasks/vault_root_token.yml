@@ -62,23 +62,23 @@
 
   when: vault_install_method == 'docker'
 
-- name: Ensure _vault_create_root_token (service)
+- name: Ensure _vault_create_root_token (service/binary)
   
   block:
 
-  - name: Ensure vault create root token (service)
+  - name: Ensure vault create root token (service/binary)
     ansible.builtin.shell:
       cmd: >
         VAULT_TOKEN='{{ _vault_root_token }}' {{ _vault_command_prefix }} {{ _vault_command_postfix }} token create -ttl {{ vault_root_token_ttl }} -format=json
     register: _vault_create_root_token_result
     run_once: yes
 
-  - name: Set fact _vault_create_root_token (service)
+  - name: Set fact _vault_create_root_token (service/binary)
     ansible.builtin.set_fact:
       _vault_create_root_token: "{{ _vault_create_root_token_result.stdout }}"
     run_once: yes
 
-  when: vault_install_method == 'service'
+  when: vault_install_method in ['service', 'binary']
 
 - name: Set fact vault_root_token
   ansible.builtin.set_fact:

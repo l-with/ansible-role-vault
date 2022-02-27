@@ -8,11 +8,14 @@
 - name: Check {{ vault_install_method }}
   ansible.builtin.fail:
     msg: "vault_install_method '{{ vault_install_method }}' not supported"
-  when: vault_install_method not in ['docker', 'service']
+  when: vault_install_method not in ['docker', 'service', 'binary']
   
+- name: Print vault_config_path
+  ansible.builtin.debug:
+    msg: "vault_config_path '{{ vault_config_path }}"
+
 - name: Ensure prepare dependencies
   ansible.builtin.include_tasks: dependencies.yml
-  when: vault_install_method == 'service'
 
 - name: Ensure install vault
   ansible.builtin.include_tasks: "vault_install_{{ vault_install_method }}.yml"
@@ -46,15 +49,19 @@
 
 - name: Get vault status
   ansible.builtin.include_tasks: vault_status.yml
-  
+
+- name: Print vault status type
+  ansible.builtin.debug:
+    msg: "type: {{ _vault_status.type }}"
+
 - name: Wait vault
   ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json || /bin/true
-  register: _vault_status_output
-  until: _vault_status_output.stdout is defined
-  retries: 10
-  delay: 2
+  register:     _vault_status_output
+  until:        _vault_status_output.stdout.find("shamir") != -1
+  retries:      10
+  delay:        2
   changed_when: false
   
 - name: Ensure vault init
@@ -73,12 +80,12 @@
   ansible.builtin.shell:
     cmd: >
       {{ _vault_command_prefix }} {{ _vault_command_postfix }} status -format=json
-  register: _vault_status_output
-  until: _vault_status_output.stdout.find("leader_") != -1
-  retries: 30
-  delay: 5
+  register:     _vault_status_output
+  until:        _vault_status_output.stdout.find("leader_") != -1
+  retries:      "{{ vault_ha_wait_retries }}"
+  delay:        "{{ vault_ha_wait_delay }}"
   changed_when: false
-  when: _vault_status.ha_enabled
+  when:         _vault_status.ha_enabled
   # run_once: true
 
 - name: Ensure vault root token

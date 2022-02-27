@@ -4,7 +4,7 @@
 vault_version:                              'latest'
 vault_install_method:                       'docker'
 vault_home_path:                            /srv/vault
-vault_config_path:                          "{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"
+vault_config_path:                          "{% if vault_install_method not in ['service', 'binary'] %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"
 vault_log_level:                            "Info"
 vault_ui:                                   'false'
 vault_api_port:                             8200
@@ -40,12 +40,23 @@ vault_tls_key_file:       "{{ vault_storage_raft_leader_client_key_file }}"
 vault_tls_client_ca:      false
 vault_tls_client_ca_file: "{{ vault_storage_raft_leader_ca_cert_file }}"
 
+# HA
+vault_ha_wait_retries: 30
+vault_ha_wait_delay:   5
+
 # docker
 vault_docker_network_mode:     default
 vault_docker_api_port:         "{{ vault_api_port }}"
 vault_docker_cluster_port:     "{{ vault_cluster_port }}"
 vault_docker_expose_api:       "127.0.0.1:8200:{{ vault_docker_api_port }}"
 vault_docker_expose_cluster:   "127.0.0.1:8201:{{ vault_docker_cluster_port }}"
+
+# service, binary
+vault_service_wait_retries: 10
+vault_service_wait_delay:   2
+
+# binary
+# vault_binary_archive_src:
 
 # init
 vault_key_shares:              1
