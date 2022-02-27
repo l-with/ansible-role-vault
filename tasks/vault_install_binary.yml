@@ -1,57 +1,34 @@
 ---
 
-- name: Ensure _vault_releases_latest
-  ansible.builtin.uri:
-    url: https://api.github.com/repos/hashicorp/vault/releases/latest
-  register: _vault_releases_latest
+- name: Ensure unzip
+  ansible.builtin.apt:
+    name: unzip
 
-- name: Ensure _vault_latest_release
-  ansible.builtin.set_fact:
-    _vault_latest_release: "{{ _vault_releases_latest.json.name[1:] }}"
-
-- name: Ensure vault bin path
-  ansible.builtin.file:
-    path:  "{{ vault_home_path }}/bin"
-    state: directory
-    mode: g-rwx
+- name: Ensure linux user vault
+  ansible.builtin.user: 
+    name: vault
 
 - name: Ensure vault binary
   ansible.builtin.unarchive:
     remote_src: true
-    src: https://releases.hashicorp.com/vault/{{ _vault_latest_release }}/vault_{{ _vault_latest_release }}_linux_amd64.zip
-    dest: "{{ vault_home_path }}/bin"
-    mode: ug+x,o-rwx
-    creates: "{{ vault_home_path }}/bin/vault"
+    src:        "{{ vault_binary_archive_src }}"
+    dest:       /usr/local/bin
+    mode:       ugo+rx,go-w
+    creates:    /usr/local/bin/vault
 
 - name: Ensure vault server systemd service configuration exists
   ansible.builtin.template:
     src: templates/vault.service.j2
     dest: /etc/systemd/system/vault.service
-    mode: ug+x,o-rw
+    mode: go-w
 
-- name: Check vault running
-  ansible.builtin.command:
-    cmd: pgrep vault
-  ignore_errors: true
-  register: _pgrep_vault
-
-- name: Print vault running
-  ansible.builtin.debug:
-    msg: "_pgrep_vault: {{ _pgrep_vault }}"
-
-- name: Decide vault running
-  ansible.builtin.debug:
-    msg: "running"
-  when: _pgrep_vault.stdout
-
-- name: Run vault
-  ansible.builtin.shell:
-    cmd: "{{ vault_home_path }}/bin/vault server -config={{ vault_home_path }}/config >{{ vault_home_path }}/logs/vault.log &"
-  when: not _pgrep_vault.stdout
+- name: reload daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
 
 - name: Ensure _vault_command_prefix
   ansible.builtin.set_fact:
-    _vault_command_prefix: "VAULT_ADDR=http://127.0.0.1:{{ vault_api_port }} {{ vault_home_path }}/bin/vault"
+    _vault_command_prefix: "VAULT_ADDR={{ vault_internal_api_addr }} {% if vault_tls_client_ca_file is defined and vault_tls_client_ca_file %}VAULT_CACERT={{ vault_tls_client_ca_file }}{% endif %} vault"
 
 - name: Ensure _vault_command_postfix
   ansible.builtin.set_fact:

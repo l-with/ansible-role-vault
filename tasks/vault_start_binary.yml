@@ -1,0 +1,6 @@
+---
+
+- name: Ensure vault binary started
+  ansible.builtin.include_tasks: vault_start_service.yml
+
+...

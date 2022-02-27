@@ -1,0 +1,23 @@
+---
+
+- name: Ensure /etc/vault.d
+  ansible.builtin.file:
+    path:  /etc/vault.d
+    state: directory
+    group: vault
+    owner: vault
+    mode:  o-rwx,g-rwx
+
+
+- name: Ensure /etc/vault.d/vault.env
+  ansible.builtin.file:
+    path:  /etc/vault.d/vault.env
+    state: touch
+    group: vault
+    owner: vault
+    mode:  o-rwx,g-rwx
+
+- name: Ensure vault config binary
+  ansible.builtin.include_tasks: vault_config_service.yml
+    
+...

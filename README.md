@@ -59,6 +59,11 @@ Note that this also requires installation of the python libraries `docker` and `
 | docker | `vault_docker_cluster_port` | `"{{ vault_cluster_port }}"` | the port for `vault_docker_expose_cluster` |
 | docker | `vault_docker_expose_api` | `"127.0.0.1:8200:{{ vault_docker_api_port }}"` | the docker expose of the vault api |
 | docker | `vault_docker_expose_cluster` | `"127.0.0.1:8201:{{ vault_docker_cluster_port }}"` | the docker expose of the cluster |
+| HA | `vault_ha_wait_retries` | `30` | the number of retries for waiting vault to response status with leader information |
+| HA | `vault_ha_wait_delay` | `5` | the delay between the retries for waiting vault to response status with leader information |
+| service, binary | `vault_service_wait_retries` | `10` | the number of retries for waiting the service to become active |
+| service, binary | `vault_service_wait_delay` | 2 | the delay between the retries for waiting the service to become active |
+| binary | `vault_binary_archive_src` | | the source for the binary archive, for instance `https://releases.hashicorp.com/vault/1.9.3/vault_1.9.3_linux_amd64.zip` |
 | init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
 | init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
 | init | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
