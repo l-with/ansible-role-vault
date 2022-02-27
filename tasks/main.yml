@@ -12,6 +12,7 @@
   
 - name: Ensure prepare dependencies
   ansible.builtin.include_tasks: dependencies.yml
+  when: vault_install_method == 'service'
 
 - name: Ensure install vault
   ansible.builtin.include_tasks: "vault_install_{{ vault_install_method }}.yml"
