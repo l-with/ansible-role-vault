@@ -28,7 +28,7 @@ Note that this also requires installation of the python libraries `docker` and `
 <!-- markdownlint-disable MD033 -->
 | group | variable | default | description |
 | --- | --- | --- | --- |
-| basic | `vault_install_method` | `'docker'` | the install method, supported methods are `'docker'` and `'service'` |
+| basic | `vault_install_method` | `'docker'` | the install method, supported methods are `'docker'`, `'service'` and `'binary'` |
 | basic | `vault_version` | `latest` | the vault version (docker image tag) |
 | basic | `vault_home_path` | `/srv/vault` | the home of the vault specific files and folders |
 | basic | `vault_config_path` | `"{% if vault_install_method != 'service' %}{{ vault_home_path }}/config{% else %}/etc/vault.d{% endif %}"` |
