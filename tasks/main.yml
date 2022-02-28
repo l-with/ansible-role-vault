@@ -1,11 +1,11 @@
 ---
 
-- name: Check {{ vault_encrypt_secret }}
+- name: Check vault_encrypt_secret
   ansible.builtin.fail:
     msg: "variable 'vault_encrypt_secret' is not set"
   when: not lookup('vars', 'vault_encrypt_secret')
 
-- name: Check {{ vault_install_method }}
+- name: Check vault_install_method
   ansible.builtin.fail:
     msg: "vault_install_method '{{ vault_install_method }}' not supported"
   when: vault_install_method not in ['docker', 'service', 'binary']
