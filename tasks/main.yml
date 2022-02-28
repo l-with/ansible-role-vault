@@ -20,6 +20,10 @@
 - name: Ensure install vault
   ansible.builtin.include_tasks: "vault_install_{{ vault_install_method }}.yml"
 
+- name: Print vault command
+  ansible.builtin.debug:
+    msg: "{{ _vault_command_prefix }} {{ _vault_command_postfix }}"
+
 - name: Ensure vault TLS files
   ansible.builtin.include_tasks: vault_tls.yml
 
