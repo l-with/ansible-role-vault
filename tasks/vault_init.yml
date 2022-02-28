@@ -34,7 +34,6 @@
 # | _vault_init_file_on_host | _vault_init_file_on_localhost | action                                              |
 # | ------------------------ | ----------------------------- | --------------------------------------------------- |
 # | false                    | false                         | vault init, set '_vault_init_file_on_host' to true, |
-# |                          |                               | set '_vault_root_token'                             |
 # | *                        | true                          | -                                                   |
 # | true                     | *                             | -                                                   |
 # | ------------------------ | ----------------------------- | --------------------------------------------------- |
@@ -50,36 +49,6 @@
       creates: "{{ vault_home_path }}/ansible_done_vault_init"
     environment:
       SECRET: "{{ vault_encrypt_secret }}"
-
-  - name: Ensure decrypt ansible_done_vault_init
-    ansible.builtin.shell:
-      cmd: >
-        openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}/.ansible_done_vault_init -in {{ vault_home_path }}/ansible_done_vault_init
-    environment:
-      SECRET: "{{ vault_encrypt_secret }}"
-
-  - name: Slurp vault init info
-    ansible.builtin.slurp:
-      src: "{{ vault_home_path }}/.ansible_done_vault_init"
-    register: _vault_init_file_slurp
-
-  - name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
-    ansible.builtin.file:
-      path: "{{ vault_home_path }}/.ansible_done_vault_init"
-      state: absent
-
-  - name: Set fact _vault_init_info from slurp
-    ansible.builtin.set_fact:
-      _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
-
-  - name: Set fact _vault_root_token
-    ansible.builtin.set_fact:
-      _vault_root_token: "{{ _vault_init_info.root_token }}"
-
-  - name: Print _vault_root_token
-    ansible.builtin.debug:
-      msg: "_vault_root_token: {{ _vault_root_token }}"
-    when: vault_show_initial_root_token
     
   - name: Set fact _vault_init_file_on_host to true
     ansible.builtin.set_fact:
@@ -149,6 +118,38 @@
     msg: "not (_vault_init_file_on_host and _vault_init_file_on_localhost)"
   when: not (_vault_init_file_on_host and _vault_init_file_on_localhost)
 
+# Initial root token
+- name: Ensure decrypt ansible_done_vault_init
+  ansible.builtin.shell:
+    cmd: >
+      openssl enc -aes-256-cbc -pbkdf2 -pass env:SECRET -d -out {{ vault_home_path }}/.ansible_done_vault_init -in {{ vault_home_path }}/ansible_done_vault_init
+  environment:
+    SECRET: "{{ vault_encrypt_secret }}"
+
+- name: Slurp vault init info
+  ansible.builtin.slurp:
+    src: "{{ vault_home_path }}/.ansible_done_vault_init"
+  register: _vault_init_file_slurp
+
+- name: Ensure remove "{{ vault_home_path }}/.ansible_done_vault_init"
+  ansible.builtin.file:
+    path: "{{ vault_home_path }}/.ansible_done_vault_init"
+    state: absent
+
+- name: Set fact _vault_init_info from slurp
+  ansible.builtin.set_fact:
+    _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
+
+- name: Set fact _vault_root_token
+  ansible.builtin.set_fact:
+    _vault_root_token: "{{ _vault_init_info.root_token }}"
+
+- name: Print _vault_root_token
+  ansible.builtin.debug:
+    msg: "_vault_root_token: {{ _vault_root_token }}"
+  when: vault_show_initial_root_token
+
+# Initialized!
 - name: Set fact _vault_initialized
   ansible.builtin.set_fact:
     _vault_initialized: true
