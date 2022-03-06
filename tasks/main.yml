@@ -70,6 +70,7 @@
   
 - name: Ensure vault init
   ansible.builtin.include_tasks: vault_init.yml
+  run_once: true
   
 - name: Get vault status
   ansible.builtin.include_tasks: vault_status.yml
