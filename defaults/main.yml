@@ -66,6 +66,7 @@ vault_show_initial_root_token: false
 vault_create_root_token:       true
 vault_root_token_ttl:          10m
 vault_revoke_root_token:       true
+vault_show_root_token:         false
 
 # auth
 vault_auth_methods:            []

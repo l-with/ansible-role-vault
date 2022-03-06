@@ -71,7 +71,7 @@ fileignoreconfig:
   - >
     tls_client_ca_file: +/srv/vault/ssl/tls.key
   - >
-    \| `vault_listener` \| `tls_key_file` \| `"{{ vault_tls_key_file }}"` \| the \[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\) for the listener |
+    \| `vault_listener` \| `tls_key_file` \| `"{{ vault_tls_key_file }}"` \| the \[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\) for the listener \|
   - >
     \| `vault_show_unseal_keys` \| `false` \| if the unseal keys are shown \|
   - >
