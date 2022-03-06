@@ -92,6 +92,9 @@
   when:         _vault_status.ha_enabled
   # run_once: true
 
+- name: Get vault status
+  ansible.builtin.include_tasks: vault_status.yml
+
 - name: Ensure vault root token
   ansible.builtin.include_tasks: vault_root_token.yml
   when: vault_create_root_token
