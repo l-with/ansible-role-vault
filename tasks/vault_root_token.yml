@@ -83,6 +83,12 @@
     vault_root_token: "{{ _vault_create_root_token.auth.client_token }}"
   run_once: true
 
+- name: Print vault_root_token
+  ansible.builtin.debug:
+    msg: "vault_root_token: {{ vault_root_token }}"
+  when: vault_show_root_token
+  run_once: true
+
 - name: Ensure vault revoke root token
   ansible.builtin.shell:
     cmd: >

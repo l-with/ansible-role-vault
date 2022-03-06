@@ -66,12 +66,13 @@ Note that this also requires installation of the python libraries `docker` and `
 | binary | `vault_binary_archive_src` | | the source for the binary archive, for instance `https://releases.hashicorp.com/vault/1.9.3/vault_1.9.3_linux_amd64.zip` |
 | init | `vault_key_shares` | `1` | the value for the `vault init` parameter `-key-shares` |
 | init | `vault_key_threshold` | `1` | the value for the `vault init` parameter `-key-threshold` |
-| init | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
-| init | `vault_show_initial_root_token` | `false` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!</span> |
 | init | `vault_encrypt_secret` | `CHANGE_vault_encrypt_secret` | the secret the output of the vault initialization is encoded with<br /> <span style="color:red">ATTENTION: Keep this confidential! This is the root of the secret management in vault.</span> |
 | init | `vault_create_root_token` | `true` | if a new root token with TTL should be created |
 | init | `vault_root_token_ttl` | `10m` | the TTL for the new root token |
 | init | `vault_revoke_root_token` | `true` | if the initial root token should be revoked |
+| debug | `vault_show_unseal_keys` | `false` | if the unseal keys are shown |
+| debug | `vault_show_initial_root_token` | `false` | if the root token with no expiration is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!</span> |
+| debug | `vault_show_root_token` | `false` | if the root token with TTL is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root token can be used with th TTL.</span> |
 | auth | `vault_auth_methods` | `[]` | the list of auth methods to be enable by `vault auth enable` |
 | secret | `vault_secret_engines` | `[]` | the list of secret engines to be enabled by `vault secrets enable`, s. [`vault_secret_engines`](#section-vault_secret_engines) |
 | policies | `vault_policy_writes` | `[]` | the list of policies to be added by `vault policy write`, s. [`vault_policy_writes`](#section-vault_policy_writes) |

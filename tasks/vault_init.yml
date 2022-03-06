@@ -140,13 +140,13 @@
   ansible.builtin.set_fact:
     _vault_init_info: "{{ _vault_init_file_slurp['content'] | b64decode }}"
 
-- name: Set fact _vault_root_token
+- name: Set fact _vault_initial_root_token
   ansible.builtin.set_fact:
-    _vault_root_token: "{{ _vault_init_info.root_token }}"
+    _vault_initial_root_token: "{{ _vault_init_info.root_token }}"
 
-- name: Print _vault_root_token
+- name: Print _vault_initial_root_token
   ansible.builtin.debug:
-    msg: "_vault_root_token: {{ _vault_root_token }}"
+    msg: "_vault_initial_root_token: {{ _vault_initial_root_token }}"
   when: vault_show_initial_root_token
 
 # Initialized!

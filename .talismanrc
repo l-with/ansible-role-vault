@@ -71,7 +71,13 @@ fileignoreconfig:
   - >
     tls_client_ca_file: +/srv/vault/ssl/tls.key
   - >
-    \| `vault_listener` \| `tls_key_file` \| `"{{ vault_tls_key_file }}"` \| the \[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\) for the listener |
+    \| `vault_listener` \| `tls_key_file` \| `"{{ vault_tls_key_file }}"` \| the \[`tls_key_file`\]\(https://www.vaultproject.io/docs/configuration/listener/tcp#tls_key_file\) for the listener \|
+  - >
+    \| `vault_show_unseal_keys` \| `false` \| if the unseal keys are shown \|
+  - >
+    \| `vault_show_initial_root_token` \| `false` \| if the root token with no expiration is shown <br \/> <span style="color:red">ATTENTION: Keep this confidential! The root tooken with no expiration should be revoked!<\/span> \|
+  - >
+    \| `vault_show_root_token` \| `false` \| if the root token with TTL is shown <br /> <span style="color:red">ATTENTION: Keep this confidential! The root token can be used with th TTL.</span> \|
 
 - filename: templates/vault.hcl.j2
   allowed_patterns:
