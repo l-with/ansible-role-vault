@@ -1,22 +1,13 @@
 # Ansible Role Vault
 
-Install vault as docker container
+The role installs vault.
 
-This is as a first step implemented for a simple installation on one host, nevertheless the default storage configuration is `raft` (kind of for extensibility) and waiting for the cluster to become ready before adding configuations is builtin.
+The default storage configuration is `raft` and waiting for the cluster to become ready before adding configuations is builtin.
+
+For joining the cluster complete synchronous of the instances does not work.
+This can be avoided by using [serial](https://docs.ansible.com/ansible/latest/user_guide/playbooks_strategies.html#sts=Setting%20the%20batch%20size%20with%20serial%EF%83%81).
 
 The output of `vault init` is saved as JSON and encrypted with `openssl` with the secret `vault_encrypt_secret`.
-
-## Configurations
-
-There are role variables to
-
-* add auth methods (`vault_auth_methods`)
-* add secret engines (`vault_secret_engines`)
-* add policies (`vault_policy_writes`)
-* add data (`vault_writes`)
-* add key-values (`vault_kv_puts`)
-
-All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home_path`.
 
 ## Collection dependencies
 
@@ -108,6 +99,19 @@ Note that this also requires installation of the python libraries `docker` and `
 | init | `vault_root_token` | the created root token with TTL |
 
 <!-- markdownlint-disable MD033 -->
+
+## Configurations
+
+There are role variables to
+
+* add auth methods (`vault_auth_methods`)
+* add secret engines (`vault_secret_engines`)
+* add policies (`vault_policy_writes`)
+* add data (`vault_writes`)
+* add key-values (`vault_kv_puts`)
+
+All configurations on vault are done by the vault cli with `ansible.builtin.shell` and made idempotent by creating a file named `ansible_done_*` in `vault_home_path`.
+
 ### <a name="section-vault_secret_engines">`vault_secret_engines`</a>
 <!-- markdownlint-enable MD033 -->
 
