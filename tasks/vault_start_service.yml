@@ -5,8 +5,7 @@
     name:    vault
     state:   started
     enabled: true
-  retries:  "{{ vault_service_wait_retries }}"
-  delay:    "{{ vault_service_wait_delay }}"
+  ignore_errors: true
 
 - name: Wait vault service active
   ansible.builtin.systemd:
